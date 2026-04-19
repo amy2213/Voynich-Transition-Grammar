@@ -1,0 +1,85 @@
+{
+  "definition_sensitivity": {
+    "Standard (aiin/ain in tok)": {
+      "a_mean": 15.0,
+      "b_mean": 15.0,
+      "ks_p": 0.742
+    },
+    "Strict (6 exact tokens)": {
+      "a_mean": 6.3,
+      "b_mean": 4.4,
+      "ks_p": 0.004
+    },
+    "Loose (contains ii)": {
+      "a_mean": 15.0,
+      "b_mean": 11.2,
+      "ks_p": 0.001
+    }
+  },
+  "text_type_robustness": {
+    "Short \u22643": {
+      "chedy_qok": null,
+      "aiin_qok": 0.81
+    },
+    "Medium 4-8": {
+      "chedy_qok": 2.66,
+      "aiin_qok": 0.47
+    },
+    "Long \u22659": {
+      "chedy_qok": 2.35,
+      "aiin_qok": 0.49
+    }
+  },
+  "split_half": {
+    "cq": {
+      "mean": 2.503,
+      "range_95": [
+        2.337,
+        2.673
+      ]
+    },
+    "aq": {
+      "mean": 0.457,
+      "range_95": [
+        0.386,
+        0.533
+      ]
+    },
+    "sc": {
+      "mean": 1.429,
+      "range_95": [
+        1.346,
+        1.516
+      ]
+    },
+    "aiin": {
+      "mean": 15.044,
+      "range_95": [
+        14.616,
+        15.472
+      ]
+    }
+  },
+  "section_self_clustering": {
+    "herbal_A": {
+      "real": 1.757,
+      "shuffle_mean": 0.992,
+      "p": 0.0
+    },
+    "biological": {
+      "real": 1.288,
+      "shuffle_mean": 0.999,
+      "p": 0.001
+    },
+    "recipes_Q20": {
+      "real": 1.241,
+      "shuffle_mean": 1.001,
+      "p": 0.0
+    },
+    "herbal_B": {
+      "real": 1.759,
+      "shuffle_mean": 1.007,
+      "p": 0.001
+    }
+  }
+}

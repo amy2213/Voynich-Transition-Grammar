@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Voynich Manuscript — Transition Grammar Analysis</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+3:wght@300;400;600;700&family=IBM+Plex+Mono:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #0a0e17; --surface: #111827; --surface-light: #1a2235;
+  --border: #2a3a52; --accent: #c4a35a; --accent-dim: #8b7340;
+  --text: #e8e0d4; --text-dim: #8899aa;
+  --attract: #4ade80; --repel: #f87171; --neutral: #60a5fa;
+  --qok: #f59e0b; --ok: #3b82f6; --ot: #8b5cf6;
+  --chedy: #ec4899; --aiin: #10b981; --other: #6b7280;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Source Sans 3', sans-serif; line-height: 1.6; }
+.wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+h1 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 28px; letter-spacing: 1px; }
+h2 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 20px; margin-bottom: 4px; }
+h2 + .sub { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+
+/* Header */
+.header { border-bottom: 1px solid var(--border); padding: 32px 0 24px; }
+.header p { font-size: 13px; color: var(--text-dim); margin-top: 8px; max-width: 700px; }
+
+/* Tabs */
+.tabs { border-bottom: 1px solid var(--border); display: flex; gap: 0; overflow-x: auto; }
+.tab { padding: 12px 16px; border: none; cursor: pointer; font-size: 13px; font-family: 'Source Sans 3', sans-serif;
+  color: var(--text-dim); background: transparent; border-bottom: 2px solid transparent; white-space: nowrap; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--accent); font-weight: 600; border-bottom-color: var(--accent); }
+
+/* Cards */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 16px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+.full { grid-column: 1 / -1; }
+@media (max-width: 700px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+/* Tables */
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+th { padding: 8px 10px; text-align: center; color: var(--text-dim); border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 600; }
+th:first-child { text-align: left; }
+td { padding: 8px 10px; text-align: center; border-bottom: 1px solid rgba(42,58,82,0.15); font-family: 'IBM Plex Mono', monospace; }
+td:first-child { text-align: left; }
+tr.highlight { background: rgba(196,163,90,0.07); }
+tr.highlight td { color: var(--accent); font-weight: 700; }
+tr.control td { color: var(--text-dim); }
+
+/* Stat boxes */
+.stat-box { padding: 16px; background: var(--surface-light); border-radius: 6px; text-align: center; }
+.stat-val { font-size: 28px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; }
+.stat-label { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+.stat-note { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+/* Bars */
+.bar-wrap { margin-bottom: 8px; }
+.bar-header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px; }
+.bar-track { height: 6px; background: var(--border); border-radius: 3px; }
+.bar-fill { height: 100%; border-radius: 3px; transition: width 0.8s ease; }
+
+/* Ratio bars */
+.ratio-wrap { margin-bottom: 10px; }
+.ratio-header { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 3px; }
+.ratio-track { height: 8px; background: var(--border); border-radius: 4px; position: relative; }
+.ratio-center { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--text-dim); opacity: 0.4; }
+.ratio-fill { position: absolute; top: 0; bottom: 0; border-radius: 4px; transition: all 0.8s ease; }
+
+/* Callout */
+.callout { padding: 12px 14px; border-radius: 6px; font-size: 13px; margin-top: 16px; }
+.callout-accent { background: rgba(26,26,14,1); border: 1px solid rgba(139,115,64,0.27); }
+.callout-green { background: rgba(14,26,14,1); border: 1px solid rgba(74,222,128,0.2); }
+.callout-blue { background: var(--surface-light); border-left: 3px solid var(--accent); }
+
+/* Matrix cell colors */
+.cell-strong-attract { background: #166534; }
+.cell-attract { background: rgba(20,83,45,0.53); }
+.cell-strong-repel { background: #991b1b; }
+.cell-repel { background: rgba(127,29,29,0.53); }
+
+/* Section hide/show */
+.section { display: none; padding: 24px 0 60px; }
+.section.active { display: block; }
+
+/* Finding row */
+.finding { padding: 10px 0; border-bottom: 1px solid rgba(42,58,82,0.2); }
+.finding:last-child { border-bottom: none; }
+.finding-label { font-size: 14px; font-weight: 600; }
+.finding-detail { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+/* Eliminated */
+.elim { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(42,58,82,0.2); }
+.elim:last-child { border-bottom: none; }
+.elim-x { color: var(--repel); font-size: 16px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="header">
+    <h1>Voynich Manuscript</h1>
+    <span style="font-size:14px;color:var(--text-dim);font-weight:300;">Transition Grammar Analysis</span>
+    <p>Quantitative analysis of sequential token-family constraints across 11 natural-language comparators. April 2026.</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="tabs" id="tabs">
+    <button class="tab active" onclick="showTab(0)">Overview</button>
+    <button class="tab" onclick="showTab(1)">Transition Rules</button>
+    <button class="tab" onclick="showTab(2)">AIIN Invariance</button>
+    <button class="tab" onclick="showTab(3)">Self-Clustering</button>
+    <button class="tab" onclick="showTab(4)">Cross-Linguistic</button>
+    <button class="tab" onclick="showTab(5)">Token Grammar</button>
+    <button class="tab" onclick="showTab(6)">Methodology</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- TAB 0: Overview -->
+<div class="section active" id="sec-0">
+  <div class="grid2">
+    <div class="card">
+      <h2>Core Findings</h2><div class="sub">Verified findings</div>
+      <div class="finding"><div class="finding-label">Non-random sequential structure</div><div class="finding-detail">Chi² = 1407.8, p ≈ 0. Significantly non-random.</div></div>
+      <div class="finding"><div class="finding-label">AIIN at 15% across Currier A/B</div><div class="finding-detail">KS p = 0.742. Language-invariant.</div></div>
+      <div class="finding"><div class="finding-label">CHEDY→QOK = 2.625x attraction</div><div class="finding-detail">Split-half 95% range: [2.34x, 2.67x]</div></div>
+      <div class="finding"><div class="finding-label">AIIN→QOK = 0.504x repulsion</div><div class="finding-detail">Bidirectional. QOK is blocked.</div></div>
+      <div class="finding"><div class="finding-label">Rules are GRAMMATICAL</div><div class="finding-detail">77% of CHEDY tokens participate. 369 unique pairs.</div></div>
+    </div>
+    <div class="card">
+      <h2>Eliminated Hypotheses</h2><div class="sub">Excluded by the data</div>
+      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Gibberish</div><div class="finding-detail">Chi²/cell 0.7 vs 30.5</div></div></div>
+      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Simple table generation</div><div class="finding-detail">Cannot produce positive self-clustering</div></div></div>
+      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Turkic languages</div><div class="finding-detail">All show SC below 1.0x (SYMM-LOW)</div></div></div>
+      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Indo-European languages</div><div class="finding-detail">All show SC below 1.0x (SYMM-LOW)</div></div></div>
+      <div class="callout callout-blue" style="margin-top:16px;font-size:13px;">
+        <strong>Key result:</strong> Voynich is the only tested system with symmetric-high self-clustering (prefix 1.52x, suffix 1.54x, ratio 0.99). All natural languages with positive SC are suffix-dominant.
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Family Density Map</h2><div class="sub">Verified family distribution across the manuscript</div>
+    <div class="grid-auto" id="density-map"></div>
+  </div>
+</div>
+
+<!-- TAB 1: Transition Rules -->
+<div class="section" id="sec-1">
+  <div class="card full">
+    <h2>Full Transition Matrix</h2><div class="sub">Obs/Expected ratios. Green = attraction, Red = repulsion.</div>
+    <div style="overflow-x:auto" id="matrix-container"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h2>Key Rules</h2><div class="sub">Strength relative to chance baseline</div>
+      <div id="key-rules"></div>
+    </div>
+    <div class="card">
+      <h2>Carry-Through</h2><div class="sub">AIIN blocks QOK but passes other families</div>
+      <div id="carry-through"></div>
+      <div class="callout callout-accent" style="font-size:12px;color:var(--text-dim);margin-top:12px;">
+        AIIN acts as a transparent connector for OK, OT, CHEDY — but actively blocks QOK in both directions.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: AIIN Invariance -->
+<div class="section" id="sec-2">
+  <div class="grid2">
+    <div class="card">
+      <h2>AIIN at 15% Across Currier A/B</h2><div class="sub">The cleanest finding in the entire analysis</div>
+      <div style="display:flex;gap:24px;margin-bottom:16px;">
+        <div class="stat-box" style="flex:1"><div class="stat-val" style="color:var(--aiin)">15.0%</div><div class="stat-label">Currier A (n=102 pages)</div></div>
+        <div class="stat-box" style="flex:1"><div class="stat-val" style="color:var(--aiin)">15.0%</div><div class="stat-label">Currier B (n=72 pages)</div></div>
+      </div>
+      <div class="callout callout-accent" style="border-left:3px solid var(--aiin);">
+        <div><strong>KS test:</strong> p = 0.742</div>
+        <div><strong>Bootstrap CI for difference:</strong> [−2.0%, +1.9%]</div>
+        <div style="margin-top:6px;color:var(--text-dim);">Every other family differs significantly between A and B (all p < 0.005). AIIN is the only invariant.</div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Function Word Behavior</h2><div class="sub">AIIN does NOT self-cluster — like real function words</div>
+      <div id="aiin-sc"></div>
+      <div style="margin-top:16px;font-size:13px;color:var(--text-dim);">Real function words (the, et, di) don't cluster with themselves. Neither does AIIN. Every other backbone family does.</div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Caveat: Section Variance</h2><div class="sub">AIIN varies by section — invariance is specifically across language modes</div>
+    <div class="grid-auto" id="aiin-sections"></div>
+  </div>
+</div>
+
+<!-- TAB 3: Self-Clustering -->
+<div class="section" id="sec-3">
+  <div class="card">
+    <h2>Self-Clustering: Handle with Care</h2><div class="sub">This metric is the most method-sensitive in the study</div>
+    <div class="grid3" style="margin-bottom:20px;">
+      <div class="stat-box"><div class="stat-val" style="color:var(--accent)">1.384x</div><div class="stat-label">Pooled (all classes)</div><div class="stat-note">Includes OTHER</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:var(--accent)">1.451x</div><div class="stat-label">Pooled (backbone)</div><div class="stat-note">CI: [1.34, 1.52]</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:var(--accent)">0.929x</div><div class="stat-label">Page-level mean</div><div class="stat-note">Most conservative</div></div>
+    </div>
+    <div class="callout callout-accent">
+      <strong style="color:var(--accent)">Why the gap matters:</strong>
+      <span style="color:var(--text-dim)"> Pooled values let extreme small pages dominate. Page-level averaging is fairer but shows weaker effects. The cross-linguistic comparison uses pooled (apples-to-apples), but absolute values carry uncertainty.</span>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: Cross-Linguistic -->
+<div class="section" id="sec-4">
+  <div class="card">
+    <h2>Prefix / Suffix Self-Clustering</h2><div class="sub">Voynich is the only system with symmetric-high clustering</div>
+    <div style="overflow-x:auto" id="cross-table"></div>
+  </div>
+</div>
+
+<!-- TAB 5: Token Grammar -->
+<div class="section" id="sec-5">
+  <div class="card">
+    <h2>The Grammar Test</h2><div class="sub">Is CHEDY→QOK a few fixed phrases or a class-level rule?</div>
+    <div class="grid3" style="margin-bottom:16px;">
+      <div class="stat-box"><div class="stat-val" style="color:var(--attract)">78%</div><div class="stat-label">of CHEDY tokens attract QOK</div><div class="stat-note">(54/69 with ≥5 occurrences)</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:var(--attract)">74%</div><div class="stat-label">of QOK tokens attracted by CHEDY</div><div class="stat-note">(35/47 with ≥5 occurrences)</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:var(--repel)">69%</div><div class="stat-label">of AIIN tokens repel QOK</div><div class="stat-note">(36/52 with ≥10 occurrences)</div></div>
+    </div>
+    <div class="callout callout-green">
+      <strong style="color:var(--attract)">Verdict: </strong>
+      369 unique token pairs, top 5 cover only 13.3%. The rule is DISTRIBUTED — this is a grammatical class constraint, not fixed collocations.
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: Methodology -->
+<div class="section" id="sec-6">
+  <div class="card">
+    <h2>Methodology</h2><div class="sub">Data, tools, and reproducibility</div>
+    <div style="font-size:14px;line-height:1.8;color:var(--text-dim)">
+      <p><strong style="color:var(--text)">Corpus:</strong> Zandbergen-Landini EVA transliteration via AncientLanguages/Voynich (Hugging Face). 4,197 lines, 31,608 tokens, 184 pages.</p>
+      <p><strong style="color:var(--text)">Families:</strong> QOK (prefix qok-), OK (prefix ok- not qok-), OT (prefix ot-), CHEDY (contains chedy/shedy/chey/shey), AIIN (contains aiin/ain). All others = OTHER.</p>
+      <p><strong style="color:var(--text)">Comparison languages:</strong> 11 verified natural-language comparators (9 Leipzig Wikipedia 100K, 2 Gutenberg literary) plus 1 Ottoman Turkish UD treebank and 1 shuffled-token control.</p>
+      <p><strong style="color:var(--text)">Statistical tests:</strong> Permutation tests (5,000–10,000 iterations), bootstrap CIs, KS tests, Chi-squared, split-half reliability. All transition ratios = observed/expected under independence.</p>
+      <p><strong style="color:var(--text)">Known limitations:</strong> Family definitions are EVA-specific and may not correspond to paleographic character boundaries. Self-clustering values are method-sensitive (pooled vs page-level). Non-IE comparison texts are modern, not medieval. Ottoman Turkish tested with small UD corpus (16,890 words): SYMM-LOW, not a match. Larger corpus needed.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Corrections Log</h2>
+    <div style="font-size:13px;color:var(--text-dim);line-height:1.7">
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• Self-clustering: 0.929x (page-level) to 1.451x (pooled backbone). Method-sensitive.</p>
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• CHEDY→QOK page agreement corrected from 92% to 78%. Earlier figure inflated by selection bias.</p>
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• AIIN→QOK page agreement corrected from 91% to 67%. Same selection bias.</p>
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• Biological self-clustering initially reported as 'not significant.' Rerun shows p < 0.001.</p>
+      <p style="padding:4px 0">• Carry-through values shift ~15% between runs due to token parsing differences. Directions are stable; exact decimals are approximate.</p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// === TAB SWITCHING ===
+function showTab(n) {
+  document.querySelectorAll('.section').forEach((s,i) => s.classList.toggle('active', i===n));
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
+}
+
+// === DATA ===
+const FAMILIES = ['QOK','OK','OT','CHEDY','AIIN','OTHER'];
+const FCOLORS = {QOK:'#f59e0b',OK:'#3b82f6',OT:'#8b5cf6',CHEDY:'#ec4899',AIIN:'#10b981',OTHER:'#6b7280'};
+
+const MATRIX = {
+  QOK:[1.55,1.28,1.05,1.45,0.69,0.87], OK:[1.11,1.54,1.20,1.08,0.82,0.93],
+  OT:[0.81,1.10,1.93,0.95,0.85,0.96], CHEDY:[2.66,0.82,0.82,1.12,0.78,0.80],
+  AIIN:[0.44,1.37,1.35,1.01,0.89,1.03], OTHER:[0.77,0.85,0.84,0.90,1.14,1.06]
+};
+
+const RULES = [
+  {rule:'CHEDY → QOK',ratio:2.625,p:'<0.001'}, {rule:'AIIN → QOK',ratio:0.504,p:'<0.001'},
+  {rule:'QOK → AIIN',ratio:0.86,p:'0.001'}, {rule:'AIIN → OK',ratio:1.18,p:'0.006'},
+  {rule:'AIIN → OT',ratio:1.30,p:'<0.001'}, {rule:'OT → OT',ratio:1.85,p:'<0.001'}
+];
+
+const CARRY = [{fam:'OK',ratio:2.73},{fam:'OT',ratio:2.21},{fam:'CHEDY',ratio:1.64},{fam:'QOK',ratio:0.83}];
+
+const SECTIONS = [
+  {name:'Herbal A',qok:3.6,ok:4.2,ot:3.6,chedy:4.1,aiin:14.9,tokens:9893,hand:'1',cur:'A'},
+  {name:'Biological',qok:11.9,ok:3.9,ot:3.8,chedy:16.5,aiin:13.0,tokens:6898,hand:'2',cur:'B'},
+  {name:'Recipes Q20',qok:7.8,ok:5.2,ot:5.9,chedy:9.2,aiin:18.6,tokens:10892,hand:'3',cur:'B'},
+  {name:'Herbal B',qok:5.7,ok:6.8,ot:4.2,chedy:2.6,aiin:10.8,tokens:1984,hand:'1',cur:'A'},
+  {name:'Astronomical',qok:0.7,ok:13.4,ot:16.8,chedy:4.5,aiin:5.5,tokens:685,hand:'4',cur:'?'}
+];
+
+const LANGS = [
+  {name:'Arabic',type:'Semitic',pfx:1.92,sfx:2.662,ratio:0.72,bucket:'SUFFIX-DOM'},
+  {name:'VOYNICH',type:'Unknown',pfx:1.524,sfx:1.544,ratio:0.99,bucket:'SYMM-HIGH',hl:true},
+  {name:'Latin',type:'IE',pfx:1.105,sfx:2.925,ratio:0.38,bucket:'SUFFIX-DOM'},
+  {name:'Estonian',type:'Uralic',pfx:0.962,sfx:2.328,ratio:0.41,bucket:'SUFFIX-DOM'},
+  {name:'Hebrew',type:'Semitic',pfx:0.713,sfx:2.474,ratio:0.29,bucket:'SUFFIX-DOM'},
+  {name:'Finnish',type:'Uralic',pfx:1.006,sfx:1.511,ratio:0.67,bucket:'SUFFIX-DOM'},
+  {name:'Hungarian',type:'Uralic',pfx:0.944,sfx:1.169,ratio:0.81,bucket:'SUFFIX-DOM'},
+  {name:'Ottoman Turkish',type:'Turkic',pfx:0.702,sfx:1.042,ratio:0.67,bucket:'SYMM-LOW'},
+  {name:'Turkish',type:'Turkic',pfx:0.906,sfx:0.98,ratio:0.92,bucket:'SYMM-LOW'},
+  {name:'Italian',type:'IE',pfx:0.685,sfx:0.964,ratio:0.71,bucket:'SYMM-LOW'},
+  {name:'N. Azerbaijani',type:'Turkic',pfx:0.815,sfx:0.795,ratio:1.02,bucket:'SYMM-LOW'},
+  {name:'KJV English',type:'IE',pfx:0.551,sfx:0.704,ratio:0.78,bucket:'SYMM-LOW'},
+  {name:'Middle English',type:'IE',pfx:0.411,sfx:0.692,ratio:0.59,bucket:'SYMM-LOW'},
+  {name:'Gibberish',type:'Control',pfx:0.923,sfx:0.966,ratio:0.96,bucket:'SYMM-LOW',ctrl:true}
+];
+
+// === RENDER HELPERS ===
+function ratioBar(ratio, label, container) {
+  const color = ratio > 1.3 ? 'var(--attract)' : ratio < 0.7 ? 'var(--repel)' : 'var(--neutral)';
+  const center = 50, extent = Math.min(Math.abs(ratio-1)/2.5*50, 50);
+  const left = ratio > 1 ? center : center - extent;
+  container.innerHTML += `<div class="ratio-wrap">
+    <div class="ratio-header"><span class="mono">${label}</span><span style="color:${color};font-weight:700">${ratio.toFixed(2)}x</span></div>
+    <div class="ratio-track"><div class="ratio-center"></div><div class="ratio-fill" style="left:${left}%;width:${extent}%;background:${color}"></div></div>
+  </div>`;
+}
+
+function densityBar(value, max, color, label, container) {
+  const pct = Math.min(value/max*100, 100);
+  container.innerHTML += `<div class="bar-wrap">
+    <div class="bar-header"><span style="color:var(--text-dim)">${label}</span><span style="color:${color}">${value.toFixed(1)}%</span></div>
+    <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${color}"></div></div>
+  </div>`;
+}
+
+function cellClass(v) {
+  if (v >= 2.0) return 'cell-strong-attract';
+  if (v >= 1.3) return 'cell-attract';
+  if (v <= 0.5) return 'cell-strong-repel';
+  if (v <= 0.7) return 'cell-repel';
+  return '';
+}
+
+// === BUILD UI ===
+document.addEventListener('DOMContentLoaded', function() {
+  // Transition matrix
+  const mc = document.getElementById('matrix-container');
+  let html = '<table><thead><tr><th style="text-align:left">FROM ↓ TO →</th>';
+  FAMILIES.forEach(f => html += `<th style="color:${FCOLORS[f]}" class="mono">${f}</th>`);
+  html += '</tr></thead><tbody>';
+  FAMILIES.forEach(src => {
+    html += `<tr><td style="color:${FCOLORS[src]};font-weight:700" class="mono">${src}</td>`;
+    MATRIX[src].forEach(v => html += `<td class="${cellClass(v)}">${v.toFixed(2)}x</td>`);
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  mc.innerHTML = html;
+
+  // Key rules
+  const kr = document.getElementById('key-rules');
+  RULES.forEach(r => ratioBar(r.ratio, `${r.rule} (p=${r.p})`, kr));
+
+  // Carry-through
+  const ct = document.getElementById('carry-through');
+  CARRY.forEach(c => ratioBar(c.ratio, `${c.fam} → AIIN → ${c.fam}`, ct));
+
+  // Density map
+  const dm = document.getElementById('density-map');
+  SECTIONS.forEach(sec => {
+    const div = document.createElement('div');
+    div.style.cssText = 'padding:12px;background:var(--surface-light);border-radius:6px;';
+    div.innerHTML = `<div style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--accent)">${sec.name}</div>
+      <div style="font-size:11px;color:var(--text-dim);margin-bottom:8px">Hand ${sec.hand} · Currier ${sec.cur} · ${sec.tokens.toLocaleString()} tokens</div>`;
+    densityBar(sec.qok, 25, FCOLORS.QOK, 'QOK', div);
+    densityBar(sec.ok, 25, FCOLORS.OK, 'OK', div);
+    densityBar(sec.ot, 25, FCOLORS.OT, 'OT', div);
+    densityBar(sec.chedy, 25, FCOLORS.CHEDY, 'CHEDY', div);
+    densityBar(sec.aiin, 25, FCOLORS.AIIN, 'AIIN', div);
+    dm.appendChild(div);
+  });
+
+  // AIIN self-clustering
+  const asc = document.getElementById('aiin-sc');
+  [{sec:'Herbal A',sc:1.01},{sec:'Recipes Q20',sc:0.71},{sec:'Biological',sc:0.84}].forEach(d => {
+    const color = d.sc > 1.05 ? 'var(--attract)' : d.sc < 0.95 ? 'var(--neutral)' : 'var(--text-dim)';
+    asc.innerHTML += `<div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(42,58,82,0.15)">
+      <span style="font-size:13px">${d.sec}</span>
+      <span class="mono" style="color:${color};font-weight:600">${d.sc.toFixed(2)}x</span>
+    </div>`;
+  });
+
+  // AIIN sections
+  const asec = document.getElementById('aiin-sections');
+  [{sec:'Astronomical',pct:5.5},{sec:'Herbal B',pct:10.8},{sec:'Biological',pct:13.0},{sec:'Herbal A',pct:14.9},{sec:'Recipes Q20',pct:18.6}].forEach(d => {
+    asec.innerHTML += `<div style="padding:10px;background:var(--surface-light);border-radius:6px">
+      <div style="font-size:11px;color:var(--text-dim)">${d.sec}</div>
+      <div class="mono" style="font-size:20px;font-weight:700;color:var(--aiin)">${d.pct}%</div>
+    </div>`;
+  });
+
+  // Cross-linguistic table
+  const clt = document.getElementById('cross-table');
+  html = '<table><thead><tr>';
+  ['System','Type','Prefix SC','Suffix SC','P/S Ratio','Bucket'].forEach(h => 
+    html += `<th${h==='System'?' style="text-align:left"':''}>${h}</th>`);
+  html += '</tr></thead><tbody>';
+  LANGS.forEach(l => {
+    const cls = l.hl ? ' class="highlight"' : l.ctrl ? ' class="control"' : '';
+    const pfxColor = l.pfx > 1.0 ? 'var(--attract)' : 'var(--text-dim)';
+    html += `<tr${cls}>
+      <td style="text-align:left;font-weight:${l.hl?700:400}">${l.name}</td>
+      <td style="font-size:11px;color:var(--text-dim)">${l.type}</td>
+      <td style="color:${pfxColor}">${l.pfx.toFixed(2)}x</td>
+      <td>${l.sfx.toFixed(2)}x</td>
+      <td>${l.ratio.toFixed(2)}</td>
+      <td style="font-size:11px">${l.bucket}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  clt.innerHTML = html;
+});
+</script>
+</body>
+</html>

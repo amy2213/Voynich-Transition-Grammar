@@ -1,0 +1,95 @@
+{
+  "description": "Self-clustering at different corpus sizes (sentences subsampled from 100K Leipzig corpora)",
+  "methodology_note": "Earlier analysis used 10K-sentence corpora which produced inflated SC for Uralic languages. 100K corpora give more stable estimates.",
+  "sizes_tested": [
+    5000,
+    10000,
+    30000,
+    50000,
+    100000
+  ],
+  "results": {
+    "Arabic": {
+      "5K": 1.644,
+      "10K": 1.611,
+      "30K": 1.586,
+      "50K": 1.602,
+      "100K": 1.497,
+      "stable": true,
+      "always_positive": true
+    },
+    "Finnish": {
+      "5K": 0.837,
+      "10K": 0.816,
+      "30K": 0.877,
+      "50K": 0.976,
+      "100K": 0.914,
+      "stable": false,
+      "always_positive": false
+    },
+    "Estonian": {
+      "5K": 0.792,
+      "10K": 0.825,
+      "30K": 0.929,
+      "50K": 0.965,
+      "100K": 0.963,
+      "stable": false,
+      "always_positive": false
+    },
+    "Turkish": {
+      "5K": 0.748,
+      "10K": 0.825,
+      "30K": 0.831,
+      "50K": 0.872,
+      "100K": 0.85,
+      "stable": true,
+      "always_positive": false
+    },
+    "Hebrew": {
+      "5K": 0.908,
+      "10K": 0.864,
+      "30K": 0.895,
+      "50K": 0.992,
+      "100K": 1.001,
+      "stable": false,
+      "always_positive": false
+    }
+  },
+  "voynich_stability": {
+    "25pct": {
+      "mean": 1.426,
+      "ci_95": [
+        1.245,
+        1.618
+      ]
+    },
+    "50pct": {
+      "mean": 1.423,
+      "ci_95": [
+        1.282,
+        1.553
+      ]
+    },
+    "75pct": {
+      "mean": 1.428,
+      "ci_95": [
+        1.313,
+        1.548
+      ]
+    },
+    "100pct": {
+      "mean": 1.428,
+      "ci_95": [
+        1.329,
+        1.519
+      ]
+    }
+  },
+  "conclusions": [
+    "Arabic prefix SC is stable across corpus sizes (1.50-1.64x), but Arabic is SUFFIX-DOMINANT under bidirectional analysis (prefix 1.92x, suffix 2.66x, ratio 0.72). The earlier 'Arabic match' claim was retired.",
+    "Finnish and Estonian SC fluctuate around 0.85-0.97x. Never clearly positive. Earlier values (1.16x, 1.35x) were from 10K corpora and are not reproducible at larger sizes.",
+    "The Uralic match reported in earlier analysis was a false positive from small corpus size.",
+    "Voynich SC is stable at ~1.43x regardless of subsample size.",
+    "Under bidirectional analysis, no tested language matches Voynich's symmetric-high profile."
+  ]
+}

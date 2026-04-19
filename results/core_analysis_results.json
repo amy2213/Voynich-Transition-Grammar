@@ -1,0 +1,177 @@
+{
+  "transition_rules": {
+    "CHEDY\u2192QOK": {
+      "ratio": 2.625,
+      "obs": 626,
+      "exp": 238.5,
+      "p": 0.0
+    },
+    "AIIN\u2192QOK": {
+      "ratio": 0.504,
+      "obs": 160,
+      "exp": 317.4,
+      "p": 0.0
+    },
+    "QOK\u2192AIIN": {
+      "ratio": 0.725,
+      "obs": 230,
+      "exp": 317.4,
+      "p": 0.0
+    },
+    "AIIN\u2192OK": {
+      "ratio": 1.302,
+      "obs": 283,
+      "exp": 217.4,
+      "p": 0.0
+    },
+    "AIIN\u2192OT": {
+      "ratio": 1.29,
+      "obs": 260,
+      "exp": 201.5,
+      "p": 0.0
+    },
+    "OT\u2192OT": {
+      "ratio": 2.052,
+      "obs": 205,
+      "exp": 99.9,
+      "p": 0.0
+    }
+  },
+  "transition_matrix": {
+    "QOK": {
+      "QOK": 1.561,
+      "OK": 1.237,
+      "OT": 1.029,
+      "CHEDY": 1.501,
+      "AIIN": 0.725,
+      "OTHER": 0.87
+    },
+    "OK": {
+      "QOK": 1.066,
+      "OK": 1.574,
+      "OT": 1.234,
+      "CHEDY": 1.035,
+      "AIIN": 0.805,
+      "OTHER": 0.942
+    },
+    "OT": {
+      "QOK": 0.794,
+      "OK": 1.123,
+      "OT": 2.052,
+      "CHEDY": 0.938,
+      "AIIN": 0.878,
+      "OTHER": 0.951
+    },
+    "CHEDY": {
+      "QOK": 2.625,
+      "OK": 0.82,
+      "OT": 0.806,
+      "CHEDY": 1.151,
+      "AIIN": 0.773,
+      "OTHER": 0.817
+    },
+    "AIIN": {
+      "QOK": 0.504,
+      "OK": 1.302,
+      "OT": 1.29,
+      "CHEDY": 0.963,
+      "AIIN": 0.918,
+      "OTHER": 1.037
+    },
+    "OTHER": {
+      "QOK": 0.791,
+      "OK": 0.863,
+      "OT": 0.845,
+      "CHEDY": 0.913,
+      "AIIN": 1.12,
+      "OTHER": 1.049
+    }
+  },
+  "chi2": {
+    "value": 1407.8,
+    "p": "8.47e-282"
+  },
+  "aiin_invariance": {
+    "currier_a_mean": 15.0,
+    "currier_b_mean": 15.0,
+    "ks_p": 0.742,
+    "bootstrap_ci": [
+      -1.95,
+      2.02
+    ]
+  },
+  "section_densities": {
+    "herbal_A": {
+      "QOK": 4.0,
+      "OK": 5.0,
+      "OT": 4.0,
+      "CHEDY": 4.2,
+      "AIIN": 13.3,
+      "OTHER": 69.6,
+      "tokens": 9893
+    },
+    "biological": {
+      "QOK": 15.6,
+      "OK": 5.1,
+      "OT": 4.4,
+      "CHEDY": 16.5,
+      "AIIN": 7.5,
+      "OTHER": 50.9,
+      "tokens": 6898
+    },
+    "recipes_Q20": {
+      "QOK": 10.1,
+      "OK": 6.9,
+      "OT": 7.4,
+      "CHEDY": 9.3,
+      "AIIN": 13.2,
+      "OTHER": 53.2,
+      "tokens": 10892
+    },
+    "herbal_B": {
+      "QOK": 6.0,
+      "OK": 7.2,
+      "OT": 4.6,
+      "CHEDY": 2.6,
+      "AIIN": 9.7,
+      "OTHER": 70.0,
+      "tokens": 1984
+    },
+    "astronomical": {
+      "QOK": 0.9,
+      "OK": 13.9,
+      "OT": 17.7,
+      "CHEDY": 4.5,
+      "AIIN": 4.1,
+      "OTHER": 59.0,
+      "tokens": 685
+    },
+    "text_f58": {
+      "QOK": 9.3,
+      "OK": 7.7,
+      "OT": 5.8,
+      "CHEDY": 2.0,
+      "AIIN": 8.4,
+      "OTHER": 66.8,
+      "tokens": 753
+    }
+  },
+  "self_clustering": {
+    "backbone": 1.451,
+    "all": 1.384,
+    "page_level": 0.929
+  },
+  "carry_through": {
+    "QOK": 0.83,
+    "OK": 2.73,
+    "OT": 2.21,
+    "CHEDY": 1.64
+  },
+  "token_grammar": {
+    "chedy_attractors": 53,
+    "chedy_tested": 69,
+    "chedy_pct": 77.0,
+    "unique_pairs": 369,
+    "top5_coverage_pct": 13.3
+  }
+}

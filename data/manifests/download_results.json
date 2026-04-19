@@ -1,0 +1,89 @@
+{
+  "Turkish": {
+    "file": "tur_wikipedia_2021_100K",
+    "sha256": "732122ae3d9bec3b9a9781d773825301705c1e84cd1f14e242a50855bb49e56c",
+    "size": 17982663,
+    "status": "verified"
+  },
+  "Hungarian": {
+    "file": "hun_wikipedia_2021_100K",
+    "sha256": "821d5f4b2fe2b667b3b025e7d61a32a2ee57c90c23c829b4f83c8806b3fd5997",
+    "size": 20248361,
+    "status": "verified"
+  },
+  "Finnish": {
+    "file": "fin_wikipedia_2021_100K",
+    "sha256": "126263932396a53f89b32c1b881f6003a1420ffef126cedbb7c3419716b0ed10",
+    "size": 17026165,
+    "status": "verified"
+  },
+  "Hebrew": {
+    "file": "heb_wikipedia_2021_100K",
+    "sha256": "ceeb63560a31278ba80d1380180c09012e003176dffb5b31ff886d40545706b2",
+    "size": 18572932,
+    "status": "verified"
+  },
+  "Arabic": {
+    "file": "ara_wikipedia_2021_100K",
+    "sha256": "63248254c627e95409edc26e5be681372f8bdcde58bed33812f21bbf84527902",
+    "size": 22953913,
+    "status": "verified"
+  },
+  "Latin": {
+    "file": "lat_wikipedia_2021_100K",
+    "sha256": "a642cdd34384bea05c003664a30a54d4032978bcc73893a44d2d67ba9cc98844",
+    "size": 15503847,
+    "status": "verified"
+  },
+  "North Azerbaijani": {
+    "file": "aze_wikipedia_2021_100K",
+    "sha256": "e2da9da69013a73812a2a66d93de2b864e273c3f65c457a5d9e2cc445c2f8ee1",
+    "size": 17965194,
+    "status": "verified"
+  },
+  "Italian": {
+    "file": "ita_wikipedia_2021_100K",
+    "sha256": "4fc8d1cf4133a5325020a3ba1c0b9211543719ad967eba6da5ce6a9ad4ce5ad6",
+    "size": 24242989,
+    "status": "verified"
+  },
+  "Estonian": {
+    "file": "ekk_wikipedia_2021_100K",
+    "sha256": "c242c04a96099f547e9e3cfb8e880cd70cbcefd7bcc1ae340b831671807d0734",
+    "size": 16786110,
+    "status": "verified",
+    "note": "Downloaded under ISO 639-3 code 'ekk' (Standard Estonian). Initial attempt under 'est' failed."
+  },
+  "Uzbek": {
+    "file": "uzb_wikipedia_2021_100K",
+    "sha256": "0a1166bf2b2649bcfdda6cec6d2a53d9171726531704e0a30d394460185ec66c",
+    "size": 19341996,
+    "status": "pending"
+  },
+  "Kazakh": {
+    "file": "kaz_wikipedia_2021_100K",
+    "sha256": "aff5b47dc2effbb06041d22d2ba1f55fc0dca45bced07380d4a926d7783f9675",
+    "size": 18063909,
+    "status": "pending"
+  },
+  "Mongolian": {
+    "file": "mon_wikipedia_2021_100K",
+    "sha256": "55161fc58bbb2779144818aeada1e2c700bfca2b0b80dcd2013b92fd54139699",
+    "size": 21062106,
+    "status": "pending"
+  },
+  "Middle English": {
+    "file": "chaucer_canterbury_tales_22120.txt",
+    "sha256": "dc58a1b4b07f1a3bc06458d57da5a329aab80c88eb4f6acbb2a34f3b5576b979",
+    "size": 1503759,
+    "status": "verified",
+    "note": "Project Gutenberg download"
+  },
+  "KJV English": {
+    "file": "king_james_bible_10900.txt",
+    "sha256": "43968092331866bb573225e879a4ce3333fb72660b3ce99173042da9e1cf02d1",
+    "size": 4475707,
+    "status": "verified",
+    "note": "Project Gutenberg download"
+  }
+}

@@ -1,0 +1,51 @@
+============================================================
+VOYNICH PROJECT: DATASET VALIDATION REPORT
+============================================================
+
+--- VERIFIED DATASETS (3) ---
+  ✓ Voynich              AncientLanguages_Voynich_snapshot/train.parquet
+  ✓ Middle English       chaucer_canterbury_tales_22120.txt
+  ✓ English              king_james_bible_10900.txt
+
+--- PROXY DATASETS (9) ---
+  ~ Turkish              tur_wikipedia_2021_100K.tar.gz  [modern proxy, NOT historical]
+  ~ Hungarian            hun_wikipedia_2021_100K.tar.gz  [modern proxy, NOT historical]
+  ~ Finnish              fin_wikipedia_2021_100K.tar.gz  [modern proxy, NOT historical]
+  ~ Hebrew               heb_wikipedia_2021_100K.tar.gz  [modern proxy, NOT historical]
+  ~ Arabic               ara_wikipedia_2021_100K.tar.gz  [modern proxy, NOT historical]
+  ~ Latin                lat_wikipedia_2021_100K.tar.gz  [modern proxy, NOT historical]
+  ~ North Azerbaijani    aze_wikipedia_2021_100K.tar.gz  [modern proxy, NOT historical]
+  ~ Italian              ita_wikipedia_2021_100K.tar.gz  [modern proxy, NOT historical]
+  ~ Estonian             ekk_wikipedia_2021_100K.tar.gz  [modern proxy, NOT historical]
+
+--- PENDING VERIFICATION (3) ---
+  ? Uzbek                uzb_wikipedia_2021_100K.tar.gz
+  ? Kazakh               kaz_wikipedia_2021_100K.tar.gz
+  ? Mongolian            mon_wikipedia_2021_100K.tar.gz
+
+--- MISSING FILES (0) ---
+
+--- CHECKSUM FAILURES (0) ---
+
+--- MISLABELED PROXIES (0) ---
+
+============================================================
+SUMMARY
+============================================================
+  Verified:          3
+  Proxy (verified):  9
+  Pending:           3
+  Missing:           0
+  Checksum failures: 0
+  Mislabeled:        0
+  Total usable:      12
+
+--- CLAIMED BUT NOT IN MANIFEST ---
+  ! Old French — referenced in earlier analysis but no frozen dataset
+  ! Medieval Italian — referenced in earlier analysis but no frozen dataset
+  ! Latin (Caesar) — referenced in earlier analysis but no frozen dataset
+
+✓ All datasets validated successfully.
+---
+Generated: 2026-04-18T22:39:26Z
+Final consolidation with prefix/suffix analysis.

@@ -1,0 +1,138 @@
+{
+  "description": "Prefix vs suffix self-clustering comparison across all verified systems",
+  "method": "Auto-detected top-5 affix families (2-3 char, 2-20% coverage). Voynich uses standard EVA prefix families for prefix SC.",
+  "corpus_note": "Leipzig languages use 20K sentences for this table. Voynich uses full corpus (31,608 tokens).",
+  "bucket_definitions": {
+    "SYMM-HIGH": "Both prefix and suffix SC > 1.1x, ratio between 0.80 and 1.25",
+    "SUFFIX-DOM": "Suffix SC > 1.1x and ratio < 0.80, OR suffix > 1.1x and prefix < 1.1x",
+    "PREFIX-DOM": "Prefix SC > 1.1x and ratio > 1.25, OR prefix > 1.1x and suffix < 1.1x",
+    "SYMM-LOW": "Both prefix and suffix SC < 1.1x"
+  },
+  "systems": {
+    "VOYNICH": {
+      "prefix_sc": 1.524,
+      "suffix_sc": 1.544,
+      "ratio": 0.99,
+      "bucket": "SYMM-HIGH",
+      "prefix_ci_95": [
+        1.41,
+        1.62
+      ],
+      "suffix_ci_95": [
+        1.48,
+        1.6
+      ],
+      "n": 31608
+    },
+    "Arabic": {
+      "prefix_sc": 1.92,
+      "suffix_sc": 2.662,
+      "ratio": 0.72,
+      "bucket": "SUFFIX-DOM",
+      "family": "Semitic",
+      "n": 311151
+    },
+    "Latin": {
+      "prefix_sc": 1.105,
+      "suffix_sc": 2.925,
+      "ratio": 0.38,
+      "bucket": "SUFFIX-DOM",
+      "family": "IE",
+      "n": 226211
+    },
+    "Estonian": {
+      "prefix_sc": 0.962,
+      "suffix_sc": 2.328,
+      "ratio": 0.41,
+      "bucket": "SUFFIX-DOM",
+      "family": "Uralic",
+      "n": 222176
+    },
+    "Hebrew": {
+      "prefix_sc": 0.713,
+      "suffix_sc": 2.474,
+      "ratio": 0.29,
+      "bucket": "SUFFIX-DOM",
+      "family": "Semitic",
+      "n": 266625
+    },
+    "Finnish": {
+      "prefix_sc": 1.006,
+      "suffix_sc": 1.511,
+      "ratio": 0.67,
+      "bucket": "SUFFIX-DOM",
+      "family": "Uralic",
+      "n": 221299
+    },
+    "Hungarian": {
+      "prefix_sc": 0.944,
+      "suffix_sc": 1.169,
+      "ratio": 0.81,
+      "bucket": "SUFFIX-DOM",
+      "family": "Uralic",
+      "n": 259810
+    },
+    "Gibberish": {
+      "prefix_sc": 0.923,
+      "suffix_sc": 0.966,
+      "ratio": 0.96,
+      "bucket": "SYMM-LOW",
+      "family": "Control",
+      "n": 31608
+    },
+    "Turkish": {
+      "prefix_sc": 0.906,
+      "suffix_sc": 0.98,
+      "ratio": 0.92,
+      "bucket": "SYMM-LOW",
+      "family": "Turkic",
+      "n": 262148
+    },
+    "Italian": {
+      "prefix_sc": 0.685,
+      "suffix_sc": 0.964,
+      "ratio": 0.71,
+      "bucket": "SYMM-LOW",
+      "family": "IE",
+      "n": 362081
+    },
+    "N. Azerbaijani": {
+      "prefix_sc": 0.815,
+      "suffix_sc": 0.795,
+      "ratio": 1.02,
+      "bucket": "SYMM-LOW",
+      "family": "Turkic",
+      "n": 254269
+    },
+    "KJV English": {
+      "prefix_sc": 0.551,
+      "suffix_sc": 0.704,
+      "ratio": 0.78,
+      "bucket": "SYMM-LOW",
+      "family": "IE",
+      "n": 771838
+    },
+    "Middle English": {
+      "prefix_sc": 0.411,
+      "suffix_sc": 0.692,
+      "ratio": 0.59,
+      "bucket": "SYMM-LOW",
+      "family": "IE",
+      "n": 217642
+    },
+    "Ottoman Turkish": {
+      "prefix_sc": 0.702,
+      "suffix_sc": 1.042,
+      "ratio": 0.67,
+      "bucket": "SYMM-LOW",
+      "family": "Turkic",
+      "n": 16890,
+      "note": "UD treebank (DUDU), 1782 sentences, 14th-20th century texts. Small corpus \u2014 wider CIs expected."
+    }
+  },
+  "key_finding": "Voynich is the only system in SYMM-HIGH. All natural languages with positive self-clustering are SUFFIX-DOM. No tested natural language clusters equally in both directions.",
+  "ablation_findings": {
+    "arabic_al_stripped": "Stripping al- prefix INCREASES SC (1.60x -> 2.41x). Arabic self-clustering is driven by root-pattern morphology, not just the definite article.",
+    "voynich_family_ablation": "QOK and OT drive self-clustering; CHEDY and AIIN drive transition rules. Two independent structural layers."
+  }
+}
