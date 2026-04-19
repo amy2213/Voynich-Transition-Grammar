@@ -4,6 +4,8 @@ Statistical analysis of sequential word-group constraints in the Voynich Manuscr
 
 This project does not claim to identify the manuscript's language or decode its content.
 
+https://amy2213.github.io/Voynich-Transition-Grammar/
+
 ## What Was Tested
 
 We define five word families based on the EVA transliteration alphabet (QOK, OK, OT, CHEDY, AIIN) and measure how they follow each other across 31,608 tokens on 184 pages. We compare the same metrics — computed identically — against 9 modern-proxy languages (Leipzig Wikipedia 100K), 2 historical literary texts (Gutenberg), and 1 shuffled-token control.
