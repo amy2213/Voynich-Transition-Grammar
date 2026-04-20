@@ -176,7 +176,7 @@ Weakened substantially. No tested constructed system reproduces the combination 
 
 6. No decipherment is claimed or attempted.
 
-7. Findings 1.1–1.3 are reproducible via the bundled scripts (01_core_analysis.py, 02_cross_linguistic.py, 03_stress_tests.py). Findings 1.4–1.10 (line structure, suffix agreement, glyph layers, cascades, morphological paradigms) were computed interactively during the research session and are not yet covered by reproducible scripts. The statistical methods and exact parameters are documented in this file. Scripting these analyses is recommended before formal publication.
+7. Findings 1.1–1.3 are reproducible via scripts 01–03. Findings 1.4–1.10 are reproducible via 04_extended_analysis.py, which produces results/extended_analysis_results.json. All 27 canonical values are verified by the regression test suite (tests/test_canonical_values.py). Some values in this document differ slightly from the scripted output due to differences in computation path (e.g., family detection method, stratification granularity); the scripted values are canonical for reproduction purposes.
  All findings describe statistical structure, not semantic content. The project identifies constraints that any decipherment theory must satisfy, but does not identify the manuscript's language or meaning.
 
 ---

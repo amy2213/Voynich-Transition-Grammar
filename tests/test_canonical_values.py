@@ -254,6 +254,7 @@ class TestResultsFilesExist(unittest.TestCase):
         "stress_test_results.json",
         "corpus_size_analysis.json",
         "validation_report.txt",
+        "extended_analysis_results.json",
     ]
 
     def test_all_canonical_files_present(self):
@@ -278,3 +279,100 @@ class TestResultsFilesExist(unittest.TestCase):
 if __name__ == "__main__":
     # When run as a script (not under pytest), use verbose output
     unittest.main(verbosity=2)
+
+
+class TestExtendedAnalysis(unittest.TestCase):
+    """
+    Regression tests for findings 1.4-1.10, produced by
+    scripts/04_extended_analysis.py.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.data = _load("extended_analysis_results.json")
+
+    # --- 1.4 Line-bounded grammar ---
+
+    def test_chedy_qok_within_line(self):
+        """Published: within-line CHEDY→QOK = 2.54x. Tolerance: ±0.15."""
+        v = self.data["1.4_line_bounded_grammar"]["chedy_qok_within"]
+        self.assertAlmostEqual(v, 2.54, delta=0.15,
+            msg=f"Within-line CHEDY→QOK drift: expected 2.54 ±0.15, got {v}")
+
+    def test_chedy_qok_cross_line(self):
+        """Published: cross-line CHEDY→QOK = 0.85x. Tolerance: ±0.10."""
+        v = self.data["1.4_line_bounded_grammar"]["chedy_qok_cross"]
+        self.assertAlmostEqual(v, 0.85, delta=0.10,
+            msg=f"Cross-line CHEDY→QOK drift: expected 0.85 ±0.10, got {v}")
+
+    def test_grammar_resets_at_line_boundary(self):
+        """The defining property: within-line ratio must exceed cross-line ratio."""
+        w = self.data["1.4_line_bounded_grammar"]["chedy_qok_within"]
+        c = self.data["1.4_line_bounded_grammar"]["chedy_qok_cross"]
+        self.assertGreater(w, c + 0.5,
+            msg=f"Line-bounded grammar: within ({w}) should exceed cross ({c}) by >0.5")
+
+    def test_template_recurrence_near_chance(self):
+        """Published: template recurrence 1.04x above shuffled."""
+        v = self.data["1.4_line_bounded_grammar"]["template_recurrence_ratio"]
+        self.assertAlmostEqual(v, 1.04, delta=0.15,
+            msg=f"Template recurrence drift: expected ~1.04, got {v}")
+
+    # --- 1.5 Suffix agreement ---
+
+    def test_suffix_agreement_chedy_qok(self):
+        """Published: CHEDY→QOK suffix agreement = 1.18x."""
+        v = self.data["1.5_suffix_agreement"]["CHEDY→QOK"]["ratio"]
+        self.assertAlmostEqual(v, 1.18, delta=0.10,
+            msg=f"CHEDY→QOK suffix agreement drift: expected 1.18 ±0.10, got {v}")
+
+    def test_suffix_agreement_qok_qok(self):
+        """Published: QOK→QOK suffix agreement = 1.41x."""
+        v = self.data["1.5_suffix_agreement"]["QOK→QOK"]["ratio"]
+        self.assertAlmostEqual(v, 1.41, delta=0.10,
+            msg=f"QOK→QOK suffix agreement drift: expected 1.41 ±0.10, got {v}")
+
+    def test_chedy_selects_qok_subtypes(self):
+        """Published: Chi² = 36.4, p = 7.2e-5."""
+        chi2 = self.data["1.5_suffix_agreement"]["chedy_selects_qok_subtypes"]["chi2"]
+        self.assertGreater(chi2, 20,
+            msg=f"CHEDY subtype selection Chi² too low: {chi2}")
+
+    # --- 1.6 Multi-feature agreement ---
+
+    def test_multi_feature_ok_ot(self):
+        """Published: OK→OT combined 4-feature ratio = 8.74x."""
+        v = self.data["1.6_multi_feature_agreement"]["OK→OT"]["all_four_ratio"]
+        self.assertGreater(v, 4.0,
+            msg=f"OK→OT multi-feature ratio too low: {v}")
+
+    # --- 1.7 Cascades ---
+
+    def test_cascade_chedy_other_chedy(self):
+        """Published: CHEDY→OTHER→CHEDY cascade = +80pp."""
+        v = self.data["1.7_agreement_cascades"]["chains"]["CHEDY→OTHER→CHEDY"]["cascade_pp"]
+        self.assertGreater(v, 50,
+            msg=f"CHEDY→OTHER→CHEDY cascade too weak: +{v}pp")
+
+    def test_skip_agreement_qok(self):
+        """Published: QOK→[OTHER]→QOK skip agreement = 2.32x."""
+        v = self.data["1.7_agreement_cascades"]["skip_agreement"]["QOK→O→QOK"]["ratio"]
+        self.assertGreater(v, 1.5,
+            msg=f"QOK skip agreement too low: {v}x")
+
+    # --- 1.8 Paradigms ---
+
+    def test_paradigm_connectivity(self):
+        """Published: all 50 tested types per family are connected."""
+        for fam in ["QOK", "CHEDY", "AIIN"]:
+            c = self.data["1.8_productive_paradigms"][fam]["connected_of_top50"]
+            self.assertGreaterEqual(c, 45,
+                msg=f"{fam} paradigm connectivity too low: {c}/50")
+
+    # --- 1.9 Line position ---
+
+    def test_chedy_avoids_line_final(self):
+        """Published: CHEDY line-final residual = -2.7%. Must be negative."""
+        v = self.data["1.9_line_position"]["chedy_line_final_residual_pct"]
+        self.assertLess(v, 0,
+            msg=f"CHEDY line-final residual should be negative, got {v}%")

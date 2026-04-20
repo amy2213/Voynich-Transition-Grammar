@@ -41,6 +41,7 @@ PIPELINE = [
     ("Core analysis",            SCRIPTS_DIR / "01_core_analysis.py",    RESULTS_DIR / "core_analysis_results.json"),
     ("Cross-linguistic",         SCRIPTS_DIR / "02_cross_linguistic.py", RESULTS_DIR / "cross_linguistic_results.json"),
     ("Stress tests",             SCRIPTS_DIR / "03_stress_tests.py",     RESULTS_DIR / "stress_test_results.json"),
+    ("Extended analysis",        SCRIPTS_DIR / "04_extended_analysis.py", RESULTS_DIR / "extended_analysis_results.json"),
 ]
 
 BANNER = "=" * 72

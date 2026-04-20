@@ -1,0 +1,212 @@
+{
+  "1.4_line_bounded_grammar": {
+    "chedy_qok_within": 2.54,
+    "chedy_qok_cross": 0.85,
+    "aiin_qok_within": 0.4,
+    "aiin_qok_cross": 1.22,
+    "cross_line_self_clustering": {
+      "QOK": 1.19,
+      "OK": 2.24,
+      "OT": 3.03,
+      "CHEDY": 1.5,
+      "AIIN": 1.06
+    },
+    "template_recurrence_ratio": 1.04,
+    "template_coverage_pct": 35.4,
+    "n_within_pairs": 27411,
+    "n_cross_pairs": 4013
+  },
+  "1.5_suffix_agreement": {
+    "CHEDY\u2192QOK": {
+      "obs_pct": 37.7,
+      "exp_pct": 32.0,
+      "ratio": 1.18,
+      "n_pairs": 469,
+      "z_score": 3.5
+    },
+    "QOK\u2192QOK": {
+      "obs_pct": 37.2,
+      "exp_pct": 26.4,
+      "ratio": 1.41,
+      "n_pairs": 301,
+      "z_score": 5.2
+    },
+    "OK\u2192OT": {
+      "obs_pct": 31.6,
+      "exp_pct": 18.0,
+      "ratio": 1.75,
+      "n_pairs": 76,
+      "z_score": 3.3
+    },
+    "OK\u2192OK": {
+      "obs_pct": 24.5,
+      "exp_pct": 14.7,
+      "ratio": 1.67,
+      "n_pairs": 110,
+      "z_score": 2.8
+    },
+    "OT\u2192OT": {
+      "obs_pct": 19.0,
+      "exp_pct": 12.8,
+      "ratio": 1.49,
+      "n_pairs": 105,
+      "z_score": 1.9
+    },
+    "chedy_selects_qok_subtypes": {
+      "chi2": 36.4,
+      "p": 7.19e-05
+    }
+  },
+  "1.6_multi_feature_agreement": {
+    "CHEDY\u2192QOK": {
+      "suffix_only_ratio": 1.18,
+      "all_four_ratio": 7.64,
+      "n_pairs": 469
+    },
+    "QOK\u2192QOK": {
+      "suffix_only_ratio": 1.41,
+      "all_four_ratio": 5.0,
+      "n_pairs": 301
+    },
+    "OK\u2192OT": {
+      "suffix_only_ratio": 1.75,
+      "all_four_ratio": 8.74,
+      "n_pairs": 76
+    },
+    "OK\u2192OK": {
+      "suffix_only_ratio": 1.67,
+      "all_four_ratio": 6.56,
+      "n_pairs": 110
+    },
+    "OT\u2192OT": {
+      "suffix_only_ratio": 1.49,
+      "all_four_ratio": 4.56,
+      "n_pairs": 105
+    }
+  },
+  "1.7_agreement_cascades": {
+    "chains": {
+      "CHEDY\u2192OTHER\u2192CHEDY": {
+        "if_agree_pct": 85.0,
+        "if_disagree_pct": 4.0,
+        "cascade_pp": 80.0,
+        "n_agree": 13,
+        "n_disagree": 119
+      },
+      "QOK\u2192OTHER\u2192QOK": {
+        "if_agree_pct": 62.0,
+        "if_disagree_pct": 18.0,
+        "cascade_pp": 44.0,
+        "n_agree": 26,
+        "n_disagree": 61
+      },
+      "QOK\u2192QOK\u2192QOK": {
+        "if_agree_pct": 52.0,
+        "if_disagree_pct": 19.0,
+        "cascade_pp": 33.0,
+        "n_agree": 27,
+        "n_disagree": 16
+      },
+      "CHEDY\u2192QOK\u2192CHEDY": {
+        "if_agree_pct": 69.0,
+        "if_disagree_pct": 13.0,
+        "cascade_pp": 56.0,
+        "n_agree": 26,
+        "n_disagree": 45
+      },
+      "OT\u2192OTHER\u2192OT": {
+        "if_agree_pct": 33.0,
+        "if_disagree_pct": 14.0,
+        "cascade_pp": 20.0,
+        "n_agree": 18,
+        "n_disagree": 37
+      }
+    },
+    "skip_agreement": {
+      "QOK\u2192O\u2192QOK": {
+        "ratio": 2.32,
+        "n": 87
+      },
+      "CHEDY\u2192O\u2192CHEDY": {
+        "ratio": 1.43,
+        "n": 132
+      },
+      "OT\u2192O\u2192OT": {
+        "ratio": 1.87,
+        "n": 55
+      }
+    }
+  },
+  "1.8_productive_paradigms": {
+    "QOK": {
+      "n_types": 83,
+      "connected_of_top50": 49,
+      "max_hub_degree": 7,
+      "mean_degree": 3.6,
+      "freq_variant_r": 0.422
+    },
+    "CHEDY": {
+      "n_types": 119,
+      "connected_of_top50": 50,
+      "max_hub_degree": 14,
+      "mean_degree": 7.4,
+      "freq_variant_r": 0.592
+    },
+    "AIIN": {
+      "n_types": 224,
+      "connected_of_top50": 50,
+      "max_hub_degree": 14,
+      "mean_degree": 5.7,
+      "freq_variant_r": 0.709
+    },
+    "positional_ops_CHEDY": {
+      "sub:s": {
+        "dominant_position": "START",
+        "pct": 71.0,
+        "total": 80
+      },
+      "sub:l": {
+        "dominant_position": "START",
+        "pct": 82.0,
+        "total": 56
+      },
+      "sub:t": {
+        "dominant_position": "START",
+        "pct": 81.0,
+        "total": 54
+      },
+      "sub:p": {
+        "dominant_position": "START",
+        "pct": 81.0,
+        "total": 53
+      },
+      "ins:d": {
+        "dominant_position": "END",
+        "pct": 80.0,
+        "total": 49
+      },
+      "del:d": {
+        "dominant_position": "END",
+        "pct": 80.0,
+        "total": 49
+      }
+    }
+  },
+  "1.9_line_position": {
+    "chedy_line_final_residual_pct": -3.2,
+    "aiin_line_initial_residual_pct": 3.6
+  },
+  "1.10_glyph_layers": {
+    "crust_sc": {
+      "prefix": 1.34,
+      "suffix": 1.57
+    },
+    "mantle_core_sc": {
+      "prefix": 1.19,
+      "suffix": 1.96
+    },
+    "scramble_circles_chedy_qok": 2.48,
+    "original_chedy_qok": 2.54,
+    "crust_family_prediction_accuracy_pct": 76.4
+  }
+}
