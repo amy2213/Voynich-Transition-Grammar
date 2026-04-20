@@ -12,7 +12,7 @@
 | Transition rules are grammatical, not phrasal | **Supported** | 77% of CHEDY tokens participate, 369 unique pairs, top-5 cover 13.3% | README, paper, dashboard, JSON | "Distributed across individual tokens — class-level constraint" |
 | Arabic is the closest structural match | **Retired** | Was based on prefix-only SC. Arabic is suffix-dominant (ratio 0.72); Voynich is symmetric (ratio 0.99) | Corrections log only | Do not use. Replaced by bidirectional symmetry finding |
 | Uralic languages match Voynich | **Retired** | Estonian 1.35x and Finnish 1.16x were false positives from 10K corpora. At 100K: 0.96x and 0.91x prefix | Corrections log only | Do not use |
-| Bidirectional self-clustering symmetry | **Supported** | Prefix 1.52x, suffix 1.54x, ratio 0.99, bootstrap CI prefix [1.41, 1.62], suffix [1.48, 1.60]. Unique among 11 tested natural-language comparators | README, paper, dashboard, JSON | "Voynich is the only tested system with elevated, balanced self-clustering in both directions" |
+| Bidirectional self-clustering symmetry | **Supported** | Prefix 1.52x, suffix 1.54x, ratio 0.99, bootstrap CI prefix [1.41, 1.62], suffix [1.48, 1.60]. Unique among 13 tested natural-language comparators | README, paper, dashboard, JSON | "Voynich is the only tested system with elevated, balanced self-clustering in both directions" |
 | Prefix-family method has directional bias | **Supported** | Suffix test reverses rankings: Finnish 0.96x→1.51x, Estonian 0.96x→2.33x | README, paper, JSON | "The prefix-family method inherently favors languages with consistent prefixing morphology" |
 | Cross-transcription stability (EVA) | **Supported with caveat** | Stable across 5 EVA-based transliterations (SC 1.51–1.52x). FSG/Currier NOT tested | Paper, README | "Stable across EVA transliterations; FSG/Currier family definitions not yet implemented" |
 | Voynich is written in [specific language] | **Not tested** | No semantic analysis performed. Structural comparison only | Explicit in limitations | "These findings do not identify the manuscript's language" |
@@ -24,7 +24,7 @@
 
 We analyze sequential constraints between token families in the Voynich Manuscript (Beinecke MS 408) using the Zandbergen-Landini EVA transliteration (31,608 tokens, 184 pages). We identify two robust transition rules: CHEDY→QOK attraction (2.63x, p<0.001) and AIIN→QOK repulsion (0.50x, p<0.001), both distributed across 77% of individual CHEDY tokens and 369 unique token pairs. The AIIN family density is invariant at 15.0% across Currier A and B language modes (KS p=0.742) and exhibits function-word-like behavior.
 
-We introduce a bidirectional self-clustering test comparing prefix-family and suffix-family morphological self-similarity across 11 verified natural-language comparators and 1 shuffled-token control. All natural languages with positive self-clustering are suffix-dominant. Voynich is the only tested system with elevated, balanced clustering in both directions (prefix 1.52x, suffix 1.54x, ratio 0.99). This bidirectional symmetry does not match any tested language family and represents the manuscript's most distinctive measurable structural property.
+We introduce a bidirectional self-clustering test comparing prefix-family and suffix-family morphological self-similarity across 13 natural-language comparators and 1 shuffled-token control. All natural languages with positive self-clustering are suffix-dominant. Swahili (Bantu), despite rich bidirectional morphology, also tests SYMM-LOW. Voynich is the only tested system with elevated, balanced clustering in both directions (prefix 1.52x, suffix 1.54x, ratio 0.99). This bidirectional symmetry does not match any tested language family and represents the manuscript's most distinctive measurable structural property.
 
 These findings establish structural constraints that any decipherment or generation theory must account for but do not identify the manuscript's language or content. The prefix-family method used in earlier Voynich research has a directional bias that favors prefix-morphology languages; this bias is documented and corrected in our analysis. All comparison corpora are modern proxies, not medieval texts.
 
@@ -91,7 +91,7 @@ These limitations are inherent to the current analysis and should not be minimiz
 ## 6. GitHub Release Text
 
 **Repo description:**
-Statistical analysis of sequential token-family constraints in the Voynich Manuscript, with bidirectional self-clustering comparison against 11 natural-language comparators.
+Statistical analysis of sequential token-family constraints in the Voynich Manuscript, with bidirectional self-clustering comparison against 13 natural-language comparators.
 
 **Tagline:**
 Quantitative transition grammar analysis of the Voynich Manuscript. Identifies distributed sequential rules, a structural constant, and a unique bidirectional self-clustering signature.
@@ -100,7 +100,7 @@ Quantitative transition grammar analysis of the Voynich Manuscript. Identifies d
 v1.0 — Transition Grammar with Bidirectional Self-Clustering Analysis
 
 **Release notes:**
-First public release. Includes frozen datasets (226MB), reproducible analysis scripts, interactive React dashboard, and research paper. Key findings: two robust transition rules (CHEDY→QOK 2.63x, AIIN→QOK 0.50x), AIIN invariance at 15% across language modes, and bidirectional self-clustering symmetry unique among 11 tested comparators. All comparison corpora are modern proxies; no language identification or decipherment is claimed.
+First public release. Includes frozen datasets (226MB), reproducible analysis scripts, interactive React dashboard, and research paper. Key findings: two robust transition rules (CHEDY→QOK 2.63x, AIIN→QOK 0.50x), AIIN invariance at 15% across language modes, and bidirectional self-clustering symmetry unique among 13 tested comparators. All comparison corpora are modern proxies; no language identification or decipherment is claimed.
 
 **Topic tags:**
 voynich-manuscript, computational-linguistics, statistical-analysis, digital-humanities, historical-cryptography, morphological-analysis
@@ -126,4 +126,4 @@ voynich-manuscript, computational-linguistics, statistical-analysis, digital-hum
 | 7 | "Self-clustering of 1.45x is a fixed number" | It ranges from 0.93x to 1.45x depending on method. | README caveats, paper §3.3, dashboard self-clustering tab all report the range. |
 | 8 | "AIIN is definitely a function word" | Behavior is consistent with a function-word role, but this is a statistical observation, not a linguistic identification. | Claim ledger: "supported with caveat." Paper uses "consistent with." |
 | 9 | "The bidirectional symmetry proves the text is artificial" | Symmetry is unusual but does not establish artificiality. An untested natural language could have this property. | Paper §4 lists four possible interpretations including natural language. |
-| 10 | "15 languages were compared" | 11 verified natural-language comparators + 3 pending + 1 control. Voynich is the target system, not a comparator. | README line 3. Manifest distinguishes verified/pending. Validation report confirms. |
+| 10 | "15 languages were compared" | 13 natural-language comparators (10 Leipzig + 2 Gutenberg + 1 Ottoman Turkish UD) + 3 pending + 1 control. Voynich is the target system, not a comparator. | README, prefix_suffix_analysis.json. |

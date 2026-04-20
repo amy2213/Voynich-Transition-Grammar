@@ -115,7 +115,7 @@ docs/             Research paper, durable findings, release documentation
 |---|---|---|
 | Arabic is the closest match | Retired | Arabic is suffix-dominant (0.72); Voynich is symmetric (0.99) |
 | Estonian SC = 1.35x, Finnish = 1.16x | Retired | False positives from 10K-sentence corpora |
-| 15 languages compared | Corrected to 11 verified + 3 pending + 1 control | Earlier session used undocumented downloads |
+| 15 languages compared | Corrected to 13 comparators + 3 pending + 1 control | Swahili added; earlier session used undocumented downloads |
 | Self-clustering = 1.44x | Reported as range: 0.93x–1.45x | Method-sensitive |
 
 ## Limitations
