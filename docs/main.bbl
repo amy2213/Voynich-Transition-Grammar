@@ -1,0 +1,36 @@
+\begin{thebibliography}{5}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bowern and Lindemann(2021)]{Bowern2021}
+Claire Bowern and Luke Lindemann.
+\newblock The linguistics of the {V}oynich manuscript.
+\newblock \emph{Annual Review of Linguistics}, 7:\penalty0 285--308, 2021.
+
+\bibitem[Clemens(2016)]{Clemens2016}
+Raymond Clemens, editor.
+\newblock \emph{The {V}oynich Manuscript}.
+\newblock Yale University Press, New Haven, 2016.
+
+\bibitem[Hodgins(2011)]{Hodgins2011}
+Gregory Hodgins.
+\newblock Forensic investigations of the {V}oynich {MS}.
+\newblock \emph{Proceedings of the Voynich 100 Conference}, 2011.
+\newblock Radiocarbon dating of the vellum: 1404--1438.
+
+\bibitem[Montemurro and Zanette(2013)]{Montemurro2013}
+Marcelo~A. Montemurro and Dami{\'a}n~H. Zanette.
+\newblock Keywords and co-occurrence patterns in the {V}oynich {M}anuscript: An
+  information-theoretic analysis.
+\newblock \emph{PLoS ONE}, 8\penalty0 (6):\penalty0 e66344, 2013.
+
+\bibitem[Reddy and Knight(2011)]{Reddy2011}
+Sravana Reddy and Kevin Knight.
+\newblock What we know about the {V}oynich manuscript.
+\newblock \emph{Proceedings of the 5th ACL-HLT Workshop on Language Technology
+  for Cultural Heritage, Social Sciences, and Humanities}, pages 78--86, 2011.
+
+\end{thebibliography}
