@@ -2,7 +2,7 @@
 
 Status as of April 2026. All claims tested against controls, conditioning, section splits, Currier types, frequency matching, and shuffled null models. This document records what survived, what weakened, and what was retired.
 
-Dataset: Zandbergen-Landini EVA transliteration, 31,608 tokens, 184 pages, 4,197 lines. Comparison set: 13 natural-language comparators (10 Leipzig Wikipedia 100K including Swahili, 2 Gutenberg literary, 1 Ottoman Turkish UD treebank), 1 shuffled-token control.
+Dataset: Zandbergen-Landini EVA transliteration, 31,608 tokens, 184 pages, 4,197 lines. Comparison set: 15 natural-language comparators (12 Leipzig Wikipedia 100K including Swahili, Georgian, and Tagalog; 2 Gutenberg literary; 1 Ottoman Turkish UD treebank), 1 shuffled-token control.
 
 ---
 
@@ -36,7 +36,7 @@ Caveat: invariance holds under the standard definition (contains "aiin" or "ain"
 
 Prefix SC=1.524x, suffix SC=1.544x, ratio=0.99. Bootstrap 95% CI: prefix [1.41, 1.62], suffix [1.48, 1.60].
 
-Unique among all tested systems. All 13 natural-language comparators with positive self-clustering are suffix-dominant (ratios 0.29–0.81). No tested system is prefix-dominant. Ottoman Turkish (the strongest candidate for bidirectional morphology due to Arabic prefix layer over Turkic suffixes) tested at prefix=0.70x, suffix=1.04x, ratio=0.67 — SYMM-LOW. Swahili (Bantu), which has textbook bidirectional morphology (prefix subject/class agreement + suffix tense/aspect markers), tested at prefix=0.79x, suffix=0.96x, ratio=0.82 — also SYMM-LOW. Having bidirectional morphology in a natural language does not produce Voynich's symmetric elevated clustering.
+Unique among all tested systems. All 15 natural-language comparators with positive self-clustering are suffix-dominant (ratios 0.29–0.81). No tested system is prefix-dominant. Ottoman Turkish (the strongest candidate for bidirectional morphology due to Arabic prefix layer over Turkic suffixes) tested at prefix=0.70x, suffix=1.04x, ratio=0.67 — SYMM-LOW. Swahili (Bantu), which has textbook bidirectional morphology (prefix subject/class agreement + suffix tense/aspect markers), tested at prefix=0.79x, suffix=0.96x, ratio=0.82 — also SYMM-LOW. Georgian (Kartvelian), which has polypersonal prefix+suffix agreement, tested at prefix=0.98x, suffix=0.86x — SYMM-LOW. Tagalog (Austronesian), with infixation plus prefix/suffix morphology, tested at prefix=0.44x, suffix=0.41x — also SYMM-LOW. Having bidirectional morphology in a natural language does not produce Voynich's symmetric elevated clustering. Tested across 4 typologically distinct bidirectional-morphology languages (Swahili, Ottoman Turkish, Georgian, Tagalog), none approaches SYMM-HIGH.
 
 The symmetry persists across all sections, Currier types, and line positions. Per-scribe breakdown: Hand 1 (9,024 tokens): SYMM-HIGH (1.52x/1.54x, ratio 0.99). Hand 3 (11,390 tokens): SYMM-HIGH (1.27x/1.32x, ratio 0.96). Hands 4 and 5 (small samples): SYMM-HIGH. Hand 2 (9,155 tokens): SYMM-LOW (1.10x/1.23x, ratio 0.89). The symmetry is carried primarily by Hands 1, 3, 4, and 5; Hand 2 shows weaker and more suffix-leaning clustering.
 
@@ -164,7 +164,7 @@ Weakened substantially. No tested constructed system reproduces the combination 
 
 ## Methodological Caveats (apply to all claims)
 
-1. All family definitions are EVA-specific. Results under FSG or Currier alphabets may differ. Cross-transcription validation with non-EVA family definitions has not been performed.
+1. All family definitions are EVA-specific. Cross-transcription validation has been performed using the LSI interlinear file (Currier, FSG/Friedman, Takahashi, and Grove transcriptions, all mapped to EVA alphabet but with independent tokenization). All four transcriptions produce SYMM-HIGH bidirectional symmetry, CHEDY→QOK attraction (2.01–2.48x), AIIN→QOK repulsion (0.21–0.47x), and line-bounded grammar reset. The core findings are stable across transcribers. Validation under non-EVA alphabets (original Currier alphabet, original FSG alphabet) remains an open question.
 
 2. All comparison languages are modern proxies (Leipzig Wikipedia) except Middle English (Gutenberg) and Ottoman Turkish (UD treebank). No medieval herbal, recipe, or formulaic text has been tested with the same pipeline.
 
@@ -201,7 +201,7 @@ When two adjacent tokens agree on suffix, the probability of the next token also
 Each family contains hub-centered edit-distance graphs where high-frequency stems have 2–3x more morphological variants than low-frequency stems (r = 0.52–0.69). The same positionally constrained edit operations (prefix-like, stem-internal, suffix-like) recur across all four major sections while the specific vocabulary changes. The explanation must produce a productive morphological system with frequency-correlated variant generation.
 
 ### 6. Bidirectional self-clustering symmetry
-Prefix SC = 1.52x, suffix SC = 1.54x, ratio = 0.99. No tested natural language (0 of 13) produces this. All natural languages with positive self-clustering are suffix-dominant. The explanation must produce balanced elevated clustering at both word beginnings and word endings simultaneously.
+Prefix SC = 1.52x, suffix SC = 1.54x, ratio = 0.99. No tested natural language (0 of 15) produces this. All natural languages with positive self-clustering are suffix-dominant. The explanation must produce balanced elevated clustering at both word beginnings and word endings simultaneously.
 
 ### 7. Section-stable grammar with shifting lexicon
 Transition rules, suffix agreement, morphological operations, and family proportions are consistent across herbal, biological, and recipe sections. But within-family vocabulary overlap between sections is only 0.09–0.25 (Jaccard). The explanation must produce a system where the grammatical infrastructure is shared but the specific word inventory changes by topic.

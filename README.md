@@ -22,9 +22,11 @@ When you group Voynich words into families by their beginning characters and mea
 | Ottoman Turkish | 0.70x | 1.04x | 0.67 | Symmetric-Low |
 | Turkish | 0.91x | 0.98x | 0.92 | Symmetric-Low |
 | Swahili | 0.79x | 0.96x | 0.82 | Symmetric-Low |
+| Georgian | 0.98x | 0.86x | 1.14 | Symmetric-Low |
+| Tagalog | 0.44x | 0.41x | 1.08 | Symmetric-Low |
 | Gibberish (shuffled) | 0.92x | 0.97x | 0.96 | Symmetric-Low |
 
-Full table with all 15 systems in [results/prefix_suffix_analysis.json](results/prefix_suffix_analysis.json). This comparison covers 10 modern-proxy languages (Leipzig Wikipedia 100K, including Swahili), 2 historical literary texts (Gutenberg), 1 Ottoman Turkish UD treebank, and 1 shuffled-token control.
+Full table with all 17 systems in [results/prefix_suffix_analysis.json](results/prefix_suffix_analysis.json). This comparison covers 12 modern-proxy languages (Leipzig Wikipedia 100K), 2 historical literary texts (Gutenberg), 1 Ottoman Turkish UD treebank, and 1 shuffled-token control.
 
 This matters because it constrains what the writing system can be. A simple letter-substitution cipher would preserve the source language's suffix dominance. Whatever produced Voynich operates on both word boundaries simultaneously — consistent with a syllabic or morpheme-level encoding.
 
@@ -46,7 +48,7 @@ This matters because it constrains what the writing system can be. A simple lett
 
 ## What this does NOT claim
 
-This project does not decode any text, identify any language, or assign meaning to any word. Structural similarity is not linguistic identification. The comparison set covers 13 languages but not every language type — Sinitic, polysynthetic, and historical shorthand systems are untested. The bidirectional symmetry does not prove the text is artificial; an untested natural language could have this property. All analysis uses the EVA transliteration, which may not correspond to the original script's character boundaries.
+This project does not decode any text, identify any language, or assign meaning to any word. Structural similarity is not linguistic identification. The comparison set covers 15 languages but not every language type — Sinitic, polysynthetic, and historical shorthand systems are untested. The bidirectional symmetry does not prove the text is artificial; an untested natural language could have this property. All analysis uses the EVA transliteration, which may not correspond to the original script's character boundaries.
 
 ---
 
@@ -59,7 +61,7 @@ Any theory about the Voynich Manuscript — decipherment, hoax mechanism, or con
 3. **Suffix agreement** — adjacent words agree on ending class at 1.18–1.75x
 4. **Agreement cascades** — feature matching propagates through 3-token chains
 5. **Productive paradigms** — hub-centered morphological networks with frequency-correlated variant counts
-6. **Bidirectional symmetry** — prefix/suffix clustering ratio of 0.99, unique among 15 tested systems (13 natural languages + 1 shuffled control + Voynich)
+6. **Bidirectional symmetry** — prefix/suffix clustering ratio of 0.99, unique among 15 tested systems (15 natural languages + 1 shuffled control + Voynich)
 7. **Stable grammar, shifting vocabulary** — same rules across sections, but only 9–25% vocabulary overlap
 8. **Open vocabulary** — 71.4% hapax, natural-like frequency distribution, not template-generated
 
@@ -115,7 +117,7 @@ docs/             Research paper, durable findings, release documentation
 |---|---|---|
 | Arabic is the closest match | Retired | Arabic is suffix-dominant (0.72); Voynich is symmetric (0.99) |
 | Estonian SC = 1.35x, Finnish = 1.16x | Retired | False positives from 10K-sentence corpora |
-| 15 languages compared | Corrected to 13 comparators + 3 pending + 1 control | Swahili added; earlier session used undocumented downloads |
+| 15 languages compared | Corrected to 15 comparators + 3 pending + 1 control | Swahili added; earlier session used undocumented downloads |
 | Self-clustering = 1.44x | Reported as range: 0.93x–1.45x | Method-sensitive |
 
 ## Limitations

@@ -1,0 +1,103 @@
+{
+  "description": "Cross-transcription stability test. All transcriptions use EVA alphabet but differ in tokenization (word boundaries) and coverage.",
+  "source_file": "LSI_ivtff_0d.txt (voynich.nu/data/beta/)",
+  "transcribers": {
+    "C": {
+      "name": "Currier",
+      "n_tokens": 16453,
+      "n_lines": 2373,
+      "chedy_qok": 2.48,
+      "aiin_qok": 0.42,
+      "prefix_sc": 1.298,
+      "suffix_sc": 1.534,
+      "ps_ratio": 0.85,
+      "bucket": "SYMM-HIGH",
+      "chedy_qok_within": 2.6,
+      "chedy_qok_cross": 0.92,
+      "aiin_pct": 15.0,
+      "family_distribution": {
+        "QOK": 7.4,
+        "OK": 4.3,
+        "OT": 4.0,
+        "CHEDY": 9.6,
+        "AIIN": 15.0,
+        "OTHER": 59.7
+      }
+    },
+    "F": {
+      "name": "FSG (Friedman)",
+      "n_tokens": 28811,
+      "n_lines": 3613,
+      "chedy_qok": 2.4,
+      "aiin_qok": 0.45,
+      "prefix_sc": 1.225,
+      "suffix_sc": 1.466,
+      "ps_ratio": 0.84,
+      "bucket": "SYMM-HIGH",
+      "chedy_qok_within": 2.46,
+      "chedy_qok_cross": 0.71,
+      "aiin_pct": 16.5,
+      "family_distribution": {
+        "QOK": 7.5,
+        "OK": 4.7,
+        "OT": 4.6,
+        "CHEDY": 9.1,
+        "AIIN": 16.5,
+        "OTHER": 57.6
+      }
+    },
+    "H": {
+      "name": "Takahashi",
+      "n_tokens": 30426,
+      "n_lines": 4113,
+      "chedy_qok": 2.41,
+      "aiin_qok": 0.47,
+      "prefix_sc": 1.283,
+      "suffix_sc": 1.496,
+      "ps_ratio": 0.86,
+      "bucket": "SYMM-HIGH",
+      "chedy_qok_within": 2.45,
+      "chedy_qok_cross": 0.72,
+      "aiin_pct": 15.6,
+      "family_distribution": {
+        "QOK": 7.4,
+        "OK": 5.2,
+        "OT": 5.1,
+        "CHEDY": 8.8,
+        "AIIN": 15.6,
+        "OTHER": 58.0
+      }
+    },
+    "V": {
+      "name": "Grove",
+      "n_tokens": 7657,
+      "n_lines": 1238,
+      "chedy_qok": 2.01,
+      "aiin_qok": 0.21,
+      "prefix_sc": 1.135,
+      "suffix_sc": 1.151,
+      "ps_ratio": 0.99,
+      "bucket": "SYMM-HIGH",
+      "chedy_qok_within": 2.03,
+      "chedy_qok_cross": 0.79,
+      "aiin_pct": 12.3,
+      "family_distribution": {
+        "QOK": 11.0,
+        "OK": 4.7,
+        "OT": 4.8,
+        "CHEDY": 15.1,
+        "AIIN": 12.3,
+        "OTHER": 52.1
+      }
+    }
+  },
+  "zl_baseline": {
+    "chedy_qok": 2.625,
+    "aiin_qok": 0.504,
+    "prefix_sc": 1.524,
+    "suffix_sc": 1.544,
+    "ps_ratio": 0.99,
+    "bucket": "SYMM-HIGH",
+    "n_tokens": 31608
+  }
+}

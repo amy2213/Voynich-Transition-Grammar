@@ -137,6 +137,24 @@
       "family": "Bantu",
       "n": 1593683,
       "note": "Leipzig Wikipedia 100K. Despite rich bidirectional morphology (prefix AGR + suffix TAM), does not produce symmetric elevated self-clustering."
+    },
+    "Georgian": {
+      "prefix_sc": 0.978,
+      "suffix_sc": 0.856,
+      "ratio": 1.14,
+      "bucket": "SYMM-LOW",
+      "family": "Kartvelian",
+      "n": 1102327,
+      "note": "Leipzig Wikipedia 100K. Polypersonal agreement (prefix+suffix) does not produce symmetric elevated self-clustering."
+    },
+    "Tagalog": {
+      "prefix_sc": 0.444,
+      "suffix_sc": 0.411,
+      "ratio": 1.08,
+      "bucket": "SYMM-LOW",
+      "family": "Austronesian",
+      "n": 1924215,
+      "note": "Leipzig Wikipedia 100K. Infixation + prefix + suffix morphology does not produce symmetric elevated self-clustering."
     }
   },
   "key_finding": "Voynich is the only system in SYMM-HIGH. All natural languages with positive self-clustering are SUFFIX-DOM. No tested natural language clusters equally in both directions.",
