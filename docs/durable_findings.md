@@ -2,7 +2,7 @@
 
 Status as of April 2026. All claims tested against controls, conditioning, section splits, Currier types, frequency matching, and shuffled null models. This document records what survived, what weakened, and what was retired.
 
-Dataset: Zandbergen-Landini EVA transliteration, 31,608 tokens, 184 pages, 4,197 lines. Comparison set: 11 verified natural-language comparators (9 Leipzig Wikipedia 100K, 2 Gutenberg literary), 1 Ottoman Turkish UD treebank, 1 shuffled-token control.
+Dataset: Zandbergen-Landini EVA transliteration, 31,608 tokens, 184 pages, 4,197 lines. Comparison set: 13 natural-language comparators (10 Leipzig Wikipedia 100K including Swahili, 2 Gutenberg literary, 1 Ottoman Turkish UD treebank), 1 shuffled-token control.
 
 ---
 
@@ -16,7 +16,7 @@ Survived: section splits, Currier A/B, line-position controls (mid-position only
 
 The rules operate at the family level: shuffling tokens within families preserves both effects perfectly (0.00 change). The rules describe class-level constraints, not specific token collocations.
 
-CHEDY→QOK is specific to QOK. After CHEDY at +1: QOK=2.62x, OK=0.83x, OT=0.80x, AIIN=1.08x. CHEDY does not attract backbone families in general. It specifically attracts QOK and mildly repels OK and OT.
+CHEDY→QOK is specific to QOK. After CHEDY at +1 (ratio = observed rate / overall token rate): QOK=2.62x, OK=0.83x, OT=0.80x, AIIN=1.08x, OTHER=0.82x. CHEDY does not attract backbone families in general. It specifically attracts QOK and mildly repels OK, OT, and OTHER. Note: the core JSON transition matrix uses a different baseline (destination-position rate rather than overall rate), yielding CHEDY→AIIN=0.77x. Both computations are correct; the difference arises because AIIN's destination-position rate differs from its overall rate. The paper and this document use the overall-rate baseline for the specificity comparison.
 
 The dependency extends beyond adjacency: +1=2.62x, +2=1.23x, +3=1.32x, +4=1.16x, +5=1.02x. It reaches 3-4 tokens forward but is strongest at immediate adjacency.
 
@@ -36,9 +36,9 @@ Caveat: invariance holds under the standard definition (contains "aiin" or "ain"
 
 Prefix SC=1.524x, suffix SC=1.544x, ratio=0.99. Bootstrap 95% CI: prefix [1.41, 1.62], suffix [1.48, 1.60].
 
-Unique among all tested systems. All 11 natural-language comparators with positive self-clustering are suffix-dominant (ratios 0.29–0.81). No tested system is prefix-dominant. Ottoman Turkish (the strongest candidate for bidirectional morphology due to Arabic prefix layer over Turkic suffixes) tested at prefix=0.70x, suffix=1.04x, ratio=0.67 — SYMM-LOW.
+Unique among all tested systems. All 13 natural-language comparators with positive self-clustering are suffix-dominant (ratios 0.29–0.81). No tested system is prefix-dominant. Ottoman Turkish (the strongest candidate for bidirectional morphology due to Arabic prefix layer over Turkic suffixes) tested at prefix=0.70x, suffix=1.04x, ratio=0.67 — SYMM-LOW. Swahili (Bantu), which has textbook bidirectional morphology (prefix subject/class agreement + suffix tense/aspect markers), tested at prefix=0.79x, suffix=0.96x, ratio=0.82 — also SYMM-LOW. Having bidirectional morphology in a natural language does not produce Voynich's symmetric elevated clustering.
 
-The symmetry persists across all sections, Currier types, and line positions.
+The symmetry persists across all sections, Currier types, and line positions. Per-scribe breakdown: Hand 1 (9,024 tokens): SYMM-HIGH (1.52x/1.54x, ratio 0.99). Hand 3 (11,390 tokens): SYMM-HIGH (1.27x/1.32x, ratio 0.96). Hands 4 and 5 (small samples): SYMM-HIGH. Hand 2 (9,155 tokens): SYMM-LOW (1.10x/1.23x, ratio 0.89). The symmetry is carried primarily by Hands 1, 3, 4, and 5; Hand 2 shows weaker and more suffix-leaning clustering.
 
 No encoding simulation reproduced the full profile (symmetric-high clustering + 71% hapax + grammatical variance CV=0.40 + transition rules >2.5x). Bidirectional padding of Arabic came closest (ratio 0.77) but missed symmetry and inflated hapax. Grammar-aware edge templating preserved transition rules (CV 0.35) but produced PREFIX-DOM, not SYMM-HIGH.
 
@@ -74,13 +74,15 @@ When A and B agree on suffix, B→C agreement jumps dramatically: CHEDY→OTHER�
 
 Suffix agreement jumps over OTHER tokens: QOK→[OTHER]→QOK at 2.32x, CHEDY→[OTHER]→CHEDY at 1.43x, OT→[OTHER]→OT at 1.87x. The agreement system treats OTHER-family tokens as transparent.
 
+Suffix cascades also persist across line boundaries (within-line cascade: +42pp; cross-line cascade: +48pp, n=21). This contrasts with the transition rules (§1.4), which reset at line breaks. The agreement system and the sequential grammar system have different boundary behaviors: suffix features propagate across lines even though CHEDY→QOK attraction does not.
+
 ### 1.8 Productive morphological paradigm structure
 
 Each family has hub-centered edit-distance-1 graphs. Top hubs: chedy connects to 12 edit-1 neighbors, daiin to 10, qokeedy to 7. All 50 tested types per family are connected — no isolated nodes.
 
 The same edit operations recur across all four major sections: insertion/deletion of 'e' (92% mid-position), insertion/deletion of 'd' (74% end-position), c↔s substitution (ch↔sh, 62% mid-position), insertion/deletion of 'l' (89% start-position). Operations are positionally locked to specific word positions — prefix-like, stem-internal, and suffix-like.
 
-High-frequency stems generate more edit-1 variants: correlation (log-frequency vs variant count) r=0.516 for QOK, r=0.598 for CHEDY, r=0.686 for AIIN. Stems at frequency 100+ have 2–3x more variants than stems at frequency 2–5.
+High-frequency stems generate more edit-1 variants: correlation (log-frequency vs variant count) r=0.516 for QOK, r=0.598 for CHEDY, r=0.686 for AIIN. Stems at frequency 100+ have 2–3x more variants than stems at frequency 2–5. Caveat: shuffled Voynich tokens (r=0.61) and trigram-generated null tokens (r=0.67) produce comparable or higher correlations. The frequency-variant correlation is partially a combinatorial property of Zipfian distributions on edit-distance graphs, not solely a morphological diagnostic. The stronger evidence for productive paradigms is the hub-centered graph structure, positionally locked edit operations, and cross-section consistency of those operations.
 
 ### 1.9 CHEDY avoids line-final position
 
@@ -199,7 +201,7 @@ When two adjacent tokens agree on suffix, the probability of the next token also
 Each family contains hub-centered edit-distance graphs where high-frequency stems have 2–3x more morphological variants than low-frequency stems (r = 0.52–0.69). The same positionally constrained edit operations (prefix-like, stem-internal, suffix-like) recur across all four major sections while the specific vocabulary changes. The explanation must produce a productive morphological system with frequency-correlated variant generation.
 
 ### 6. Bidirectional self-clustering symmetry
-Prefix SC = 1.52x, suffix SC = 1.54x, ratio = 0.99. No tested natural language (0 of 12, including Ottoman Turkish) produces this. All natural languages with positive self-clustering are suffix-dominant. The explanation must produce balanced elevated clustering at both word beginnings and word endings simultaneously.
+Prefix SC = 1.52x, suffix SC = 1.54x, ratio = 0.99. No tested natural language (0 of 13) produces this. All natural languages with positive self-clustering are suffix-dominant. The explanation must produce balanced elevated clustering at both word beginnings and word endings simultaneously.
 
 ### 7. Section-stable grammar with shifting lexicon
 Transition rules, suffix agreement, morphological operations, and family proportions are consistent across herbal, biological, and recipe sections. But within-family vocabulary overlap between sections is only 0.09–0.25 (Jaccard). The explanation must produce a system where the grammatical infrastructure is shared but the specific word inventory changes by topic.

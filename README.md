@@ -2,7 +2,7 @@
 
 The Voynich Manuscript is a 15th-century book that nobody can read. The script is unknown, the language (if it is a language) is unidentified, and every proposed decipherment has failed verification. This project doesn't try to decode it. Instead, it measures the statistical structure of the text and asks: what kind of system could have produced these patterns?
 
-The answer is surprisingly specific. The text has grammatical rules that operate within lines and reset at line boundaries, morphological agreement between adjacent words where the ending of one word predicts the ending of the next, and a unique structural symmetry that no tested natural language shares. These properties together rule out random generation, simple ciphers, and template-based hoax mechanisms. The strongest remaining explanation is encoded natural language — probably a formulaic text like a herbal or recipe collection, written in a syllabic cipher that preserves the source language's grammar.
+The answer is surprisingly specific. The text has grammatical rules that operate within lines and reset at line boundaries, morphological agreement between adjacent words where the ending of one word predicts the ending of the next, and a unique structural symmetry that no tested natural language shares. These properties together rule out random generation, simple ciphers, and template-based hoax mechanisms. The strongest remaining explanation is encoded structured language — plausibly natural language under a cipher that preserves the source system's grammar. The structural profile is consistent with a formulaic domain text (herbal, recipe, or medical collection), though this genre inference has not been tested against genre-matched comparison corpora.
 
 **[Interactive Dashboard](https://amy2213.github.io/Voynich-Transition-Grammar/dashboard/voynich_dashboard.html)** · **[Research Paper (PDF)](https://amy2213.github.io/Voynich-Transition-Grammar/docs/paper.pdf)** · **[Durable Findings](docs/durable_findings.md)**
 
@@ -21,9 +21,10 @@ When you group Voynich words into families by their beginning characters and mea
 | Finnish | 1.01x | 1.51x | 0.67 | Suffix-Dominant |
 | Ottoman Turkish | 0.70x | 1.04x | 0.67 | Symmetric-Low |
 | Turkish | 0.91x | 0.98x | 0.92 | Symmetric-Low |
+| Swahili | 0.79x | 0.96x | 0.82 | Symmetric-Low |
 | Gibberish (shuffled) | 0.92x | 0.97x | 0.96 | Symmetric-Low |
 
-Full table with all 14 systems in [results/prefix_suffix_analysis.json](results/prefix_suffix_analysis.json). This comparison covers 9 modern-proxy languages (Leipzig Wikipedia 100K), 2 historical literary texts (Gutenberg), 1 Ottoman Turkish UD treebank, and 1 shuffled-token control.
+Full table with all 15 systems in [results/prefix_suffix_analysis.json](results/prefix_suffix_analysis.json). This comparison covers 10 modern-proxy languages (Leipzig Wikipedia 100K, including Swahili), 2 historical literary texts (Gutenberg), 1 Ottoman Turkish UD treebank, and 1 shuffled-token control.
 
 This matters because it constrains what the writing system can be. A simple letter-substitution cipher would preserve the source language's suffix dominance. Whatever produced Voynich operates on both word boundaries simultaneously — consistent with a syllabic or morpheme-level encoding.
 
@@ -37,7 +38,7 @@ This matters because it constrains what the writing system can be. A simple lett
 
 **Adjacent words agree on their endings.** When one word ends in -dy, the next word is more likely to also end in -dy than chance predicts (1.18x–1.75x depending on family pair). This agreement compounds when you track multiple features simultaneously (suffix + length + mantle = 5–9x). The agreement cascades through chains of three or more words, with conditional lifts of 20–80 percentage points, and jumps over intervening function-like words.
 
-**The morphology looks productive.** Each word family contains hub-centered networks of similar words (edit distance 1) where high-frequency stems have 2–3x more variants than low-frequency stems. The same four edit operations (prefix-like, stem-internal, suffix-like) recur across all manuscript sections while the specific vocabulary changes. This is how real inflectional morphology works — common words develop more forms.
+**The morphology looks productive.** Each word family contains hub-centered networks of similar words (edit distance 1) where high-frequency stems have 2–3x more variants than low-frequency stems. The same four edit operations (prefix-like, stem-internal, suffix-like) recur across all manuscript sections while the specific vocabulary changes. This frequency-productivity correlation is consistent with productive morphology, though it has not yet been tested against a combinatorial null model (high-frequency strings may have more edit-distance-1 neighbors trivially).
 
 **One word family behaves like a function word.** AIIN appears at exactly 15.0% of tokens in both Currier A and B language modes (KS p = 0.742). It doesn't cluster with itself. It's elevated at line beginnings. It passes other word families through but blocks QOK. This is consistent with a conjunction, article, or structural particle — something like "and" or "take" in a recipe text.
 
@@ -45,7 +46,7 @@ This matters because it constrains what the writing system can be. A simple lett
 
 ## What this does NOT claim
 
-This project does not decode any text, identify any language, or assign meaning to any word. Structural similarity is not linguistic identification. The comparison set covers 11 languages but not every language type — Sinitic, polysynthetic, and historical shorthand systems are untested. The bidirectional symmetry does not prove the text is artificial; an untested natural language could have this property. All analysis uses the EVA transliteration, which may not correspond to the original script's character boundaries.
+This project does not decode any text, identify any language, or assign meaning to any word. Structural similarity is not linguistic identification. The comparison set covers 13 languages but not every language type — Sinitic, polysynthetic, and historical shorthand systems are untested. The bidirectional symmetry does not prove the text is artificial; an untested natural language could have this property. All analysis uses the EVA transliteration, which may not correspond to the original script's character boundaries.
 
 ---
 
@@ -58,11 +59,11 @@ Any theory about the Voynich Manuscript — decipherment, hoax mechanism, or con
 3. **Suffix agreement** — adjacent words agree on ending class at 1.18–1.75x
 4. **Agreement cascades** — feature matching propagates through 3-token chains
 5. **Productive paradigms** — hub-centered morphological networks with frequency-correlated variant counts
-6. **Bidirectional symmetry** — prefix/suffix clustering ratio of 0.99, unique among 14 tested systems
+6. **Bidirectional symmetry** — prefix/suffix clustering ratio of 0.99, unique among 15 tested systems (13 natural languages + 1 shuffled control + Voynich)
 7. **Stable grammar, shifting vocabulary** — same rules across sections, but only 9–25% vocabulary overlap
 8. **Open vocabulary** — 71.4% hapax, natural-like frequency distribution, not template-generated
 
-Encoded natural language is the only candidate class that satisfies all eight without requiring mechanisms that lack known 15th-century precedent. Details and scoring against alternative hypotheses in [docs/durable_findings.md](docs/durable_findings.md).
+Among the explanation classes tested with this pipeline (random generation, simple ciphers, template-based generation), encoded structured language is the only one compatible with all eight requirements. More sophisticated constructed systems remain untested and cannot be excluded. Details and scoring against alternative hypotheses in [docs/durable_findings.md](docs/durable_findings.md).
 
 ---
 

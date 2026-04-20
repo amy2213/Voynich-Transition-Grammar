@@ -128,6 +128,15 @@
       "family": "Turkic",
       "n": 16890,
       "note": "UD treebank (DUDU), 1782 sentences, 14th-20th century texts. Small corpus \u2014 wider CIs expected."
+    },
+    "Swahili": {
+      "prefix_sc": 0.791,
+      "suffix_sc": 0.96,
+      "ratio": 0.82,
+      "bucket": "SYMM-LOW",
+      "family": "Bantu",
+      "n": 1593683,
+      "note": "Leipzig Wikipedia 100K. Despite rich bidirectional morphology (prefix AGR + suffix TAM), does not produce symmetric elevated self-clustering."
     }
   },
   "key_finding": "Voynich is the only system in SYMM-HIGH. All natural languages with positive self-clustering are SUFFIX-DOM. No tested natural language clusters equally in both directions.",
