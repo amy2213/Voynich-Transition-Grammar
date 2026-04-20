@@ -190,18 +190,21 @@ Within-line CHEDY→QOK attraction is 2.54x. Cross-line it drops to 0.85x. The t
 CHEDY attracts QOK at 2.62x while simultaneously repelling OK (0.83x) and OT (0.80x). This is a targeted class-to-class dependency, not a general content-density effect. The explanation must produce specific asymmetric attraction between particular word classes.
 
 ### 3. Suffix-led multi-feature agreement
-Adjacent tokens from specific family pairings agree on suffix class at 1.18–1.75x above chance, with the effect compounding across suffix + length + mantle to 5–9x. Agreement cascades through 3-token chains (20–80 percentage point conditional lifts) and jumps over intervening OTHER tokens. The explanation must produce morphological concord between adjacent content words.
+Adjacent tokens from specific family pairings agree on suffix class at 1.18–1.75x above chance, with the effect compounding across suffix + length + mantle to 5–9x. The explanation must produce morphological concord between adjacent content words.
 
-### 4. Productive morphological paradigms
+### 4. Agreement cascades through three-token chains
+When two adjacent tokens agree on suffix, the probability of the next token also agreeing jumps by 20–80 percentage points. Agreement propagates across intervening OTHER tokens (QOK→[OTHER]→QOK at 2.32x, CHEDY→[OTHER]→CHEDY at 1.43x). The explanation must produce feature propagation across multi-token spans.
+
+### 5. Productive morphological paradigms
 Each family contains hub-centered edit-distance graphs where high-frequency stems have 2–3x more morphological variants than low-frequency stems (r = 0.52–0.69). The same positionally constrained edit operations (prefix-like, stem-internal, suffix-like) recur across all four major sections while the specific vocabulary changes. The explanation must produce a productive morphological system with frequency-correlated variant generation.
 
-### 5. Bidirectional self-clustering symmetry
+### 6. Bidirectional self-clustering symmetry
 Prefix SC = 1.52x, suffix SC = 1.54x, ratio = 0.99. No tested natural language (0 of 12, including Ottoman Turkish) produces this. All natural languages with positive self-clustering are suffix-dominant. The explanation must produce balanced elevated clustering at both word beginnings and word endings simultaneously.
 
-### 6. Section-stable grammar with shifting lexicon
+### 7. Section-stable grammar with shifting lexicon
 Transition rules, suffix agreement, morphological operations, and family proportions are consistent across herbal, biological, and recipe sections. But within-family vocabulary overlap between sections is only 0.09–0.25 (Jaccard). The explanation must produce a system where the grammatical infrastructure is shared but the specific word inventory changes by topic.
 
-### 7. Open vocabulary with natural-like distribution
+### 8. Open vocabulary with natural-like distribution
 71.4% hapax legomena. Type/token ratio 0.23. Grammatical variance CV = 0.40 with the transition rules breaking in 6% of 500-token windows. Top-100 bigrams cover only 3.7% of text. Frame slots accept mean 6.6 unique fillers. The explanation must produce a genuinely open, non-template vocabulary with natural-like frequency distribution and occasional rule violations.
 
 ### Checklist
@@ -210,12 +213,13 @@ Transition rules, suffix agreement, morphological operations, and family proport
 |---|---|---|---|---|---|
 | 1 | Line-bounded grammar | Yes (clause = line) | Possible if designed | No mechanism | No mechanism |
 | 2 | Specific class attraction | Yes (inherited syntax) | Requires design | No mechanism | No mechanism |
-| 3 | Suffix agreement cascade | Yes (morphological concord) | No known precedent | Destroys morphology | No mechanism |
-| 4 | Productive paradigms | Yes (inflectional system) | No 15th-c. precedent | Destroys paradigms | No mechanism |
-| 5 | Bidirectional symmetry | Requires syllabic encoding | Possible if designed | Cannot produce | Cannot produce |
-| 6 | Stable grammar, shifting lexicon | Yes (topic variation) | Requires elaborate design | Preserved if syllabic | Partial |
-| 7 | Open vocabulary, natural distribution | Yes (natural property) | Requires Zipf engineering | Partially preserved | No (template-bound) |
+| 3 | Suffix agreement | Yes (morphological concord) | No known precedent | Destroys morphology | No mechanism |
+| 4 | Agreement cascades | Yes (feature propagation) | No known precedent | No mechanism | No mechanism |
+| 5 | Productive paradigms | Yes (inflectional system) | No 15th-c. precedent | Destroys paradigms | No mechanism |
+| 6 | Bidirectional symmetry | Requires syllabic encoding | Possible if designed | Cannot produce | Cannot produce |
+| 7 | Stable grammar, shifting lexicon | Yes (topic variation) | Requires elaborate design | Preserved if syllabic | Partial |
+| 8 | Open vocabulary, natural distribution | Yes (natural property) | Requires Zipf engineering | Partially preserved | No (template-bound) |
 
-Only encoded natural language satisfies all seven requirements without requiring mechanisms that lack historical precedent. Constructed systems can satisfy requirements 1, 2, 5, and 6 individually but have no known 15th-century precedent for requirements 3 and 4 (morphological concord and productive paradigms). Simple ciphers and table/grille generation fail requirements 1–5.
+Only encoded natural language satisfies all eight requirements without requiring mechanisms that lack historical precedent. Constructed systems can satisfy requirements 1, 2, 5, and 6 individually but have no known 15th-century precedent for requirements 3, 4, and 5 (morphological concord, agreement cascades, and productive paradigms). Simple ciphers and table/grille generation fail requirements 1–6.
 
 This does not prove encoded natural language. It establishes that encoded natural language is the only hypothesis that does not require historically unprecedented mechanisms.

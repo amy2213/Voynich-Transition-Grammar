@@ -225,134 +225,66 @@ export default function VoynichDashboard() {
 
       {/* Content */}
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 24px 60px", opacity: loaded ? 1 : 0, transition: "opacity 0.5s" }}>
-{tab === 0 && (
-  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }}>
 
-    {/* Plain-language preface — spans full width */}
-    <Card style={{ gridColumn: "1 / -1", borderLeft: `3px solid ${COLORS.accent}` }}>
-      <SectionTitle sub="Start here if you're new to the Voynich manuscript">What this is, in plain English</SectionTitle>
-      <div style={{ fontSize: 14, lineHeight: 1.7, color: COLORS.text, maxWidth: 780 }}>
-        <p style={{ marginTop: 0 }}>
-          The <strong style={{ color: COLORS.accent }}>Voynich manuscript</strong> is a 15th-century book written in a script nobody has ever been able to read. For over 600 years it has resisted every attempt at translation, and one long-standing possibility has been that the text is elaborate nonsense — pretty patterns with no meaning behind them.
-        </p>
-        <p>
-          This project tests that possibility. Instead of trying to translate the text, I measured its <em>structure</em>: do certain recurring "word-types" attract or repel each other in sequence, the way grammatical words do in real languages? I then ran the same tests on 11 known languages — ancient and modern, related and unrelated — as comparisons, plus a shuffled-text control for gibberish.
-        </p>
-        <p style={{ marginBottom: 0 }}>
-          The short version: the Voynich has rigid, statistically undeniable grammar-like rules. But those rules don't match any of the 11 languages tested. It behaves like a language — just not like any language we currently know. What that <em>means</em> is still an open question, but "meaningless gibberish" is no longer one of the live possibilities.
-        </p>
-      </div>
-      <div style={{ marginTop: 16, padding: 12, background: COLORS.surfaceLight, borderRadius: 6, fontSize: 12, color: COLORS.textDim, lineHeight: 1.6 }}>
-        <strong style={{ color: COLORS.accent }}>A quick glossary for the tabs below: </strong>
-        <strong style={{ color: COLORS.text }}>AIIN, CHEDY, QOK, OK, OT</strong> are common recurring word-shapes in the manuscript (I grouped similar-looking "words" into families). <strong style={{ color: COLORS.text }}>Self-clustering</strong> measures how often a word appears near copies of itself vs. random chance. <strong style={{ color: COLORS.text }}>Currier A/B</strong> are two distinct scribal hands found in the manuscript — testing across both shows a pattern isn't an artifact of one writer. <strong style={{ color: COLORS.text }}>Chi² and p-values</strong> are standard statistical tests; p ≈ 0 means "this pattern is essentially impossible by chance."
-      </div>
-    </Card>
+        {tab === 0 && (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 16 }}>
+            <Card>
+              <SectionTitle sub="Verified findings">Core Findings</SectionTitle>
+              {[
+                { label: "Non-random sequential structure", detail: "Chi² = 1407.8, p ≈ 0. Significantly non-random." },
+                { label: "AIIN at 15% across Currier A/B", detail: "KS p = 0.742. Language-invariant." },
+                { label: "CHEDY→QOK = 2.625x attraction", detail: "Split-half 95% range: [2.34x, 2.67x]" },
+                { label: "AIIN→QOK = 0.504x repulsion", detail: "Bidirectional. QOK is blocked." },
+                { label: "Rules are GRAMMATICAL", detail: "77% of CHEDY tokens participate." },
+              ].map((f, i) => (
+                <div key={i} style={{ padding: "10px 0", borderBottom: i < 4 ? `1px solid ${COLORS.border}33` : "none" }}>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: COLORS.text }}>{f.label}</div>
+                  <div style={{ fontSize: 12, color: COLORS.textDim, marginTop: 2 }}>{f.detail}</div>
+                </div>
+              ))}
+            </Card>
 
-    <Card>
-      <SectionTitle sub="Verified findings">Core Findings</SectionTitle>
-      {[
-        {
-          label: "Non-random sequential structure",
-          detail: "Chi² = 1407.8, p ≈ 0. Significantly non-random.",
-          plain: "The order of words isn't random. Something is governing which word-types can follow which."
-        },
-        {
-          label: "AIIN at 15% across Currier A/B",
-          detail: "KS p = 0.742. Language-invariant.",
-          plain: "The AIIN family shows up at exactly the same rate (15%) in both scribal hands — the kind of behavior you'd expect from a common function word like 'the' or 'of'."
-        },
-        {
-          label: "CHEDY→QOK = 2.625x attraction",
-          detail: "Split-half 95% range: [2.34x, 2.67x]",
-          plain: "CHEDY-type words are 2.6x more likely to be followed by QOK-type words than chance would predict. Very stable across subsamples."
-        },
-        {
-          label: "AIIN→QOK = 0.504x repulsion",
-          detail: "Bidirectional. QOK is blocked.",
-          plain: "AIIN and QOK actively avoid each other in both directions — they almost never sit next to each other. This is a hard sequential constraint."
-        },
-        {
-          label: "Rules are GRAMMATICAL",
-          detail: "77% of CHEDY tokens participate. 369 unique pairs.",
-          plain: "These aren't a handful of fixed phrases being repeated — they're class-wide rules. Most CHEDY-type words follow the rule, across hundreds of different word combinations."
-        },
-      ].map((f, i) => (
-        <div key={i} style={{ padding: "12px 0", borderBottom: i < 4 ? `1px solid ${COLORS.border}33` : "none" }}>
-          <div style={{ fontSize: 14, fontWeight: 600, color: COLORS.text }}>{f.label}</div>
-          <div style={{ fontSize: 12, color: COLORS.textDim, marginTop: 2, fontFamily: "'IBM Plex Mono', monospace" }}>{f.detail}</div>
-          <div style={{ fontSize: 12, color: COLORS.accentDim, marginTop: 6, fontStyle: "italic", lineHeight: 1.5 }}>→ {f.plain}</div>
-        </div>
-      ))}
-    </Card>
+            <Card>
+              <SectionTitle sub="Excluded hypotheses">Eliminated Hypotheses</SectionTitle>
+              {[
+                { label: "Gibberish", reason: "Chi²/cell 0.7 vs 30.5", color: COLORS.repel },
+                { label: "Simple table generation", reason: "Cannot produce positive self-clustering", color: COLORS.repel },
+                { label: "Turkic languages", reason: "All 4 show negative self-clustering (0.79–0.89x)", color: COLORS.repel },
+                { label: "Indo-European languages", reason: "All 5 show negative self-clustering (0.49–0.77x)", color: COLORS.repel },
+              ].map((h, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 0", borderBottom: i < 3 ? `1px solid ${COLORS.border}33` : "none" }}>
+                  <span style={{ color: h.color, fontSize: 16 }}>✗</span>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600 }}>{h.label}</div>
+                    <div style={{ fontSize: 12, color: COLORS.textDim }}>{h.reason}</div>
+                  </div>
+                </div>
+              ))}
+              <div style={{ marginTop: 16, padding: 12, background: COLORS.surfaceLight, borderRadius: 6, borderLeft: `3px solid ${COLORS.accent}` }}>
+                <div style={{ fontSize: 13, color: COLORS.text }}>
+                  <strong>Closest structural neighbors:</strong> Voynich is the only tested system with symmetric-high self-clustering (prefix 1.52x, suffix 1.54x, ratio 0.99). All natural languages with positive SC are suffix-dominant.
+                </div>
+              </div>
+            </Card>
 
-    <Card>
-      <SectionTitle sub="Excluded hypotheses">Eliminated Hypotheses</SectionTitle>
-      {[
-        {
-          label: "Gibberish",
-          reason: "Chi²/cell 0.7 vs 30.5",
-          plain: "Random text produces near-zero structure. The Voynich produces 40x more.",
-          color: COLORS.repel
-        },
-        {
-          label: "Simple table generation",
-          reason: "Cannot produce positive self-clustering",
-          plain: "If someone generated text from a lookup table, you'd see specific patterns we don't observe here.",
-          color: COLORS.repel
-        },
-        {
-          label: "Turkic languages",
-          reason: "All 4 show negative self-clustering (0.79–0.89x)",
-          plain: "Turkish, Azerbaijani, and relatives behave very differently from the Voynich at the structural level.",
-          color: COLORS.repel
-        },
-        {
-          label: "Indo-European languages",
-          reason: "All 5 show negative self-clustering (0.49–0.77x)",
-          plain: "Latin, Italian, English, Middle English — none match. The Voynich isn't a disguised European language either.",
-          color: COLORS.repel
-        },
-      ].map((h, i) => (
-        <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "12px 0", borderBottom: i < 3 ? `1px solid ${COLORS.border}33` : "none" }}>
-          <span style={{ color: h.color, fontSize: 16, marginTop: 1 }}>✗</span>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 14, fontWeight: 600 }}>{h.label}</div>
-            <div style={{ fontSize: 12, color: COLORS.textDim, fontFamily: "'IBM Plex Mono', monospace" }}>{h.reason}</div>
-            <div style={{ fontSize: 12, color: COLORS.accentDim, marginTop: 6, fontStyle: "italic", lineHeight: 1.5 }}>→ {h.plain}</div>
+            <Card style={{ gridColumn: "1 / -1" }}>
+              <SectionTitle sub="Verified family distribution across the manuscript">Family Density Map</SectionTitle>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
+                {FINDINGS.familyDensities.sections.map((sec, i) => (
+                  <div key={i} style={{ padding: 12, background: COLORS.surfaceLight, borderRadius: 6 }}>
+                    <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, color: COLORS.accent }}>{sec.name}</div>
+                    <div style={{ fontSize: 11, color: COLORS.textDim, marginBottom: 8 }}>Hand {sec.hand} · Currier {sec.currier} · {sec.tokens.toLocaleString()} tokens</div>
+                    <Bar value={sec.qok} max={25} color={COLORS.qok} label="QOK" />
+                    <Bar value={sec.ok} max={25} color={COLORS.ok} label="OK" />
+                    <Bar value={sec.ot} max={25} color={COLORS.ot} label="OT" />
+                    <Bar value={sec.chedy} max={25} color={COLORS.chedy} label="CHEDY" />
+                    <Bar value={sec.aiin} max={25} color={COLORS.aiin} label="AIIN" />
+                  </div>
+                ))}
+              </div>
+            </Card>
           </div>
-        </div>
-      ))}
-      <div style={{ marginTop: 16, padding: 12, background: COLORS.surfaceLight, borderRadius: 6, borderLeft: `3px solid ${COLORS.accent}` }}>
-        <div style={{ fontSize: 13, color: COLORS.text }}>
-          <strong>Closest structural neighbors:</strong> Voynich is the only tested system with symmetric-high self-clustering (prefix 1.52x, suffix 1.54x, ratio 0.99). All natural languages with positive SC are suffix-dominant.
-        </div>
-        <div style={{ fontSize: 12, color: COLORS.accentDim, marginTop: 8, fontStyle: "italic", lineHeight: 1.5 }}>
-          → In plain terms: most languages build structure mainly through word-endings (suffixes). The Voynich builds structure equally through both word beginnings and endings — a profile no tested language shares.
-        </div>
-      </div>
-    </Card>
-
-    <Card style={{ gridColumn: "1 / -1" }}>
-      <SectionTitle sub="Verified family distribution across the manuscript">Family Density Map</SectionTitle>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
-        {FINDINGS.familyDensities.sections.map((sec, i) => (
-          <div key={i} style={{ padding: 12, background: COLORS.surfaceLight, borderRadius: 6 }}>
-            <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8, color: COLORS.accent }}>{sec.name}</div>
-            <div style={{ fontSize: 11, color: COLORS.textDim, marginBottom: 8 }}>Hand {sec.hand} · Currier {sec.currier} · {sec.tokens.toLocaleString()} tokens</div>
-            <Bar value={sec.qok} max={25} color={COLORS.qok} label="QOK" />
-            <Bar value={sec.ok} max={25} color={COLORS.ok} label="OK" />
-            <Bar value={sec.ot} max={25} color={COLORS.ot} label="OT" />
-            <Bar value={sec.chedy} max={25} color={COLORS.chedy} label="CHEDY" />
-            <Bar value={sec.aiin} max={25} color={COLORS.aiin} label="AIIN" />
-          </div>
-        ))}
-      </div>
-      <div style={{ marginTop: 14, fontSize: 12, color: COLORS.accentDim, fontStyle: "italic", lineHeight: 1.5, maxWidth: 780 }}>
-        → Each manuscript section has its own "fingerprint" of word-family frequencies. Astronomical pages are heavy on OT and OK but almost lack QOK. Biological pages have triple the CHEDY of Herbal pages. The sections read like different topics would in a normal book — but whatever those topics are, we still can't name them.
-      </div>
-    </Card>
-  </div>
-)}
+        )}
 
         {tab === 1 && (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
