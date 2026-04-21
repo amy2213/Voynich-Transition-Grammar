@@ -105,7 +105,7 @@ tr.control td { color: var(--text-dim); }
   <div class="header">
     <h1>Voynich Manuscript</h1>
     <span style="font-size:14px;color:var(--text-dim);font-weight:300;">Transition Grammar Analysis</span>
-    <p>Quantitative analysis of sequential token-family constraints across 15 natural-language comparators. April 2026.</p>
+    <p>Quantitative analysis of sequential token-family constraints across 16 natural-language comparators. April 2026.</p>
   </div>
 </div>
 
@@ -277,7 +277,7 @@ tr.control td { color: var(--text-dim); }
     <div style="font-size:14px;line-height:1.8;color:var(--text-dim)">
       <p><strong style="color:var(--text)">Corpus:</strong> Zandbergen-Landini EVA transliteration via AncientLanguages/Voynich (Hugging Face). 4,197 lines, 31,608 tokens, 184 pages.</p>
       <p><strong style="color:var(--text)">Families:</strong> QOK (prefix qok-), OK (prefix ok- not qok-), OT (prefix ot-), CHEDY (contains chedy/shedy/chey/shey), AIIN (contains aiin/ain). All others = OTHER.</p>
-      <p><strong style="color:var(--text)">Comparison languages:</strong> 15 natural-language comparators (12 Leipzig Wikipedia 100K including Swahili, Georgian, and Tagalog; 2 Gutenberg literary; 1 Ottoman Turkish UD treebank) and 1 shuffled-token control.</p>
+      <p><strong style="color:var(--text)">Comparison languages:</strong> 16 natural-language comparators (13 Leipzig Wikipedia 100K including Swahili, Georgian, Tagalog, and Mandarin; 2 Gutenberg literary; 1 Ottoman Turkish UD treebank) and 1 shuffled-token control.</p>
       <p><strong style="color:var(--text)">Statistical tests:</strong> Permutation tests (5,000–10,000 iterations), bootstrap CIs, KS tests, Chi-squared, split-half reliability. All transition ratios = observed/expected under independence.</p>
       <p><strong style="color:var(--text)">Known limitations:</strong> Family definitions are EVA-specific and may not correspond to paleographic character boundaries. Self-clustering values are method-sensitive (pooled vs page-level). Non-IE comparison texts are modern, not medieval. Ottoman Turkish tested with small UD corpus (16,890 words): SYMM-LOW, not a match. Larger corpus needed.</p>
     </div>
@@ -368,6 +368,7 @@ const LANGS = [
   {name:'Swahili',type:'Bantu',pfx:0.791,sfx:0.960,ratio:0.82,bucket:'SYMM-LOW'},
   {name:'Georgian',type:'Kartvelian',pfx:0.978,sfx:0.856,ratio:1.14,bucket:'SYMM-LOW'},
   {name:'Tagalog',type:'Austronesian',pfx:0.444,sfx:0.411,ratio:1.08,bucket:'SYMM-LOW'},
+  {name:'Mandarin',type:'Sinitic',pfx:0.817,sfx:0.784,ratio:1.04,bucket:'SYMM-LOW'},
   {name:'Ottoman Turkish',type:'Turkic',pfx:0.702,sfx:1.042,ratio:0.67,bucket:'SYMM-LOW'},
   {name:'Turkish',type:'Turkic',pfx:0.906,sfx:0.98,ratio:0.92,bucket:'SYMM-LOW'},
   {name:'Italian',type:'IE',pfx:0.685,sfx:0.964,ratio:0.71,bucket:'SYMM-LOW'},

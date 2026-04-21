@@ -40,7 +40,7 @@ Manuscript (Beinecke MS 408), with three strongest findings:
 - **Frozen datasets** (~228 MB): Voynich parquet + 9 Leipzig comparators +
   2 Gutenberg literary texts + 3 pending + 1 Ottoman Turkish treebank,
   all with SHA-256 checksums
-- **Research paper draft** (`docs/voynich_paper_v2_revised.docx`)
+- **Research paper** (`docs/paper.pdf`, built from `docs/main.tex`)
 - **Durable findings document** (`docs/durable_findings.md`) documenting 10
   numbered findings, caveats, retired claims, and the "minimum viable
   explanation" checklist any Voynich theory must satisfy

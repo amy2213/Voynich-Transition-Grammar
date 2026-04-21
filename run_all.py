@@ -5,7 +5,7 @@ run_all.py — One-command reproduction of the full Voynich analysis pipeline.
 Runs (in order):
   1. scripts/00_validate_datasets.py   — verify bundled data checksums
   2. scripts/01_core_analysis.py       — transition rules, AIIN invariance, SC
-  3. scripts/02_cross_linguistic.py    — 11-language comparison
+  3. scripts/02_cross_linguistic.py    — cross-linguistic comparison
   4. scripts/03_stress_tests.py        — robustness checks
 
 Results are written to results/ as six canonical JSON files (one of which,
@@ -43,6 +43,10 @@ PIPELINE = [
     ("Stress tests",             SCRIPTS_DIR / "03_stress_tests.py",     RESULTS_DIR / "stress_test_results.json"),
     ("Extended analysis",        SCRIPTS_DIR / "04_extended_analysis.py", RESULTS_DIR / "extended_analysis_results.json"),
 ]
+
+# Optional: cross-transcription analysis (requires LSI_ivtff_0d.txt)
+# Not included in default pipeline because it requires a separate data file.
+# Run manually: python scripts/05_cross_transcription.py
 
 BANNER = "=" * 72
 

@@ -2,7 +2,7 @@
 
 Status as of April 2026. All claims tested against controls, conditioning, section splits, Currier types, frequency matching, and shuffled null models. This document records what survived, what weakened, and what was retired.
 
-Dataset: Zandbergen-Landini EVA transliteration, 31,608 tokens, 184 pages, 4,197 lines. Comparison set: 15 natural-language comparators (12 Leipzig Wikipedia 100K including Swahili, Georgian, and Tagalog; 2 Gutenberg literary; 1 Ottoman Turkish UD treebank), 1 shuffled-token control.
+Dataset: Zandbergen-Landini EVA transliteration, 31,608 tokens, 184 pages, 4,197 lines. Comparison set: 16 natural-language comparators (13 Leipzig Wikipedia 100K including Swahili, Georgian, Tagalog, and Mandarin Chinese; 2 Gutenberg literary; 1 Ottoman Turkish UD treebank), 1 shuffled-token control.
 
 ---
 
@@ -36,7 +36,13 @@ Caveat: invariance holds under the standard definition (contains "aiin" or "ain"
 
 Prefix SC=1.524x, suffix SC=1.544x, ratio=0.99. Bootstrap 95% CI: prefix [1.41, 1.62], suffix [1.48, 1.60].
 
-Unique among all tested systems. All 15 natural-language comparators with positive self-clustering are suffix-dominant (ratios 0.29–0.81). No tested system is prefix-dominant. Ottoman Turkish (the strongest candidate for bidirectional morphology due to Arabic prefix layer over Turkic suffixes) tested at prefix=0.70x, suffix=1.04x, ratio=0.67 — SYMM-LOW. Swahili (Bantu), which has textbook bidirectional morphology (prefix subject/class agreement + suffix tense/aspect markers), tested at prefix=0.79x, suffix=0.96x, ratio=0.82 — also SYMM-LOW. Georgian (Kartvelian), which has polypersonal prefix+suffix agreement, tested at prefix=0.98x, suffix=0.86x — SYMM-LOW. Tagalog (Austronesian), with infixation plus prefix/suffix morphology, tested at prefix=0.44x, suffix=0.41x — also SYMM-LOW. Having bidirectional morphology in a natural language does not produce Voynich's symmetric elevated clustering. Tested across 4 typologically distinct bidirectional-morphology languages (Swahili, Ottoman Turkish, Georgian, Tagalog), none approaches SYMM-HIGH.
+Unique among all tested systems. All 16 natural-language comparators with positive self-clustering are suffix-dominant (ratios 0.29–0.81). No tested system is prefix-dominant. Ottoman Turkish (the strongest candidate for bidirectional morphology due to Arabic prefix layer over Turkic suffixes) tested at prefix=0.70x, suffix=1.04x, ratio=0.67 — SYMM-LOW. Swahili (Bantu), which has textbook bidirectional morphology (prefix subject/class agreement + suffix tense/aspect markers), tested at prefix=0.79x, suffix=0.96x, ratio=0.82 — also SYMM-LOW. Georgian (Kartvelian), which has polypersonal prefix+suffix agreement, tested at prefix=0.98x, suffix=0.86x — SYMM-LOW. Tagalog (Austronesian), with infixation plus prefix/suffix morphology, tested at prefix=0.44x, suffix=0.41x — also SYMM-LOW. Having bidirectional morphology in a natural language does not produce Voynich's symmetric elevated clustering. Tested across 4 typologically distinct bidirectional-morphology languages (Swahili, Ottoman Turkish, Georgian, Tagalog), none approaches SYMM-HIGH.
+
+Mandarin Chinese (Sinitic, isolating morphology) tested at prefix=0.82x, suffix=0.78x, ratio=1.04 — SYMM-LOW. As expected, an isolating language with no affixal morphology produces near-zero clustering in both directions. This establishes the SYMM-LOW floor for morphologically minimal systems.
+
+Medieval Latin abbreviation simulation: applying standard 15th-century scribal abbreviations (prefix contractions com→c̃, pre→p̃, per→p̄ and suffix contractions -bus→;, -rum→ꝝ, -tur→t̄) to expanded Latin text does NOT move it toward SYMM-HIGH. Even at 90%/95% abbreviation rates, Latin remains strongly SUFFIX-DOM (ratio 0.29). Abbreviation is not a viable path to the Voynich profile.
+
+Root extraction analysis (results/root_extraction_results.json): stripping EVA prefix/suffix wrappers compresses 7,255 token types to 3,193 root types (44% of original vocabulary). Root distribution is moderately Zipfian (R²=0.894, comparable to token-level R²=0.901). Currier A/B root vocabulary overlap increases slightly vs token-level (Jaccard 16% vs 14%), with weak but significant rank correlation (ρ=0.367). AIIN roots collapse to the AIIN morpheme itself (aii, ii, ai), confirming function-word-like structure. Results are consistent with affixal structure but not strong enough to confirm natural-language lexicon underneath.
 
 The symmetry persists across all sections, Currier types, and line positions. Per-scribe breakdown: Hand 1 (9,024 tokens): SYMM-HIGH (1.52x/1.54x, ratio 0.99). Hand 3 (11,390 tokens): SYMM-HIGH (1.27x/1.32x, ratio 0.96). Hands 4 and 5 (small samples): SYMM-HIGH. Hand 2 (9,155 tokens): SYMM-LOW (1.10x/1.23x, ratio 0.89). The symmetry is carried primarily by Hands 1, 3, 4, and 5; Hand 2 shows weaker and more suffix-leaning clustering.
 
@@ -142,7 +148,7 @@ Retired. Estonian SC=1.35x and Finnish SC=1.16x were false positives from 10K-se
 
 ### 3.3 15 languages compared
 
-Corrected. 15 natural-language comparators (12 Leipzig including Swahili, Georgian, and Tagalog; 2 Gutenberg; 1 Ottoman Turkish UD) + 3 pending (Uzbek, Kazakh, Mongolian) + 1 control. Earlier session counts included ad-hoc downloads and miscounted Voynich as a comparator.
+Corrected. 16 natural-language comparators (12 Leipzig including Swahili, Georgian, and Tagalog; 2 Gutenberg; 1 Ottoman Turkish UD) + 3 pending (Uzbek, Kazakh, Mongolian) + 1 control. Earlier session counts included ad-hoc downloads and miscounted Voynich as a comparator.
 
 ### 3.4 Self-clustering = 1.44x
 
@@ -201,7 +207,7 @@ When two adjacent tokens agree on suffix, the probability of the next token also
 Each family contains hub-centered edit-distance graphs where high-frequency stems have 2–3x more morphological variants than low-frequency stems (r = 0.52–0.69). The same positionally constrained edit operations (prefix-like, stem-internal, suffix-like) recur across all four major sections while the specific vocabulary changes. The explanation must produce a productive morphological system with frequency-correlated variant generation.
 
 ### 6. Bidirectional self-clustering symmetry
-Prefix SC = 1.52x, suffix SC = 1.54x, ratio = 0.99. No tested natural language (0 of 15) produces this. All natural languages with positive self-clustering are suffix-dominant. The explanation must produce balanced elevated clustering at both word beginnings and word endings simultaneously.
+Prefix SC = 1.52x, suffix SC = 1.54x, ratio = 0.99. No tested natural language (0 of 16) produces this. All natural languages with positive self-clustering are suffix-dominant. The explanation must produce balanced elevated clustering at both word beginnings and word endings simultaneously.
 
 ### 7. Section-stable grammar with shifting lexicon
 Transition rules, suffix agreement, morphological operations, and family proportions are consistent across herbal, biological, and recipe sections. But within-family vocabulary overlap between sections is only 0.09–0.25 (Jaccard). The explanation must produce a system where the grammatical infrastructure is shared but the specific word inventory changes by topic.

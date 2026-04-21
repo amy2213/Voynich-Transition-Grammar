@@ -3,11 +3,13 @@ message: "If you use this software or its findings, please cite it as below."
 title: "Voynich Manuscript: Transition Grammar Analysis"
 abstract: >-
   Statistical analysis of sequential word-family constraints in the Voynich
-  Manuscript (Beinecke MS 408), compared against 11 verified natural-language
-  comparators and 1 shuffled-token control. Identifies two robust transition
-  rules (CHEDY→QOK at 2.63x, AIIN→QOK at 0.50x), AIIN density invariance at
-  15% across Currier A/B, and a bidirectional self-clustering signature
-  (prefix 1.52x, suffix 1.54x, ratio 0.99) unique among tested systems.
+  Manuscript (Beinecke MS 408), compared against 16 natural-language
+  comparators across 9 language families and 1 shuffled-token control.
+  Identifies two robust transition rules (CHEDY→QOK at 2.63x, AIIN→QOK
+  at 0.50x), AIIN density invariance at 15% across Currier A/B, and a
+  bidirectional self-clustering signature (prefix 1.52x, suffix 1.54x,
+  ratio 0.99) unique among tested systems. Cross-transcription validation
+  confirms all findings are stable across 4 independent transcribers.
   No decipherment or language identification is claimed.
 type: software
 authors:
@@ -16,8 +18,8 @@ authors:
     orcid: "https://orcid.org/0009-0001-5479-0007"
 repository-code: "https://github.com/amy2213/Voynich-Transition-Grammar"
 url: "https://amy2213.github.io/Voynich-Transition-Grammar/"
-version: "1.0.0"
-date-released: "2026-04-19"
+version: "1.1.0"
+date-released: "2026-04-21"
 license: MIT
 keywords:
   - voynich-manuscript

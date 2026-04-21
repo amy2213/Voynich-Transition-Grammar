@@ -70,3 +70,48 @@ These would need a separate sourcing pass to include properly.
 ## Ottoman Turkish (UD Treebank)
 
 **Ottoman Turkish (DUDU)** is a Universal Dependencies treebank containing 1,782 sentences from 14th–20th century texts in romanized Ottoman Turkish transcription alphabet. Downloaded from https://github.com/UniversalDependencies/UD_Ottoman_Turkish-DUDU. 16,890 words. Result: SYMM-LOW (prefix 0.70x, suffix 1.04x, ratio 0.67). Not a match for Voynich's symmetric-high profile. Small corpus — a larger historical Ottoman corpus would strengthen this result.
+
+## Additional Comparators (Added April 2026)
+
+### Swahili (Bantu)
+- **Source:** Leipzig Corpora Collection, `swa_wikipedia_2021_100K`
+- **URL:** https://downloads.wortschatz-leipzig.de/corpora/swa_wikipedia_2021_100K.tar.gz
+- **License:** CC-BY
+- **Tokens:** 1,593,683
+- **Purpose:** Test whether rich bidirectional morphology (prefix subject/class agreement + suffix tense/aspect markers) produces SYMM-HIGH. Result: SYMM-LOW (prefix 0.79x, suffix 0.96x, ratio 0.82).
+- **Citation:** D. Goldhahn, T. Eckart & U. Quasthoff: Building Large Monolingual Dictionaries at the Leipzig Corpora Collection: From 100 to 200 Languages. In: *Proceedings of LREC 2012*.
+
+### Georgian (Kartvelian)
+- **Source:** Leipzig Corpora Collection, `kat_wikipedia_2021_100K`
+- **URL:** https://downloads.wortschatz-leipzig.de/corpora/kat_wikipedia_2021_100K.tar.gz
+- **License:** CC-BY
+- **Tokens:** 1,102,327
+- **Purpose:** Test whether polypersonal agreement (prefix + suffix verb slots) produces SYMM-HIGH. Result: SYMM-LOW (prefix 0.98x, suffix 0.86x, ratio 1.14).
+- **Citation:** Leipzig Corpora Collection (Goldhahn et al. 2012).
+
+### Tagalog (Austronesian)
+- **Source:** Leipzig Corpora Collection, `tgl_wikipedia_2021_100K`
+- **URL:** https://downloads.wortschatz-leipzig.de/corpora/tgl_wikipedia_2021_100K.tar.gz
+- **License:** CC-BY
+- **Tokens:** 1,924,215
+- **Purpose:** Test whether infixation + prefix/suffix morphology produces SYMM-HIGH. Result: SYMM-LOW (prefix 0.44x, suffix 0.41x, ratio 1.08).
+- **Citation:** Leipzig Corpora Collection (Goldhahn et al. 2012).
+
+### Mandarin Chinese (Sinitic)
+- **Source:** Leipzig Corpora Collection, `cmn_wikipedia_2021_100K`
+- **URL:** https://downloads.wortschatz-leipzig.de/corpora/cmn_wikipedia_2021_100K.tar.gz
+- **License:** CC-BY
+- **Tokens:** 327,791 (after jieba segmentation and Pinyin romanization of 20K sentences)
+- **Purpose:** Test whether isolating morphology (no affixes) produces any self-clustering. Result: SYMM-LOW (prefix 0.82x, suffix 0.78x, ratio 1.04). Establishes the morphologically minimal floor.
+- **Processing:** Chinese text segmented with jieba, converted to Pinyin with pypinyin. Each word-segmented unit treated as one token.
+- **Citation:** Leipzig Corpora Collection (Goldhahn et al. 2012). Jieba: https://github.com/fxsjy/jieba. pypinyin: https://github.com/mozillazg/python-pinyin.
+
+### LSI Interlinear File (Cross-Transcription Source)
+- **Source:** voynich.nu (René Zandbergen), beta data directory
+- **URL:** http://www.voynich.nu/data/beta/LSI_ivtff_0d.txt
+- **License:** Public domain (Voynich Manuscript text)
+- **Format:** IVTFF (Intermediate Voynich MS Transliteration File Format)
+- **Contents:** Interlinear transcriptions by multiple scholars: Currier (C), First Study Group/Friedman (F), Takahashi (H), Grove (V), Tiltman (T), Latham (L), Kluge (K), Stolfi (U), and others. All mapped to EVA alphabet by J. Stolfi.
+- **Purpose:** Cross-transcription stability validation. Tests whether bidirectional symmetry and transition rules are artifacts of ZL tokenization decisions.
+- **Result:** All 4 major transcribers (C, F, H, V) independently produce SYMM-HIGH.
+- **Citation:** Landini, G. & Zandbergen, R. (1998). INTERLN.EVT, European Voynich Manuscript Transcription project. Edited by J. Stolfi, release 1.6e6. Available at voynich.nu.

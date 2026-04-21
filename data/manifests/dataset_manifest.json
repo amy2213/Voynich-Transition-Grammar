@@ -253,5 +253,83 @@
     "license": "CC-BY",
     "checksum_sha256": "55161fc58bbb2779144818aeada1e2c700bfca2b0b80dcd2013b92fd54139699",
     "notes": "PENDING VERIFICATION. Modern Wikipedia proxy."
+  },
+  {
+    "dataset_id": "swahili_wikipedia",
+    "language": "Swahili",
+    "source": "Leipzig Corpora Collection",
+    "source_url": "https://downloads.wortschatz-leipzig.de/corpora/swa_wikipedia_2021_100K.tar.gz",
+    "file_name": "swa_wikipedia_2021_100K.tar.gz",
+    "local_path": "data/raw/cross_linguistic/swahili",
+    "checksum_sha256": "05e41f4c58a27732bc223cac37155ee53b0b2e47c1815585428928456d7be1d5",
+    "proxy_status": "yes",
+    "historical_or_modern": "modern",
+    "notes": "Bantu family. Rich bidirectional morphology (prefix AGR + suffix TAM). Tests SYMM-LOW.",
+    "license": "CC-BY"
+  },
+  {
+    "dataset_id": "georgian_wikipedia",
+    "language": "Georgian",
+    "source": "Leipzig Corpora Collection",
+    "source_url": "https://downloads.wortschatz-leipzig.de/corpora/kat_wikipedia_2021_100K.tar.gz",
+    "file_name": "kat_wikipedia_2021_100K.tar.gz",
+    "local_path": "data/raw/cross_linguistic/georgian",
+    "checksum_sha256": "9ae8e02b617a70d8667b2965a1f8d7acef6c43e433fd7c8d603431cd059f1e08",
+    "proxy_status": "yes",
+    "historical_or_modern": "modern",
+    "notes": "Kartvelian family. Polypersonal agreement (prefix+suffix). Tests SYMM-LOW.",
+    "license": "CC-BY"
+  },
+  {
+    "dataset_id": "tagalog_wikipedia",
+    "language": "Tagalog",
+    "source": "Leipzig Corpora Collection",
+    "source_url": "https://downloads.wortschatz-leipzig.de/corpora/tgl_wikipedia_2021_100K.tar.gz",
+    "file_name": "tgl_wikipedia_2021_100K.tar.gz",
+    "local_path": "data/raw/cross_linguistic/tagalog",
+    "checksum_sha256": "6882246e886096936a501a7d181af803c16ea9cf1b06e687e55790add1407244",
+    "proxy_status": "yes",
+    "historical_or_modern": "modern",
+    "notes": "Austronesian family. Infixation + prefix/suffix morphology. Tests SYMM-LOW.",
+    "license": "CC-BY"
+  },
+  {
+    "dataset_id": "mandarin_wikipedia",
+    "language": "Mandarin Chinese",
+    "source": "Leipzig Corpora Collection",
+    "source_url": "https://downloads.wortschatz-leipzig.de/corpora/cmn_wikipedia_2021_100K.tar.gz",
+    "file_name": "cmn_wikipedia_2021_100K.tar.gz",
+    "local_path": "data/raw/cross_linguistic/mandarin",
+    "checksum_sha256": "2525f649c6dc885c0b6c3d06476649ab4f296e8705b635863429376e25ed7fea",
+    "proxy_status": "yes",
+    "historical_or_modern": "modern",
+    "notes": "Sinitic family. Isolating morphology. Jieba-segmented and Pinyin-romanized for analysis. Tests SYMM-LOW.",
+    "license": "CC-BY"
+  },
+  {
+    "dataset_id": "ottoman_turkish_ud",
+    "language": "Ottoman Turkish",
+    "source": "Universal Dependencies (DUDU treebank)",
+    "source_url": "https://github.com/UniversalDependencies/UD_Ottoman_Turkish-DUDU",
+    "file_name": "ota_dudu_train.conllu",
+    "local_path": "data/raw/cross_linguistic/ottoman_turkish",
+    "checksum_sha256": "52ee97deb37c240bb142ec27fe19394470f3da2305837990394301ce4177ff66",
+    "proxy_status": "no",
+    "historical_or_modern": "historical",
+    "notes": "14th-20th century texts. 16,890 words. Small corpus \u2014 wider CIs expected. Tests SYMM-LOW.",
+    "license": "CC-BY-SA"
+  },
+  {
+    "dataset_id": "lsi_interlinear",
+    "language": "Voynich (LSI Interlinear)",
+    "source": "voynich.nu (Ren\u00e9 Zandbergen)",
+    "source_url": "http://www.voynich.nu/data/beta/LSI_ivtff_0d.txt",
+    "file_name": "LSI_ivtff_0d.txt",
+    "local_path": "data/raw/voynich",
+    "checksum_sha256": "3f3f2af18cde10efe75c582f49b07b651c3397022fcbfa5854fecc424c121afa",
+    "proxy_status": "no",
+    "historical_or_modern": "historical",
+    "notes": "Landini-Stolfi Interlinear file. Contains transcriptions by Currier, FSG/Friedman, Takahashi, Grove, and others, all mapped to EVA. Used for cross-transcription stability validation.",
+    "license": "Public domain"
   }
 ]

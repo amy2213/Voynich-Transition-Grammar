@@ -12,8 +12,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `CITATION.cff` for academic citation
 - `CHANGELOG.md` (this file)
 - `RELEASE_NOTES.md` for the v1.0 GitHub release
-- `archive/` directory for deprecated source files (retains `voynich_dashboard.jsx`
-  as a historical artifact — no longer in the load path)
 - `run_all.py` — single-command reproduction of the entire analysis pipeline
 - `tests/test_canonical_values.py` — regression tests that verify key findings
   match published values within tolerance, catching silent drift
@@ -38,14 +36,14 @@ pipeline, and interactive dashboard.
   unique token pairs
 - AIIN density invariant at 15.0% across Currier A and B (KS p = 0.742)
 - Bidirectional self-clustering symmetry: prefix 1.524x, suffix 1.544x,
-  ratio 0.99 — unique among 11 tested natural-language comparators
+  ratio 0.99 — unique among 16 natural-language comparators
 
 ### Included
 - 5 analysis scripts (`scripts/`): fetch, validate, core, cross-linguistic,
   stress tests
 - 6 canonical result JSONs (`results/`)
 - Frozen comparison datasets (~228 MB) with SHA-256 checksums and manifest
-- Research paper draft (`docs/voynich_paper_v2_revised.docx`)
+- Research paper (`docs/paper.pdf`, built from `docs/main.tex`)
 - Durable findings document (`docs/durable_findings.md`) with 10 numbered
   findings, caveats, retired claims, and a "minimum viable explanation"
   checklist

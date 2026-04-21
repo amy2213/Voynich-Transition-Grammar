@@ -1,0 +1,149 @@
+{
+  "description": "Naked root extraction: strip EVA prefix/suffix wrappers to expose interior lexical roots.",
+  "corpus_stats": {
+    "total_tokens": 31608,
+    "unique_tokens": 7255,
+    "unique_roots": 3193,
+    "compression_pct": 44.0,
+    "null_root_pct": 0.0
+  },
+  "zipf_test": {
+    "root_slope": -0.884,
+    "root_r_squared": 0.8942,
+    "token_slope": -0.875,
+    "token_r_squared": 0.9011,
+    "finding": "Root distribution departs from Zipf"
+  },
+  "currier_invariance": {
+    "vocab_a": 1598,
+    "vocab_b": 1948,
+    "shared": 484,
+    "jaccard_pct": 15.8,
+    "token_jaccard_pct": 13.9,
+    "rank_correlation_rho": 0.367,
+    "rank_correlation_p": 9.39e-08,
+    "finding": "Root extraction increases cross-mode overlap"
+  },
+  "top_roots": [
+    [
+      "d",
+      2820
+    ],
+    [
+      "o",
+      2472
+    ],
+    [
+      "y",
+      2381
+    ],
+    [
+      "ch",
+      1603
+    ],
+    [
+      "a",
+      1501
+    ],
+    [
+      "l",
+      1179
+    ],
+    [
+      "aii",
+      1021
+    ],
+    [
+      "r",
+      896
+    ],
+    [
+      "ii",
+      841
+    ],
+    [
+      "k",
+      752
+    ],
+    [
+      "ai",
+      735
+    ],
+    [
+      "qot",
+      659
+    ],
+    [
+      "sh",
+      579
+    ],
+    [
+      "t",
+      439
+    ],
+    [
+      "s",
+      417
+    ],
+    [
+      "ol",
+      390
+    ],
+    [
+      "i",
+      348
+    ],
+    [
+      "lk",
+      271
+    ],
+    [
+      "cho",
+      225
+    ],
+    [
+      "al",
+      222
+    ],
+    [
+      "yk",
+      214
+    ],
+    [
+      "od",
+      204
+    ],
+    [
+      "olk",
+      196
+    ],
+    [
+      "yt",
+      193
+    ],
+    [
+      "chckh",
+      192
+    ],
+    [
+      "e",
+      190
+    ],
+    [
+      "q",
+      178
+    ],
+    [
+      "sho",
+      173
+    ],
+    [
+      "am",
+      163
+    ],
+    [
+      "op",
+      140
+    ]
+  ]
+}

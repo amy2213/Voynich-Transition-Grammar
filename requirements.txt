@@ -1,5 +1,10 @@
+# Core pipeline (required for run_all.py)
 datasets>=2.0.0
 scipy>=1.10.0
 numpy>=1.24.0
 pandas>=2.0.0
 pyarrow>=12.0.0
+
+# Optional: Mandarin Chinese comparison (scripts/02_cross_linguistic.py)
+# jieba>=0.42.1
+# pypinyin>=0.49.0

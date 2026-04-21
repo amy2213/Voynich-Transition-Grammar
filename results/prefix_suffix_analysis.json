@@ -155,11 +155,56 @@
       "family": "Austronesian",
       "n": 1924215,
       "note": "Leipzig Wikipedia 100K. Infixation + prefix + suffix morphology does not produce symmetric elevated self-clustering."
+    },
+    "Mandarin (Pinyin)": {
+      "prefix_sc": 0.817,
+      "suffix_sc": 0.784,
+      "ratio": 1.04,
+      "bucket": "SYMM-LOW",
+      "family": "Sinitic",
+      "n": 327791,
+      "note": "Leipzig Wikipedia 100K, jieba-segmented, Pinyin-romanized. Isolating morphology produces near-zero clustering in both directions."
     }
   },
   "key_finding": "Voynich is the only system in SYMM-HIGH. All natural languages with positive self-clustering are SUFFIX-DOM. No tested natural language clusters equally in both directions.",
   "ablation_findings": {
     "arabic_al_stripped": "Stripping al- prefix INCREASES SC (1.60x -> 2.41x). Arabic self-clustering is driven by root-pattern morphology, not just the definite article.",
     "voynich_family_ablation": "QOK and OT drive self-clustering; CHEDY and AIIN drive transition rules. Two independent structural layers."
+  },
+  "abbreviation_simulation": {
+    "description": "Medieval Latin abbreviation simulation. Standard prefix contractions (com\u2192c9, pre\u2192p9, per\u2192px) and suffix contractions (-bus\u2192b9, -rum\u2192r9, -tur\u2192t9) applied at 35%/45% rates.",
+    "expanded_latin": {
+      "prefix_sc": 0.767,
+      "suffix_sc": 2.303,
+      "ratio": 0.33,
+      "bucket": "SUFFIX-DOM"
+    },
+    "abbreviated_latin": {
+      "prefix_sc": 0.709,
+      "suffix_sc": 2.298,
+      "ratio": 0.31,
+      "bucket": "SUFFIX-DOM"
+    },
+    "sensitivity_sweep": {
+      "rate_50_60": {
+        "prefix_sc": 0.68,
+        "suffix_sc": 2.299,
+        "ratio": 0.3,
+        "bucket": "SUFFIX-DOM"
+      },
+      "rate_70_80": {
+        "prefix_sc": 0.678,
+        "suffix_sc": 2.322,
+        "ratio": 0.29,
+        "bucket": "SUFFIX-DOM"
+      },
+      "rate_90_95": {
+        "prefix_sc": 0.682,
+        "suffix_sc": 2.347,
+        "ratio": 0.29,
+        "bucket": "SUFFIX-DOM"
+      }
+    },
+    "finding": "Medieval abbreviation does NOT move Latin toward SYMM-HIGH. Even at 90%/95% abbreviation rates, Latin remains strongly SUFFIX-DOM (ratio 0.29). Abbreviation compresses both prefix and suffix tokens but does not equalize their clustering."
   }
 }

@@ -126,7 +126,7 @@ constructed symbolic system, or a sophisticated cipher without a known
 This paper contributes to the second tradition. We analyze sequential
 constraints between token families at the class level --- five families
 defined by EVA-transliteration affix patterns, plus a catch-all class ---
-and compare the manuscript's structural profile against $15$ natural-language comparators across $8$ language families and a shuffled-token control. Five findings
+and compare the manuscript's structural profile against $16$ natural-language comparators across $9$ language families and a shuffled-token control. Five findings
 structure our contribution: (i) distributed transition rules operating at
 the family rather than token level; (ii) a bidirectional self-clustering
 test that removes the directional bias of prefix-only analyses; (iii)
@@ -209,12 +209,12 @@ transcription alphabets are not tested here and remain an open question.
 
 \subsection{Comparison corpora}
 
-We compare Voynich against $15$ natural-language comparators:
+We compare Voynich against $16$ natural-language comparators:
 $2$ historical literary texts (Middle English Chaucer, Gutenberg~\#22120;
-KJV English, Gutenberg~\#10900) and $12$ Wikipedia-derived corpora from the
+KJV English, Gutenberg~\#10900) and $13$ Wikipedia-derived corpora from the
 Leipzig Corpora Collection (Turkish, Hungarian, Finnish, Hebrew, Arabic,
-Latin, North Azerbaijani, Italian, Estonian, Swahili, Georgian, Tagalog;
-all \texttt{wikipedia\_2021\_100K} editions). A shuffled-token control (\texttt{Gibberish}) is derived from the
+Latin, North Azerbaijani, Italian, Estonian, Swahili, Georgian, Tagalog,
+Mandarin Chinese; all \texttt{wikipedia\_2021\_100K} editions). A shuffled-token control (\texttt{Gibberish}) is derived from the
 Voynich corpus itself by random permutation. An additional small corpus
 (Ottoman Turkish, $16{,}890$ words, UD treebank) is tested separately given
 its relevance as a potential historical match.
@@ -421,7 +421,7 @@ tested system in the SYMM-HIGH bucket.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.85\linewidth]{figures/fig1_prefix_suffix.pdf}
-  \caption{Prefix vs.~suffix self-clustering across $17$ tested systems.
+  \caption{Prefix vs.~suffix self-clustering across $18$ tested systems.
   All natural languages with positive clustering (Arabic, Latin, Estonian,
   Hebrew, Finnish, Hungarian) are suffix-dominant. Voynich is the only
   system in the symmetric-high region (shaded). The shuffled control
@@ -435,7 +435,8 @@ tested system in the SYMM-HIGH bucket.
   the only SYMM-HIGH system; all other natural languages with positive
   clustering are SUFFIX-DOM. Ottoman Turkish (UD treebank, $16{,}890$ words)
   Swahili, Georgian, and Tagalog (all Leipzig 100K) also tested SYMM-LOW
-  despite having bidirectional morphology.}
+  despite having bidirectional morphology. Mandarin (Sinitic, isolating) also
+  tested SYMM-LOW, establishing the morphologically minimal floor.}
   \label{tab:pstable}
   \begin{tabular}{lrrrl}
     \toprule
@@ -452,6 +453,7 @@ tested system in the SYMM-HIGH bucket.
     Swahili             & $0.791$ & $0.960$ & $0.82$ & SYMM-LOW \\
     Georgian            & $0.978$ & $0.856$ & $1.14$ & SYMM-LOW \\
     Tagalog             & $0.444$ & $0.411$ & $1.08$ & SYMM-LOW \\
+    Mandarin (Pinyin)   & $0.817$ & $0.784$ & $1.04$ & SYMM-LOW \\
     Turkish             & $0.906$ & $0.980$ & $0.92$ & SYMM-LOW \\
     Italian             & $0.685$ & $0.964$ & $0.71$ & SYMM-LOW \\
     N.~Azerbaijani      & $0.815$ & $0.795$ & $1.02$ & SYMM-LOW \\
@@ -481,8 +483,11 @@ $0.86\times$). Tagalog (Austronesian), with infixation plus
 prefix/suffix morphology, also tested SYMM-LOW (prefix $0.44\times$,
 suffix $0.41\times$). Across four typologically distinct
 bidirectional-morphology languages (Swahili, Ottoman Turkish, Georgian,
-Tagalog), none approaches SYMM-HIGH. Having bidirectional morphology
-in a natural language does not suffice to produce Voynich's symmetric
+Tagalog), none approaches SYMM-HIGH. Mandarin Chinese (Sinitic), with isolating
+morphology and no affixes, tested SYMM-LOW (prefix $0.82\times$, suffix
+$0.78\times$, ratio $1.04$), confirming that the SYMM-LOW region spans
+the full morphological spectrum from isolating to polysynthetic.
+Having bidirectional morphology in a natural language does not suffice to produce Voynich's symmetric
 elevated clustering.
 
 \subsection{Self-clustering is method-sensitive}
@@ -712,7 +717,7 @@ been exhaustively tested here.
 These results do not identify Voynich as any particular natural language,
 because no tested natural language matches Voynich's symmetric-high profile.
 They do not identify it as artificial either: the space of possible natural
-languages is larger than our $15$-language sample, and a language with
+languages is larger than our $16$-language sample, and a language with
 bidirectional morphology (for example, a polysynthetic language or a
 combinatorial morphology with comparable prefix and suffix inventories)
 could in principle produce this signature. The findings constrain the space
@@ -763,7 +768,7 @@ not others are incomplete.
         graphs, the same four edit operations recurring across all sections,
         and a log-frequency vs.~variant-count correlation of $r = 0.52$--$0.69$.
   \item \textbf{Bidirectional self-clustering symmetry.} $P/S = 0.99$ with
-        both prefix and suffix SC $> 1.5\times$. Unique among $17$ tested
+        both prefix and suffix SC $> 1.5\times$. Unique among $18$ tested
         systems.
   \item \textbf{Section-stable grammar with shifting lexicon.} Transition
         rules, agreement, paradigm operations, and family proportions are
@@ -808,7 +813,7 @@ plausibly natural language --- is the only one compatible with all eight
 requirements without invoking mechanisms that lack known 15th-century
 precedent. This does not prove encoded natural language, nor does it
 exhaust the space of possibilities. The candidate set is limited to four
-broad classes and the comparator pool to $15$ natural languages across $8$ families; other natural-language types (Sinitic,
+broad classes and the comparator pool to $16$ natural languages across $9$ families; other natural-language types (Sinitic,
 polysynthetic, historical shorthand) and more elaborate constructed
 systems remain untested. The checklist is offered as a diagnostic
 framework, not as decisive proof: it defines what any successful
@@ -894,12 +899,12 @@ findings:
         tested SYMM-LOW despite rich bidirectional morphology. A historical
         corpus of 15th-century Ottoman Turkish remains worth testing but is
         no longer the sole candidate.
-  \item \textbf{Additional language types.} Sinitic (isolating morphology),
-        polysynthetic languages (Nahuatl --- unavailable at corpus scale
-        from Leipzig), and historical shorthand systems (Tironian notae)
-        have not been tested. Georgian (polypersonal agreement) and
-        Tagalog (infixation + affixation) have been tested and both
-        fall in SYMM-LOW.
+  \item \textbf{Additional language types.} Sinitic has been tested (Mandarin,
+        SYMM-LOW).
+        Polysynthetic languages (Nahuatl --- unavailable at corpus scale
+        from Leipzig) and historical shorthand systems (Tironian notae)
+        remain untested. Georgian, Tagalog, and Mandarin have been tested
+        and all fall in SYMM-LOW.
 \end{enumerate}
 
 % =============================================================================

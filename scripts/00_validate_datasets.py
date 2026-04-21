@@ -127,9 +127,16 @@ def main():
         print(f"\n⚠ VALIDATION ISSUES FOUND. Review above.")
         return 1
     if missing:
-        print(f"\n⚠ {len(missing)} dataset(s) missing. Run scripts/00_fetch_datasets.py to download.")
-        print(f"  This is expected in CI or lightweight clones where data is not bundled.")
-        return 0  # Not fatal — missing data is expected in some contexts
+        n_missing = len(missing)
+        n_pending = sum(1 for e in missing if "pending" in e.get("local_path", ""))
+        n_required = n_missing - n_pending
+        if n_required > 0:
+            print(f"\n⚠ {n_required} required dataset(s) missing (plus {n_pending} pending).")
+            print(f"  Run scripts/00_fetch_datasets.py to download, or check data/raw/ directory.")
+            return 1
+        else:
+            print(f"\n⚠ {n_pending} pending dataset(s) not yet verified. Non-fatal.")
+            return 0
     else:
         print(f"\n✓ All datasets validated successfully.")
         return 0
