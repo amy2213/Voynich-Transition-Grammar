@@ -142,7 +142,7 @@ Retired. Estonian SC=1.35x and Finnish SC=1.16x were false positives from 10K-se
 
 ### 3.3 15 languages compared
 
-Corrected. 13 natural-language comparators (10 Leipzig including Swahili, 2 Gutenberg, 1 Ottoman Turkish UD) + 3 pending (Uzbek, Kazakh, Mongolian) + 1 control. Earlier session counts included ad-hoc downloads and miscounted Voynich as a comparator.
+Corrected. 15 natural-language comparators (12 Leipzig including Swahili, Georgian, and Tagalog; 2 Gutenberg; 1 Ottoman Turkish UD) + 3 pending (Uzbek, Kazakh, Mongolian) + 1 control. Earlier session counts included ad-hoc downloads and miscounted Voynich as a comparator.
 
 ### 3.4 Self-clustering = 1.44x
 

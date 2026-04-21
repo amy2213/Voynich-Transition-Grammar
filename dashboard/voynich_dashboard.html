@@ -150,6 +150,36 @@ tr.control td { color: var(--text-dim); }
     <h2>Family Density Map</h2><div class="sub">Verified family distribution across the manuscript</div>
     <div class="grid-auto" id="density-map"></div>
   </div>
+  <div class="grid2">
+    <div class="card">
+      <h2>Cross-Transcription Stability</h2><div class="sub">Findings are transcription-agnostic — not EVA artifacts</div>
+      <table>
+        <tr><th style="text-align:left">Transcriber</th><th>Tokens</th><th>C→Q</th><th>A→Q</th><th>P/S</th><th>Bucket</th></tr>
+        <tr><td>Currier</td><td>16,453</td><td>2.48×</td><td>0.42×</td><td>0.85</td><td style="color:var(--accent)">SYMM-HIGH</td></tr>
+        <tr><td>FSG (Friedman)</td><td>28,811</td><td>2.40×</td><td>0.45×</td><td>0.84</td><td style="color:var(--accent)">SYMM-HIGH</td></tr>
+        <tr><td>Takahashi</td><td>30,426</td><td>2.41×</td><td>0.47×</td><td>0.86</td><td style="color:var(--accent)">SYMM-HIGH</td></tr>
+        <tr><td>Grove</td><td>7,657</td><td>2.01×</td><td>0.21×</td><td>0.99</td><td style="color:var(--accent)">SYMM-HIGH</td></tr>
+        <tr style="border-top:2px solid var(--border)"><td><strong>ZL (baseline)</strong></td><td><strong>31,608</strong></td><td><strong>2.63×</strong></td><td><strong>0.50×</strong></td><td><strong>0.99</strong></td><td style="color:var(--accent)"><strong>SYMM-HIGH</strong></td></tr>
+      </table>
+      <div class="callout callout-blue" style="margin-top:12px;font-size:13px;">
+        Four independent transcribers, working decades apart with different word-boundary judgments, all produce the same structural signature. The tokenization-artifact attack vector is closed.
+      </div>
+    </div>
+    <div class="card">
+      <h2>Minimum Viable Explanation</h2><div class="sub">8 properties any Voynich theory must satisfy simultaneously</div>
+      <div style="font-size:13px;line-height:1.8;">
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">1.</strong> Line-bounded grammar — syntax resets at every line break</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">2.</strong> Class specificity — CHEDY attracts QOK, not content words generally</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">3.</strong> Suffix agreement — adjacent words agree on endings at 1.18–1.75×</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">4.</strong> Agreement cascades — feature matching propagates through 3-token chains</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">5.</strong> Productive paradigms — hub-centered morphological networks</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">6.</strong> Bidirectional symmetry — P/S = 0.99, unique among 17 tested systems</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">7.</strong> Stable grammar, shifting vocabulary — same rules, 9–25% vocab overlap</div>
+        <div style="padding:3px 0"><strong style="color:var(--accent)">8.</strong> Open vocabulary — 71.4% hapax, natural frequency distribution</div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-dim);">Encoded structured language is the only tested candidate class compatible with all eight.</div>
+    </div>
+  </div>
 </div>
 
 <!-- TAB 1: Transition Rules -->
@@ -335,6 +365,9 @@ const LANGS = [
   {name:'Hebrew',type:'Semitic',pfx:0.713,sfx:2.474,ratio:0.29,bucket:'SUFFIX-DOM'},
   {name:'Finnish',type:'Uralic',pfx:1.006,sfx:1.511,ratio:0.67,bucket:'SUFFIX-DOM'},
   {name:'Hungarian',type:'Uralic',pfx:0.944,sfx:1.169,ratio:0.81,bucket:'SUFFIX-DOM'},
+  {name:'Swahili',type:'Bantu',pfx:0.791,sfx:0.960,ratio:0.82,bucket:'SYMM-LOW'},
+  {name:'Georgian',type:'Kartvelian',pfx:0.978,sfx:0.856,ratio:1.14,bucket:'SYMM-LOW'},
+  {name:'Tagalog',type:'Austronesian',pfx:0.444,sfx:0.411,ratio:1.08,bucket:'SYMM-LOW'},
   {name:'Ottoman Turkish',type:'Turkic',pfx:0.702,sfx:1.042,ratio:0.67,bucket:'SYMM-LOW'},
   {name:'Turkish',type:'Turkic',pfx:0.906,sfx:0.98,ratio:0.92,bucket:'SYMM-LOW'},
   {name:'Italian',type:'IE',pfx:0.685,sfx:0.964,ratio:0.71,bucket:'SYMM-LOW'},

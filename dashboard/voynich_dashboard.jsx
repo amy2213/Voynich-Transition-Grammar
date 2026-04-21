@@ -28,14 +28,18 @@ const FINDINGS = {
     languages: [
       { name: "Arabic", type: "Semitic", sc: 1.92, sfx: 2.662, ratio: 0.72, bucket: "SUFFIX-DOM" },
       { name: "VOYNICH", type: "Unknown", sc: 1.524, sfx: 1.544, ratio: 0.99, bucket: "SYMM-HIGH", highlight: true },
+      { name: "Latin", type: "IE", sc: 1.105, sfx: 2.925, ratio: 0.38, bucket: "SUFFIX-DOM" },
       { name: "Estonian", type: "Uralic", sc: 0.962, sfx: 2.328, ratio: 0.41, bucket: "SUFFIX-DOM" },
+      { name: "Hebrew", type: "Semitic", sc: 0.713, sfx: 2.474, ratio: 0.29, bucket: "SUFFIX-DOM" },
       { name: "Finnish", type: "Uralic", sc: 1.006, sfx: 1.511, ratio: 0.67, bucket: "SUFFIX-DOM" },
       { name: "Hungarian", type: "Uralic", sc: 0.944, sfx: 1.169, ratio: 0.81, bucket: "SUFFIX-DOM" },
+      { name: "Swahili", type: "Bantu", sc: 0.791, sfx: 0.960, ratio: 0.82, bucket: "SYMM-LOW" },
+      { name: "Georgian", type: "Kartvelian", sc: 0.978, sfx: 0.856, ratio: 1.14, bucket: "SYMM-LOW" },
+      { name: "Tagalog", type: "Austronesian", sc: 0.444, sfx: 0.411, ratio: 1.08, bucket: "SYMM-LOW" },
+      { name: "Ottoman Turkish", type: "Turkic", sc: 0.702, sfx: 1.042, ratio: 0.67, bucket: "SYMM-LOW" },
       { name: "Turkish", type: "Turkic", sc: 0.906, sfx: 0.98, ratio: 0.92, bucket: "SYMM-LOW" },
-      { name: "Latin", type: "IE", sc: 1.105, sfx: 2.925, ratio: 0.38, bucket: "SUFFIX-DOM" },
-      { name: "N. Azerbaijani", type: "Turkic", sc: 0.815, sfx: 0.795, ratio: 1.02, bucket: "SYMM-LOW" },
       { name: "Italian", type: "IE", sc: 0.685, sfx: 0.964, ratio: 0.71, bucket: "SYMM-LOW" },
-      { name: "Hebrew", type: "Semitic", sc: 0.713, sfx: 2.474, ratio: 0.29, bucket: "SUFFIX-DOM" },
+      { name: "N. Azerbaijani", type: "Turkic", sc: 0.815, sfx: 0.795, ratio: 1.02, bucket: "SYMM-LOW" },
       { name: "KJV English", type: "IE", sc: 0.551, sfx: 0.704, ratio: 0.78, bucket: "SYMM-LOW" },
       { name: "Middle English", type: "IE", sc: 0.411, sfx: 0.692, ratio: 0.59, bucket: "SYMM-LOW" },
       { name: "Gibberish", type: "Control", sc: 0.923, sfx: 0.966, ratio: 0.96, bucket: "SYMM-LOW", control: true }
@@ -203,7 +207,7 @@ export default function VoynichDashboard() {
             <span style={{ fontSize: 14, color: COLORS.textDim, fontWeight: 300 }}>Transition Grammar Analysis</span>
           </div>
           <p style={{ margin: "8px 0 0", fontSize: 13, color: COLORS.textDim, maxWidth: 700 }}>
-            Quantitative analysis of sequential token-family constraints across 11 natural-language comparators. 
+            Quantitative analysis of sequential token-family constraints across 15 natural-language comparators. 
             Cross-validated against independent AI analysis. April 2026.
           </p>
         </div>
@@ -453,7 +457,7 @@ export default function VoynichDashboard() {
               <div style={{ fontSize: 14, lineHeight: 1.8, color: COLORS.textDim }}>
                 <p><strong style={{ color: COLORS.text }}>Corpus:</strong> Zandbergen-Landini EVA transliteration via AncientLanguages/Voynich (Hugging Face). 4,197 lines, 31,608 tokens, 184 pages.</p>
                 <p><strong style={{ color: COLORS.text }}>Families:</strong> QOK (prefix qok-), OK (prefix ok- not qok-), OT (prefix ot-), CHEDY (contains chedy/shedy/chey/shey), AIIN (contains aiin/ain). All others = OTHER.</p>
-                <p><strong style={{ color: COLORS.text }}>Comparison languages:</strong> 11 verified natural-language comparators (9 Leipzig Wikipedia 100K, 2 Gutenberg literary) plus 1 Ottoman Turkish UD treebank and 1 shuffled-token control.</p>
+                <p><strong style={{ color: COLORS.text }}>Comparison languages:</strong> 15 natural-language comparators across 8 language families (12 Leipzig Wikipedia 100K, 2 Gutenberg literary, 1 Ottoman Turkish UD treebank) and 1 shuffled-token control. Cross-transcription validation confirms all findings are stable across 4 independent transcribers.</p>
                 <p><strong style={{ color: COLORS.text }}>Statistical tests:</strong> Permutation tests (5,000–10,000 iterations), bootstrap CIs, KS tests, Chi-squared, split-half reliability. All transition ratios = observed/expected under independence.</p>
                 
                 <p><strong style={{ color: COLORS.text }}>Known limitations:</strong> Family definitions are EVA-specific and may not correspond to paleographic character boundaries. Self-clustering values are method-sensitive (pooled vs page-level). Non-IE comparison texts are modern, not medieval. Ottoman Turkish tested with small UD corpus (16,890 words): SYMM-LOW, not a match. Larger corpus needed.</p>

@@ -64,7 +64,10 @@ is strongly suffix-dominant. Ottoman Turkish was tested separately using
 a small historical corpus and also falls outside the Voynich profile
 (SYMM-LOW). Additional analyses identify line-bounded grammatical
 structure, productive morphology-like paradigms, and agreement-like
-feature propagation across adjacent and near-adjacent tokens. These
+feature propagation across adjacent and near-adjacent tokens. Cross-transcription validation across four independent transcribers
+(Currier, FSG, Takahashi, Grove) confirms that all core findings ---
+bidirectional symmetry, transition rules, and line-bounded grammar ---
+are stable regardless of tokenization decisions. These
 findings do not identify the manuscript's language, assign meaning to any
 token, or establish a decipherment. They do, however, define a set of
 structural constraints that any successful explanation must satisfy and
@@ -123,7 +126,7 @@ constructed symbolic system, or a sophisticated cipher without a known
 This paper contributes to the second tradition. We analyze sequential
 constraints between token families at the class level --- five families
 defined by EVA-transliteration affix patterns, plus a catch-all class ---
-and compare the manuscript's structural profile against $13$ natural-language comparators and a shuffled-token control. Five findings
+and compare the manuscript's structural profile against $15$ natural-language comparators across $8$ language families and a shuffled-token control. Five findings
 structure our contribution: (i) distributed transition rules operating at
 the family rather than token level; (ii) a bidirectional self-clustering
 test that removes the directional bias of prefix-only analyses; (iii)
@@ -206,12 +209,12 @@ transcription alphabets are not tested here and remain an open question.
 
 \subsection{Comparison corpora}
 
-We compare Voynich against $13$ natural-language comparators:
+We compare Voynich against $15$ natural-language comparators:
 $2$ historical literary texts (Middle English Chaucer, Gutenberg~\#22120;
-KJV English, Gutenberg~\#10900) and $10$ Wikipedia-derived corpora from the
+KJV English, Gutenberg~\#10900) and $12$ Wikipedia-derived corpora from the
 Leipzig Corpora Collection (Turkish, Hungarian, Finnish, Hebrew, Arabic,
-Latin, North Azerbaijani, Italian, Estonian, Swahili, Swahili; all \texttt{wikipedia\_2021\_100K}
-editions). A shuffled-token control (\texttt{Gibberish}) is derived from the
+Latin, North Azerbaijani, Italian, Estonian, Swahili, Georgian, Tagalog;
+all \texttt{wikipedia\_2021\_100K} editions). A shuffled-token control (\texttt{Gibberish}) is derived from the
 Voynich corpus itself by random permutation. An additional small corpus
 (Ottoman Turkish, $16{,}890$ words, UD treebank) is tested separately given
 its relevance as a potential historical match.
@@ -418,7 +421,7 @@ tested system in the SYMM-HIGH bucket.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.85\linewidth]{figures/fig1_prefix_suffix.pdf}
-  \caption{Prefix vs.~suffix self-clustering across $15$ tested systems.
+  \caption{Prefix vs.~suffix self-clustering across $17$ tested systems.
   All natural languages with positive clustering (Arabic, Latin, Estonian,
   Hebrew, Finnish, Hungarian) are suffix-dominant. Voynich is the only
   system in the symmetric-high region (shaded). The shuffled control
@@ -431,7 +434,8 @@ tested system in the SYMM-HIGH bucket.
   \caption{Prefix/suffix self-clustering across tested systems. Voynich is
   the only SYMM-HIGH system; all other natural languages with positive
   clustering are SUFFIX-DOM. Ottoman Turkish (UD treebank, $16{,}890$ words)
-  and Swahili (Leipzig 100K) both tested SYMM-LOW.}
+  Swahili, Georgian, and Tagalog (all Leipzig 100K) also tested SYMM-LOW
+  despite having bidirectional morphology.}
   \label{tab:pstable}
   \begin{tabular}{lrrrl}
     \toprule
@@ -446,6 +450,8 @@ tested system in the SYMM-HIGH bucket.
     Hungarian           & $0.944$ & $1.169$ & $0.81$ & SUFFIX-DOM \\
     Ottoman Turkish     & $0.702$ & $1.042$ & $0.67$ & SYMM-LOW \\
     Swahili             & $0.791$ & $0.960$ & $0.82$ & SYMM-LOW \\
+    Georgian            & $0.978$ & $0.856$ & $1.14$ & SYMM-LOW \\
+    Tagalog             & $0.444$ & $0.411$ & $1.08$ & SYMM-LOW \\
     Turkish             & $0.906$ & $0.980$ & $0.92$ & SYMM-LOW \\
     Italian             & $0.685$ & $0.964$ & $0.71$ & SYMM-LOW \\
     N.~Azerbaijani      & $0.815$ & $0.795$ & $1.02$ & SYMM-LOW \\
@@ -469,8 +475,14 @@ using a small historical UD treebank ($16{,}890$ words), falls in the
 SYMM-LOW region and is also not a match. Swahili (Bantu), which has
 textbook bidirectional morphology (prefix subject/class agreement and
 suffix tense/aspect markers), also tests SYMM-LOW (prefix $0.79\times$,
-suffix $0.96\times$, ratio $0.82$). Having bidirectional morphology in
-a natural language does not suffice to produce Voynich's symmetric
+suffix $0.96\times$, ratio $0.82$). Georgian (Kartvelian), with polypersonal
+prefix+suffix agreement, tested SYMM-LOW (prefix $0.98\times$, suffix
+$0.86\times$). Tagalog (Austronesian), with infixation plus
+prefix/suffix morphology, also tested SYMM-LOW (prefix $0.44\times$,
+suffix $0.41\times$). Across four typologically distinct
+bidirectional-morphology languages (Swahili, Ottoman Turkish, Georgian,
+Tagalog), none approaches SYMM-HIGH. Having bidirectional morphology
+in a natural language does not suffice to produce Voynich's symmetric
 elevated clustering.
 
 \subsection{Self-clustering is method-sensitive}
@@ -487,6 +499,50 @@ comparison (the method applied identically to all systems) but emphasize
 that the magnitude is method-dependent. The \emph{ratio} between prefix and
 suffix SC --- the basis of the central result in \S\ref{sec:symmetry} ---
 is stable across all three methods.
+
+
+\subsection{Cross-transcription stability}
+\label{sec:crosstranscription}
+
+A common critique of Voynich statistical work is that findings may be
+artifacts of a particular transliteration's tokenization decisions. To
+test this, we parsed the Landini--Stolfi Interlinear (LSI) file, which
+contains independent transcriptions by Currier, the First Study Group
+(Friedman), Takahashi, and Grove, all mapped to EVA alphabet but with
+each transcriber's own word-boundary and line-break judgments.
+
+\begin{table}[ht]
+  \centering
+  \caption{Cross-transcription stability. All four independent
+  transcribers produce SYMM-HIGH bidirectional symmetry and
+  CHEDY$\to$QOK attraction well above chance. Line-bounded grammar
+  (within-line $>$ cross-line) is universal.}
+  \label{tab:crosstranscription}
+  \begin{tabular}{lrrrrrl}
+    \toprule
+    Transcriber & Tokens & C$\to$Q & A$\to$Q & Pfx SC & Sfx SC & Bucket \\
+    \midrule
+    Currier       & $16{,}453$ & $2.48\times$ & $0.42\times$ & $1.30\times$ & $1.53\times$ & SYMM-HIGH \\
+    FSG (Friedman)& $28{,}811$ & $2.40\times$ & $0.45\times$ & $1.23\times$ & $1.47\times$ & SYMM-HIGH \\
+    Takahashi     & $30{,}426$ & $2.41\times$ & $0.47\times$ & $1.28\times$ & $1.50\times$ & SYMM-HIGH \\
+    Grove         & $7{,}657$  & $2.01\times$ & $0.21\times$ & $1.14\times$ & $1.15\times$ & SYMM-HIGH \\
+    \midrule
+    ZL (baseline) & $31{,}608$ & $2.63\times$ & $0.50\times$ & $1.52\times$ & $1.54\times$ & SYMM-HIGH \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Table~\ref{tab:crosstranscription} shows that all four transcribers
+independently produce SYMM-HIGH bidirectional symmetry,
+CHEDY$\to$QOK attraction in the range $2.01$--$2.48\times$,
+AIIN$\to$QOK repulsion in the range $0.21$--$0.47\times$, and
+line-bounded grammar reset (within-line ratios exceed cross-line ratios
+for every transcriber). The structural findings are not artifacts of
+any particular transcriber's tokenization decisions. This result
+substantially closes the ``tokenization artifact'' attack vector:
+independent scholars working decades apart, with different approaches
+to ambiguous word boundaries, all recover the same structural
+signature.
 
 \subsection{Line-bounded grammar}
 
@@ -656,7 +712,7 @@ been exhaustively tested here.
 These results do not identify Voynich as any particular natural language,
 because no tested natural language matches Voynich's symmetric-high profile.
 They do not identify it as artificial either: the space of possible natural
-languages is larger than our $13$-language sample, and a language with
+languages is larger than our $15$-language sample, and a language with
 bidirectional morphology (for example, a polysynthetic language or a
 combinatorial morphology with comparable prefix and suffix inventories)
 could in principle produce this signature. The findings constrain the space
@@ -707,7 +763,7 @@ not others are incomplete.
         graphs, the same four edit operations recurring across all sections,
         and a log-frequency vs.~variant-count correlation of $r = 0.52$--$0.69$.
   \item \textbf{Bidirectional self-clustering symmetry.} $P/S = 0.99$ with
-        both prefix and suffix SC $> 1.5\times$. Unique among $13$ tested
+        both prefix and suffix SC $> 1.5\times$. Unique among $17$ tested
         systems.
   \item \textbf{Section-stable grammar with shifting lexicon.} Transition
         rules, agreement, paradigm operations, and family proportions are
@@ -752,7 +808,7 @@ plausibly natural language --- is the only one compatible with all eight
 requirements without invoking mechanisms that lack known 15th-century
 precedent. This does not prove encoded natural language, nor does it
 exhaust the space of possibilities. The candidate set is limited to four
-broad classes and the comparator pool to $13$ natural languages; other natural-language types (Sinitic,
+broad classes and the comparator pool to $15$ natural languages across $8$ families; other natural-language types (Sinitic,
 polysynthetic, historical shorthand) and more elaborate constructed
 systems remain untested. The checklist is offered as a diagnostic
 framework, not as decisive proof: it defines what any successful
@@ -800,9 +856,11 @@ words show SYMM-LOW but this result should be confirmed on a larger
 historical corpus before being taken as definitive. Swahili
 (Leipzig~100K) also tested SYMM-LOW despite bidirectional morphology.
 
-\paragraph{8.~Cross-transcription validation incomplete.} Results are
-stable across EVA-based transliterations but have not been tested with
-non-EVA alphabets that assign different character boundaries.
+\paragraph{8.~Cross-transcription validation.} Results are stable
+across four independent EVA-based transcribers (Currier, FSG, Takahashi,
+Grove; see \S\ref{sec:crosstranscription}). Validation under non-EVA
+alphabets (original Currier alphabet, original FSG alphabet with
+different character boundaries) remains an open question.
 
 \paragraph{9.~Reproducibility is partial.} Three of the core analyses
 (transition rules, AIIN invariance, bidirectional self-clustering) are
@@ -825,19 +883,23 @@ Three concrete extensions would substantially strengthen or refute these
 findings:
 
 \begin{enumerate}
-  \item \textbf{Cross-transcription validation.} Define equivalent token
-        families under FSG and Currier alphabets. Test whether the
-        bidirectional symmetry and transition rules survive.
+  \item \textbf{Non-EVA alphabet validation.} Cross-transcription stability
+        has been confirmed across four EVA-based transcribers
+        (\S\ref{sec:crosstranscription}). The remaining open question
+        is whether findings hold under the original Currier and FSG
+        character-boundary definitions, which assign different glyph
+        groupings than EVA.
   \item \textbf{Ottoman Turkish with larger corpus.} The UD treebank shows
         SYMM-LOW but is too small to be definitive. Swahili (Bantu) also
         tested SYMM-LOW despite rich bidirectional morphology. A historical
         corpus of 15th-century Ottoman Turkish remains worth testing but is
         no longer the sole candidate.
   \item \textbf{Additional language types.} Sinitic (isolating morphology),
-        polysynthetic languages (Nahuatl, various Indigenous American
-        languages), and historical shorthand systems (Pitman, Tironian
-        notae) have not been tested and represent distinct structural
-        profiles not covered by the current comparator set.
+        polysynthetic languages (Nahuatl --- unavailable at corpus scale
+        from Leipzig), and historical shorthand systems (Tironian notae)
+        have not been tested. Georgian (polypersonal agreement) and
+        Tagalog (infixation + affixation) have been tested and both
+        fall in SYMM-LOW.
 \end{enumerate}
 
 % =============================================================================

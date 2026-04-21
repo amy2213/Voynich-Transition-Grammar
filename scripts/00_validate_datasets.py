@@ -123,9 +123,13 @@ def main():
         for lang in claimed_not_present:
             print(f"  ! {lang} — referenced in earlier analysis but no frozen dataset")
 
-    if missing or checksum_fail or mislabeled:
+    if checksum_fail or mislabeled:
         print(f"\n⚠ VALIDATION ISSUES FOUND. Review above.")
         return 1
+    if missing:
+        print(f"\n⚠ {len(missing)} dataset(s) missing. Run scripts/00_fetch_datasets.py to download.")
+        print(f"  This is expected in CI or lightweight clones where data is not bundled.")
+        return 0  # Not fatal — missing data is expected in some contexts
     else:
         print(f"\n✓ All datasets validated successfully.")
         return 0
