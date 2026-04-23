@@ -1,7 +1,7 @@
 {
   "description": "Single constructed-system control for MVE checklist. Not a claim that a 15th-century scribe could have designed this \u2014 a demonstration that, given access to the design, a constructed system can satisfy every checklist item. This forces \u00a75's 'only compatible class' language to be rewritten.",
   "design_choices": {
-    "n_tokens": 31759,
+    "n_tokens": 32087,
     "n_lines": 4000,
     "n_sections": 4,
     "target_A_to_B_attraction": 2.5,
@@ -11,8 +11,8 @@
   },
   "mve_checklist_scoring": {
     "1_line_bounded_grammar": {
-      "within_line_A_to_B": 2.21,
-      "cross_line_A_to_B": 0.65,
+      "within_line_A_to_B": 2.22,
+      "cross_line_A_to_B": 0.56,
       "satisfies": true
     },
     "2_class_specificity_A_to_B": {
@@ -20,49 +20,49 @@
       "satisfies": true
     },
     "3_suffix_agreement": {
-      "A_to_B": null,
-      "B_to_B": 2.2,
+      "A_to_B": 0.0,
+      "B_to_B": 2.24,
       "satisfies": true
     },
     "4_cascade_A_O_A": {
-      "if_agree_pct": 100.0,
+      "if_agree_pct": 50.0,
       "if_disagree_pct": 0.2,
-      "cascade_pp": 99.8,
+      "cascade_pp": 49.8,
       "n_agree": 2,
-      "n_disagree": 1568,
+      "n_disagree": 1618,
       "satisfies": true
     },
     "5_productive_paradigms_corr": {
-      "r_log_freq_vs_variants": -0.067,
+      "r_log_freq_vs_variants": 0.021,
       "note": "Raw correlation only; NOT tested against trigram null. Finding 1.8 is disclaimed in the main project too.",
       "satisfies_if_used_as_checklist_claim": false
     },
     "6_bidirectional_symmetry": {
-      "prefix_sc": 0.839,
-      "suffix_sc": 1.563,
-      "ratio": 0.537,
+      "prefix_sc": 0.819,
+      "suffix_sc": 1.527,
+      "ratio": 0.536,
       "bucket": "SUFFIX-DOM",
       "satisfies": false
     },
     "7_section_stable_grammar_shifting_lexicon": {
-      "mean_pairwise_jaccard": 0.168,
+      "mean_pairwise_jaccard": 0.165,
       "satisfies": true
     },
     "8_open_vocabulary": {
-      "hapax_pct": 15.0,
+      "hapax_pct": 15.5,
       "satisfies": false
     },
     "F_analog_invariance": {
       "per_section_pct": [
-        27.5,
-        26.3,
-        26.9,
+        27.7,
+        26.5,
+        27.0,
         26.0
       ],
-      "mean": 26.7,
+      "mean": 26.8,
       "range": [
         26.0,
-        27.5
+        27.7
       ]
     }
   },

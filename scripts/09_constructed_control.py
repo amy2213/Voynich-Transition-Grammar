@@ -167,7 +167,7 @@ def generate_edit1_variants(word, n_variants=3):
             variants.add(word[:i] + word[i+1:])
         if len(variants) >= n_variants:
             break
-    return list(variants)
+    return sorted(variants)
 
 
 def build_section_lexicons(base_lex, n_sections=4, overlap=0.15):
@@ -345,7 +345,7 @@ def auto_affix_families(tokens, end="prefix", k=5, min_cov=0.02, max_cov=0.20,
             cov = n / total
             if min_cov <= cov <= max_cov:
                 candidates.append((af, L, n, cov))
-    candidates.sort(key=lambda x: -x[2])
+    candidates.sort(key=lambda x: (-x[2], x[0]))
     return [c[0] for c in candidates[:k]]
 
 
@@ -454,7 +454,7 @@ def main():
     ab_ratio, ab_obs, ab_exp = transition_ratio(tokens_flat, fams_flat, "A", "B")
 
     # Bidirectional SC
-    prefix_fams = list(set([t[:3] for t in tokens_flat if len(t) >= 3]))
+    prefix_fams = sorted(set([t[:3] for t in tokens_flat if len(t) >= 3]))
     prefix_affixes = auto_affix_families(tokens_flat, end="prefix", k=5)
     suffix_affixes = auto_affix_families(tokens_flat, end="suffix", k=5)
     psc = self_cluster_score(tokens_flat, prefix_affixes, end="prefix")
@@ -503,7 +503,7 @@ def main():
     # Log-freq vs edit-1 variant-count correlation (class A top-50)
     A_tokens = [t for t, f in zip(tokens_flat, fams_flat) if f == "A"]
     A_counts = Counter(A_tokens)
-    top50 = sorted(A_counts.items(), key=lambda kv: -kv[1])[:50]
+    top50 = sorted(A_counts.items(), key=lambda kv: (-kv[1], kv[0]))[:50]
     vocab_set = set(t for t, _ in top50)
     import numpy as np
     log_freqs = []
