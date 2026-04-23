@@ -1,0 +1,85 @@
+{
+  "description": "Null-model test for the productive-paradigm claim (Finding 1.8). Tests whether the log-frequency vs edit-1 variant count correlation exceeds a character-trigram null that lacks morphological structure.",
+  "methodology": {
+    "voynich_real": "Top 50 members of each family by frequency; Pearson r of log-freq vs edit-1 neighbor count within that family's top-50.",
+    "trigram_null": "10 replicates: fit character trigram model on real Voynich; generate synthetic corpus of same size; classify with same family rules; compute same correlation.",
+    "chaucer_natural": "All tokens from Chaucer's Canterbury Tales; top 50 by frequency; same correlation definition. Uses ALL tokens, not family-filtered, since the EVA family definitions don't apply."
+  },
+  "interpretation_rules": {
+    "supports_productive_morphology": "Voynich r >> trigram null r AND Voynich r \u2248 Chaucer r",
+    "artifact_only": "Voynich r \u2248 trigram null r (within factor 1.3)",
+    "partial_support": "Voynich r above null but below NL"
+  },
+  "results": {
+    "voynich_real": {
+      "QOK": {
+        "r": 0.602,
+        "n_types": 50
+      },
+      "CHEDY": {
+        "r": 0.384,
+        "n_types": 50
+      },
+      "AIIN": {
+        "r": 0.397,
+        "n_types": 50
+      }
+    },
+    "trigram_null": {
+      "QOK": {
+        "n_replicates": 10,
+        "mean": 0.481,
+        "sd": 0.093,
+        "min": 0.296,
+        "max": 0.607,
+        "p95": 0.607
+      },
+      "CHEDY": {
+        "n_replicates": 10,
+        "mean": 0.358,
+        "sd": 0.058,
+        "min": 0.248,
+        "max": 0.432,
+        "p95": 0.42
+      },
+      "AIIN": {
+        "n_replicates": 10,
+        "mean": 0.429,
+        "sd": 0.044,
+        "min": 0.378,
+        "max": 0.517,
+        "p95": 0.512
+      }
+    },
+    "chaucer_natural": {
+      "r": 0.203,
+      "n_types": 50
+    },
+    "verdicts": {
+      "QOK": {
+        "real_r": 0.602,
+        "null_mean": 0.481,
+        "null_p95": 0.607,
+        "ratio_real_over_null": 1.25,
+        "exceeds_null_p95": false,
+        "verdict": "artifact: correlation explained by Zipfian combinatorics (trigram null)"
+      },
+      "CHEDY": {
+        "real_r": 0.384,
+        "null_mean": 0.358,
+        "null_p95": 0.42,
+        "ratio_real_over_null": 1.07,
+        "exceeds_null_p95": false,
+        "verdict": "artifact: correlation explained by Zipfian combinatorics (trigram null)"
+      },
+      "AIIN": {
+        "real_r": 0.397,
+        "null_mean": 0.429,
+        "null_p95": 0.512,
+        "ratio_real_over_null": 0.93,
+        "exceeds_null_p95": false,
+        "verdict": "artifact: correlation explained by Zipfian combinatorics (trigram null)"
+      }
+    }
+  }
+}
