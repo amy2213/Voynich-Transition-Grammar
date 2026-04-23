@@ -2,7 +2,7 @@
 
 The Voynich Manuscript is a 15th-century book that nobody can read. The script is unknown, the language (if it is a language) is unidentified, and every proposed decipherment has failed verification. This project doesn't try to decode it. Instead, it measures the statistical structure of the text and asks: what kind of system could have produced these patterns?
 
-The answer is surprisingly specific. The text has grammatical rules that operate within lines and reset at line boundaries, morphological agreement between adjacent words where the ending of one word predicts the ending of the next, and a unique structural symmetry that no tested natural language shares. These properties together rule out random generation, simple ciphers, and template-based hoax mechanisms. The strongest remaining explanation is encoded structured language — plausibly natural language under a cipher that preserves the source system's grammar. The structural profile is consistent with a formulaic domain text (herbal, recipe, or medical collection), though this genre inference has not been tested against genre-matched comparison corpora.
+The answer is narrower than it first appeared. The text shows statistical regularities that operate within lines and reset at line boundaries, above-chance agreement on word endings between adjacent words, and one distinctive property: balanced elevated self-clustering at both word beginnings and word endings, a profile not shared by any of the 16 natural languages we tested. These findings rule out random generation and simple letter-substitution ciphers. They do not rule out sophisticated constructed or engineered systems — a first-pass synthetic constructed control produced 5 of 7 testable checklist properties (see `results/constructed_control_results.json`). The findings narrow the space of viable explanations without localizing a single one.
 
 **[Interactive Dashboard](https://amy2213.github.io/Voynich-Transition-Grammar/dashboard/voynich_dashboard.html)** · **[Research Paper (PDF)](https://amy2213.github.io/Voynich-Transition-Grammar/docs/paper.pdf)** · **[Durable Findings](docs/durable_findings.md)**
 
@@ -29,21 +29,21 @@ When you group Voynich words into families by their beginning characters and mea
 
 Full table with all 18 systems in [results/prefix_suffix_analysis.json](results/prefix_suffix_analysis.json). This comparison covers 13 modern-proxy languages (Leipzig Wikipedia 100K), 2 historical literary texts (Gutenberg), 1 Ottoman Turkish UD treebank, and 1 shuffled-token control.
 
-This matters because it constrains what the writing system can be. A simple letter-substitution cipher would preserve the source language's suffix dominance. Whatever produced Voynich operates on both word boundaries simultaneously — consistent with a syllabic or morpheme-level encoding.
+This matters because it constrains what the writing system can be. A simple letter-substitution cipher would preserve the source language's suffix dominance. Whatever produced Voynich imposes regularity at both word boundaries simultaneously. This is consistent with several structured generating mechanisms, including some encoding-based and constructed-system possibilities; current data do not discriminate among them.
 
 ---
 
 ## What else the analysis found
 
-**Words follow grammatical rules.** One word family (CHEDY) attracts another (QOK) at 2.63x above chance, while a third family (AIIN) blocks QOK at 0.50x. These aren't fixed phrases — 77% of individual CHEDY-type words participate across 369 unique word pairs. The rules hold across every section of the manuscript, both scribal hands, and all line lengths.
+**Class-level sequential constraints exist.** One word family (CHEDY) is followed by another (QOK) at 2.63x above chance, while a third family (AIIN) is followed by QOK at 0.50x — a repulsion, not an attraction. These effects are distributed — 77% of individual CHEDY-type words participate across 369 unique word pairs, not a handful of fixed phrases. The CHEDY→QOK effect is strongest in scribal Hands 2 and 3 (which wrote most of the biological and recipe sections) and is essentially absent in Hand 1 (see `results/per_scribe_results.json`). At the family-prediction level the effect is statistically significant but predictively weak: family-bigram prediction gives ~0% lift over the baseline majority class, 5-token family history gives only +3.6%. It is better described as "collocational preference with class-level structure" than as "grammar" in the sense of predictive syntax.
 
-**Lines are grammatical units.** The CHEDY→QOK attraction is 2.54x within a line but drops to 0.85x across line breaks. The grammar resets at every line boundary, suggesting each line is a clause or phrase, not arbitrary text wrapping. But word-family neighborhoods persist across lines — topics span multiple lines even though syntax doesn't.
+**Transition rules reset at line boundaries.** The CHEDY→QOK effect is 2.54x within a line but drops to 0.85x across line breaks. Whatever the rule is, it is line-internal. Word-family neighborhoods, by contrast, persist across lines. This pattern is consistent with lines functioning as clause-like or phrase-like units but does not prove it; any rule that resets at line boundaries (scribal, prosodic, formulaic) would produce the same signature.
 
-**Adjacent words agree on their endings.** When one word ends in -dy, the next word is more likely to also end in -dy than chance predicts (1.18x–1.75x depending on family pair). This agreement compounds when you track multiple features simultaneously (suffix + length + mantle = 5–9x). The agreement cascades through chains of three or more words, with conditional lifts of 20–80 percentage points, and jumps over intervening function-like words.
+**Adjacent words agree on their endings at above-chance rates.** When one word ends in -dy, the next word is more likely to also end in -dy than chance predicts (1.18x–1.75x depending on family pair; OT→OT is borderline at z≈1.9). The effect compounds across multiple features (suffix + length + mantle = 5–9x). Agreement propagates through 3-token chains at above-chance rates, with five tested chains all surviving Benjamini-Hochberg FDR correction at α=0.05. The headline CHEDY→OTHER→CHEDY cascade is +81 percentage points with conservative 95% CI of [+48, +94] pp, based on n=13 agreement trials and n=119 disagreement trials. The effect is real but, for the flagship chain, thinly sampled. See `results/cascade_uncertainty_results.json`.
 
-**The morphology looks productive.** Each word family contains hub-centered networks of similar words (edit distance 1) where high-frequency stems have 2–3x more variants than low-frequency stems. The same four edit operations (prefix-like, stem-internal, suffix-like) recur across all manuscript sections while the specific vocabulary changes. This frequency-productivity correlation is consistent with productive morphology, though it has not yet been tested against a combinatorial null model (high-frequency strings may have more edit-distance-1 neighbors trivially).
+**Hub-centered edit-distance graphs exist, but the "productive morphology" interpretation is not supported.** Each word family contains hub-centered networks of similar words at edit distance 1. The previously reported log-frequency vs variant-count correlation (r = 0.42–0.71) was interpreted as evidence of productive morphology. A character-trigram null model — a synthetic corpus matching Voynich's character bigram statistics but containing no morphology — produces comparable or higher correlations (r ≈ 0.36–0.48 for the same families). Voynich's correlation does not exceed the null's 95th percentile. Chaucer's Middle English produces r = 0.20 at the same measurement, below both Voynich and the null. The correlation appears to be a Zipfian-edit-graph combinatorial property, not evidence of productive morphology. See `results/paradigm_null_results.json`. This finding has been retired from the Minimum Viable Explanation checklist.
 
-**One word family behaves like a function word.** AIIN appears at exactly 15.0% of tokens in both Currier A and B language modes (KS p = 0.742). It doesn't cluster with itself. It's elevated at line beginnings. It passes other word families through but blocks QOK. This is consistent with a conjunction, article, or structural particle — something like "and" or "take" in a recipe text.
+**One word family has function-word-like density behavior with caveats.** AIIN appears at ~15% of tokens in both Currier A and B language modes (KS p = 0.742) under the standard definition (tokens containing "aiin" or "ain"). Under stricter or looser definitions the invariance fails (p = 0.004 and p = 0.001 respectively). AIIN does not self-cluster, is elevated at line beginnings, and passes other families through but blocks QOK. This is consistent with some structural role in the text. The "function word" interpretation is tempered by AIIN having 842 unique types — more than any other family, and higher entropy than CHEDY at every line position, which is the opposite of typical natural-language function-word behavior.
 
 ---
 
@@ -55,18 +55,23 @@ This project does not decode any text, identify any language, or assign meaning 
 
 ## Minimum viable explanation checklist
 
-Any theory about the Voynich Manuscript — decipherment, hoax mechanism, or constructed language — must account for all eight of these properties simultaneously. Theories that explain some but not others are incomplete.
+The following seven measured properties collectively describe the statistical structure of the Voynich text. Any proposed explanation must account for them.
 
-1. **Line-bounded grammar** — syntax resets at every line break
-2. **Specific class attraction** — CHEDY attracts QOK specifically, not content words generally
-3. **Suffix agreement** — adjacent words agree on ending class at 1.18–1.75x
-4. **Agreement cascades** — feature matching propagates through 3-token chains
-5. **Productive paradigms** — hub-centered morphological networks with frequency-correlated variant counts
-6. **Bidirectional symmetry** — prefix/suffix clustering ratio of 0.99, unique among 18 tested systems (16 natural languages + 1 shuffled control + Voynich)
-7. **Stable grammar, shifting vocabulary** — same rules across sections, but only 9–25% vocabulary overlap
-8. **Open vocabulary** — 71.4% hapax, natural-like frequency distribution, not template-generated
+1. **Line-bounded transition reset** — family transition rates reverse at line boundaries (CHEDY→QOK within-line 2.54x vs cross-line 0.85x)
+2. **Specific class-level transition** — CHEDY→QOK 2.63x while CHEDY→OK 0.83x, CHEDY→OT 0.80x. Property of Hands 2 and 3 specifically; not a uniform manuscript-wide rule
+3. **Suffix agreement** — adjacent-word ending-class match rate above chance at 1.18–1.75x (OK→OT, OK→OK, QOK→QOK, CHEDY→QOK, CHEDY→QOK-by-subtype); OT→OT is borderline
+4. **Agreement cascades** — conditional propagation through 3-token chains; five tested chains all survive Benjamini-Hochberg FDR at α=0.05; effect sizes +19pp to +81pp with wide CIs on the flagship +81pp effect
+5. **Bidirectional self-clustering** — prefix SC 1.52x, suffix SC 1.54x, ratio 0.99; present independently in Hands 1, 2, and 3 (94% of corpus); SYMM-HIGH profile survives all four alternative EVA-alphabet transcriptions tested (Currier, FSG, Takahashi, Grove)
+6. **Section-stable coarse grammar with shifting lexicon** — per-family rates and within-line/cross-line asymmetry similar across sections; within-family Jaccard overlap 0.09–0.25
+7. **Open vocabulary** — 71.4% hapax, type/token ratio 0.23, top-100 bigrams cover only 3.7% of text
 
-Among the explanation classes tested with this pipeline (random generation, simple ciphers, template-based generation), encoded structured language is the only one compatible with all eight requirements. More sophisticated constructed systems remain untested and cannot be excluded. Details and scoring against alternative hypotheses in [docs/durable_findings.md](docs/durable_findings.md).
+A previously listed eighth requirement — "productive morphological paradigms" based on a log-frequency vs edit-1 variant-count correlation (r = 0.42–0.71) — has been retired. The correlation is not distinguishable from a character-trigram null model and is lower in Chaucer than in Voynich-trigram-null; the interpretation was not supported. See `docs/durable_findings.md` §1.8 for the retraction record and `results/paradigm_null_results.json` for the test.
+
+### What the checklist discriminates
+
+Not all seven items discriminate between candidate explanations. A first-pass constructed control (`scripts/09_constructed_control.py`) designed with the corresponding rules satisfies items 1, 2, 3, 4, and 6 directly by construction. Item 5 (bidirectional symmetry with the specific SYMM-HIGH profile) and item 7 (71%+ hapax) were not achieved by that first attempt. At current evidence, the items that meaningfully discriminate sophisticated constructed systems from encoded natural language are items 5 and 7; the others do not, and earlier claims in this project that they did were overstated. See `results/constructed_control_results.json`.
+
+Among the explanation classes that have actually been tested against the pipeline — random generation, shuffled-token controls, simple substitution ciphers preserving source-language structure, and one synthetic constructed system — encoded structured language remains the most plausible single explanation. More elaborate constructed and hybrid systems have not been tested and cannot be excluded. Details in [docs/durable_findings.md](docs/durable_findings.md).
 
 ---
 
@@ -93,14 +98,17 @@ Raw data is bundled in this repository. Canonical values are verified by `tests/
 ## Repository contents
 
 ```
-run_all.py        One-command reproduction of the full pipeline
-scripts/          6 analysis scripts (fetch, validate, core, cross-linguistic, stress, extended, cross-transcription)
-tests/            Canonical value regression tests (27 tests)
+run_all.py        One-command reproduction of the full pipeline (scripts 00–09)
+scripts/          10 analysis scripts (validate, core, cross-linguistic, stress, extended,
+                  cross-transcription, paradigm null, cascade uncertainty, per-scribe,
+                  constructed control)
+tests/            Canonical value regression tests (33 tests)
 data/raw/         Frozen datasets (~308 MB, 21 entries with SHA-256 checksums)
 data/manifests/   Dataset manifest (JSON), provenance records, source notes with full citations
-results/          9 canonical output files (JSON + validation report)
+results/          13 canonical output files (JSON + validation report)
 dashboard/        Interactive HTML dashboard with 8 tabs including cross-transcription and MVE
-docs/             Research paper (LaTeX + PDF), durable findings, release documentation
+docs/             Research paper (LaTeX + PDF), durable findings, release documentation,
+                  paper revision notes
 .github/          CI workflow (validates datasets + regression tests on every push)
 index.html        Redirect to dashboard for GitHub Pages
 ```
@@ -119,24 +127,30 @@ index.html        Redirect to dashboard for GitHub Pages
 |---|---|---|
 | Arabic is the closest match | Retired | Arabic is suffix-dominant (0.72); Voynich is symmetric (0.99) |
 | Estonian SC = 1.35x, Finnish = 1.16x | Retired | False positives from 10K-sentence corpora |
-| 15 languages compared | Corrected to 16 comparators + 3 pending + 1 control | Swahili added; earlier session used undocumented downloads |
+| 15 languages compared | Corrected to 16 comparators + 3 pending + 1 control | Swahili, Georgian, Tagalog, Mandarin added across revisions |
 | Self-clustering = 1.44x | Reported as range: 0.93x–1.45x | Method-sensitive |
+| "Productive morphology" (Finding 1.8) | **Retired** | r = 0.42–0.71 does not exceed a character-trigram null that contains no morphology; Chaucer at the same definition produces r = 0.20. The edit-graph correlation is a combinatorial Zipfian property, not morphology. See `results/paradigm_null_results.json`. |
+| "Only compatible class" phrasing in §5 | **Retired** | A first-pass synthetic constructed system (`09_constructed_control.py`) satisfies 5 of 7 checklist items by design. Items 1–4 and 6 do not discriminate NL from constructed systems. Only items 5 (bidirectional symmetry) and 7 (open vocabulary) currently distinguish them. |
+| "Holds across both scribal hands" (transition rules) | Corrected | CHEDY→QOK is a property of Hands 2 and 3. Hand 1 shows the rule only at 1.42x on 13 observations; Hand 5 shows essentially no effect. See `results/per_scribe_results.json`. |
 
 ## Limitations
 
-- **EVA-dependent.** Family definitions may not map to real character units in the original script. FSG/Currier alphabets untested.
-- **Modern proxies.** Leipzig corpora are Wikipedia text, not medieval literature.
-- **Ottoman Turkish corpus is small.** UD treebank (16,890 words) shows SYMM-LOW but a larger historical corpus is needed.
-- **Method-sensitive.** Self-clustering ranges from 0.93x to 1.45x by method. The prefix/suffix ratio (0.99) is stable.
-- **Partial reproducibility.** Core findings (1.1–1.3) have scripted reproduction with regression tests. Newer findings (line structure, suffix agreement, cascades, paradigm morphology) are documented in durable_findings.md with methods and values but not yet packaged as standalone scripts.
+- **EVA-dependent for family definitions.** Token families (QOK, OK, OT, CHEDY, AIIN) are defined by EVA character strings. Bidirectional self-clustering has been tested across four alternative EVA-alphabet transcriptions (Currier, FSG, Takahashi, Grove) — all produce SYMM-HIGH, so the finding is not an artifact of the specific ZL tokenization. But non-EVA character-boundary systems have not been tested.
+- **Tokenization-stability untested across disagreeing word boundaries.** The four transcriptions differ in word-boundary placement in many loci. A dedicated high-confidence-boundary analysis (restricting to tokens whose boundaries all transcriptions agree on) has not been performed.
+- **Modern proxies.** Leipzig corpora are modern Wikipedia text, not medieval literature.
+- **Ottoman Turkish corpus is small.** UD treebank (16,890 words) shows SYMM-LOW but a larger historical corpus would be preferable.
+- **Method-sensitive self-clustering magnitude.** Self-clustering ranges from 0.93x to 1.45x by method. The prefix/suffix ratio (0.99) is stable.
+- **"Grammar" is a weak statistical tendency, not predictive syntax.** Family-bigram prediction gives ~0% lift over baseline; 5-token history gives +3.6%. The patterns documented here are collocational preferences with class-level structure; they do not make the text predictable at the family level.
+- **Constructed-system hypothesis tested only at one design point.** The single synthetic constructed control cannot rule out arbitrarily sophisticated constructed systems.
 - **No decipherment.** Structure only, not semantics.
 
 ## What remains open
 
-- Cross-transcription validation under FSG/Currier alphabets
+- High-confidence-boundary analysis across transcriptions (Currier/FSG/Takahashi/ZL agreement subset)
+- Testing of non-EVA-alphabet character-boundary systems (FSG character set directly, not just FSG word boundaries)
 - Ottoman Turkish comparison with a larger historical corpus
-- Constructed language and cipher controls (Enochian, Esperanto, Cardan grille)
-- Whether any natural language has bidirectional clustering symmetry
+- Constructed language and cipher controls beyond the single first-pass generator (Enochian, Lingua Ignota digitized, Alberti-style polyalphabetic with bidirectional padding)
+- Whether any natural language has bidirectional clustering symmetry (16 tested, none so far)
 - Whether EVA families correspond to paleographic character boundaries
 - Genre-matched structural comparison against medieval herbals, recipe texts, and medical formularies
 
