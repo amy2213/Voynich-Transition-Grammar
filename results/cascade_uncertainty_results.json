@@ -1,0 +1,127 @@
+{
+  "description": "Confidence intervals and Benjamini-Hochberg FDR correction for the five agreement-cascade chains reported in Finding 1.7. ci95_p_if_agree is the Wilson-score 95% interval on the conditional probability of B->C agreement given A\u2261B. cascade_pp_ci95_conservative is (lower_agree - upper_disagree, upper_agree - lower_disagree), a conservative composite interval.",
+  "methodology": {
+    "ci": "Wilson-score 95% intervals on each conditional probability.",
+    "test": "Two-proportion z-test for p(B->C agree | A\u2261B) > p(B->C agree | A\u2260B).",
+    "correction": "Benjamini-Hochberg FDR at \u03b1=0.05 across 5 chains."
+  },
+  "n_chains_tested": 5,
+  "n_chains_surviving_fdr": 5,
+  "chains": [
+    {
+      "chain": "CHEDY\u2192OTHER\u2192CHEDY",
+      "n_agree_trials": 13,
+      "n_disagree_trials": 119,
+      "p_if_agree": 0.85,
+      "p_if_disagree": 0.04,
+      "cascade_pp_point_estimate": 81.0,
+      "ci95_p_if_agree": [
+        0.578,
+        0.957
+      ],
+      "ci95_p_if_disagree": [
+        0.018,
+        0.095
+      ],
+      "cascade_pp_ci95_conservative": [
+        48.3,
+        93.9
+      ],
+      "two_prop_z": 8.43,
+      "two_prop_p_one_tailed": 0.0,
+      "survives_bh_fdr_alpha_0.05": true
+    },
+    {
+      "chain": "QOK\u2192OTHER\u2192QOK",
+      "n_agree_trials": 26,
+      "n_disagree_trials": 61,
+      "p_if_agree": 0.62,
+      "p_if_disagree": 0.18,
+      "cascade_pp_point_estimate": 44.0,
+      "ci95_p_if_agree": [
+        0.425,
+        0.776
+      ],
+      "ci95_p_if_disagree": [
+        0.104,
+        0.295
+      ],
+      "cascade_pp_ci95_conservative": [
+        13.1,
+        67.2
+      ],
+      "two_prop_z": 4.02,
+      "two_prop_p_one_tailed": 2.97e-05,
+      "survives_bh_fdr_alpha_0.05": true
+    },
+    {
+      "chain": "QOK\u2192QOK\u2192QOK",
+      "n_agree_trials": 27,
+      "n_disagree_trials": 16,
+      "p_if_agree": 0.52,
+      "p_if_disagree": 0.19,
+      "cascade_pp_point_estimate": 33.0,
+      "ci95_p_if_agree": [
+        0.34,
+        0.693
+      ],
+      "ci95_p_if_disagree": [
+        0.066,
+        0.43
+      ],
+      "cascade_pp_ci95_conservative": [
+        -9.0,
+        62.7
+      ],
+      "two_prop_z": 2.15,
+      "two_prop_p_one_tailed": 0.0159,
+      "survives_bh_fdr_alpha_0.05": true
+    },
+    {
+      "chain": "CHEDY\u2192QOK\u2192CHEDY",
+      "n_agree_trials": 26,
+      "n_disagree_trials": 45,
+      "p_if_agree": 0.69,
+      "p_if_disagree": 0.13,
+      "cascade_pp_point_estimate": 56.0,
+      "ci95_p_if_agree": [
+        0.5,
+        0.835
+      ],
+      "ci95_p_if_disagree": [
+        0.063,
+        0.262
+      ],
+      "cascade_pp_ci95_conservative": [
+        23.8,
+        77.2
+      ],
+      "two_prop_z": 4.8,
+      "two_prop_p_one_tailed": 8.06e-07,
+      "survives_bh_fdr_alpha_0.05": true
+    },
+    {
+      "chain": "OT\u2192OTHER\u2192OT",
+      "n_agree_trials": 18,
+      "n_disagree_trials": 37,
+      "p_if_agree": 0.33,
+      "p_if_disagree": 0.14,
+      "cascade_pp_point_estimate": 19.0,
+      "ci95_p_if_agree": [
+        0.163,
+        0.563
+      ],
+      "ci95_p_if_disagree": [
+        0.059,
+        0.28
+      ],
+      "cascade_pp_ci95_conservative": [
+        -11.7,
+        50.3
+      ],
+      "two_prop_z": 1.72,
+      "two_prop_p_one_tailed": 0.0423,
+      "survives_bh_fdr_alpha_0.05": true
+    }
+  ]
+}

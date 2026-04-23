@@ -1,0 +1,123 @@
+{
+  "description": "Per-scribe decomposition of headline findings. Tests whether the manuscript-wide signature is present in each individual hand or is an aggregation artifact.",
+  "methodology": {
+    "hand_labels": "Column 'H' in the Zandbergen-Landini parquet metadata. Values 1-5 correspond to Currier's scribal hand attribution; missing values indicate unassigned lines.",
+    "per_hand_analyses": [
+      "Prefix and suffix self-clustering (bucket classification)",
+      "CHEDY->QOK transition ratio",
+      "AIIN density"
+    ]
+  },
+  "hands": {
+    "1": {
+      "n_tokens": 8997,
+      "prefix_sc": 1.588,
+      "suffix_sc": 1.393,
+      "ps_ratio": 1.14,
+      "bucket": "SYMM-HIGH",
+      "chedy_qok_ratio": 1.42,
+      "chedy_qok_obs": 13,
+      "chedy_qok_exp": 9.1,
+      "aiin_pct": 13.1,
+      "auto_suffix_families": [
+        "in",
+        "ol",
+        "iin",
+        "or",
+        "hy"
+      ]
+    },
+    "2": {
+      "n_tokens": 9154,
+      "prefix_sc": 1.15,
+      "suffix_sc": 1.237,
+      "ps_ratio": 0.93,
+      "bucket": "SYMM-HIGH",
+      "chedy_qok_ratio": 2.15,
+      "chedy_qok_obs": 374,
+      "chedy_qok_exp": 173.7,
+      "aiin_pct": 8.7,
+      "auto_suffix_families": [
+        "in",
+        "ey",
+        "ol",
+        "iin",
+        "ar"
+      ]
+    },
+    "3": {
+      "n_tokens": 11389,
+      "prefix_sc": 1.312,
+      "suffix_sc": 1.323,
+      "ps_ratio": 0.992,
+      "bucket": "SYMM-HIGH",
+      "chedy_qok_ratio": 2.28,
+      "chedy_qok_obs": 222,
+      "chedy_qok_exp": 97.5,
+      "aiin_pct": 13.0,
+      "auto_suffix_families": [
+        "in",
+        "dy",
+        "edy",
+        "ey",
+        "iin"
+      ]
+    },
+    "4": {
+      "n_tokens": 683,
+      "prefix_sc": 0.47,
+      "suffix_sc": 1.262,
+      "ps_ratio": 0.372,
+      "bucket": "SUFFIX-DOM",
+      "chedy_qok_ratio": 7.34,
+      "chedy_qok_obs": 2,
+      "chedy_qok_exp": 0.3,
+      "aiin_pct": 4.1,
+      "auto_suffix_families": [
+        "ey",
+        "dy",
+        "ar",
+        "al",
+        "ody"
+      ]
+    },
+    "5": {
+      "n_tokens": 890,
+      "prefix_sc": 1.13,
+      "suffix_sc": 2.013,
+      "ps_ratio": 0.561,
+      "bucket": "SUFFIX-DOM",
+      "chedy_qok_ratio": 1.06,
+      "chedy_qok_obs": 6,
+      "chedy_qok_exp": 5.6,
+      "aiin_pct": 6.3,
+      "auto_suffix_families": [
+        "edy",
+        "ey",
+        "ody",
+        "in",
+        "al"
+      ]
+    },
+    "unassigned": {
+      "n_tokens": 0,
+      "status": "skipped (insufficient tokens)"
+    },
+    "@": {
+      "n_tokens": 461,
+      "status": "skipped (insufficient tokens)"
+    }
+  },
+  "total_tokens": 31574,
+  "verdict": {
+    "n_hands_with_>=3000_tokens": 3,
+    "qualifying_hands": [
+      "1",
+      "2",
+      "3"
+    ],
+    "n_qualifying_hands_symm_high": 3,
+    "n_qualifying_hands_with_chedy_qok_above_1.5": 2,
+    "interpretation": "PARTIAL SUPPORT: majority of hands but not all show the signature"
+  }
+}
