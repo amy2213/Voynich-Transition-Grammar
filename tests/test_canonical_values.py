@@ -376,3 +376,156 @@ class TestExtendedAnalysis(unittest.TestCase):
         v = self.data["1.9_line_position"]["chedy_line_final_residual_pct"]
         self.assertLess(v, 0,
             msg=f"CHEDY line-final residual should be negative, got {v}%")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# REPAIR-PASS TESTS: paradigm null, cascade CIs, per-scribe, constructed control
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestParadigmNullModel(unittest.TestCase):
+    """
+    Regression tests for results/paradigm_null_results.json.
+
+    The paradigm-null test (06_paradigm_null.py) revealed that Voynich's
+    log-freq vs edit-1 variant-count correlation does NOT exceed a character-
+    trigram null. These tests lock in the finding so future code changes don't
+    silently re-introduce the retired "productive morphology" claim.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        try:
+            cls.data = _load("paradigm_null_results.json")
+        except unittest.SkipTest:
+            raise
+
+    def test_voynich_correlations_not_clearly_above_null(self):
+        """
+        The headline finding of the null test: Voynich r values are NOT
+        reliably above the trigram null's 95th percentile for all families.
+        If any future run produces r values far exceeding null p95 for all
+        three families, the "productive paradigm" claim might be worth
+        re-examining — but currently it is retired.
+        """
+        verdicts = self.data["results"]["verdicts"]
+        # At least one family should have a verdict classifying it as artifact
+        # or not clearly above null. If all three exceed null, the finding has
+        # materially changed and this test should be revisited.
+        artifact_count = sum(
+            1 for fam, v in verdicts.items()
+            if isinstance(v, dict) and "artifact" in str(v.get("verdict", "")).lower()
+        )
+        self.assertGreaterEqual(artifact_count, 1,
+            msg="Expected at least one family's correlation to be classified as "
+                "indistinguishable from trigram null. If all three families now "
+                "clearly exceed null, the Finding 1.8 retirement may need review.")
+
+
+class TestCascadeUncertainty(unittest.TestCase):
+    """
+    Regression tests for results/cascade_uncertainty_results.json.
+
+    All five cascades should survive Benjamini-Hochberg FDR at α=0.05.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        try:
+            cls.data = _load("cascade_uncertainty_results.json")
+        except unittest.SkipTest:
+            raise
+
+    def test_all_cascades_survive_fdr(self):
+        n_passing = self.data["n_chains_surviving_fdr"]
+        n_tested = self.data["n_chains_tested"]
+        self.assertEqual(n_passing, n_tested,
+            msg=f"Cascade FDR drift: {n_passing}/{n_tested} passing BH-FDR at α=0.05")
+
+    def test_flagship_cascade_ci_lower_bound_positive(self):
+        """
+        CHEDY→OTHER→CHEDY: conservative 95% CI for the cascade magnitude
+        must have a positive lower bound. The point estimate is ~+80pp; the
+        CI lower bound should be comfortably above zero.
+        """
+        chains = self.data["chains"]
+        flagship = next(c for c in chains if c["chain"] == "CHEDY→OTHER→CHEDY")
+        lower = flagship["cascade_pp_ci95_conservative"][0]
+        self.assertGreater(lower, 20,
+            msg=f"CHEDY→OTHER→CHEDY lower CI bound unexpectedly low: {lower}pp")
+
+
+class TestPerScribeDecomposition(unittest.TestCase):
+    """
+    Regression tests for results/per_scribe_results.json.
+
+    The three major hands (1, 2, 3) together produce 94% of the corpus. Each
+    should individually test SYMM-HIGH, demonstrating that the bidirectional
+    symmetry is not an aggregation artifact.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        try:
+            cls.data = _load("per_scribe_results.json")
+        except unittest.SkipTest:
+            raise
+
+    def test_major_hands_symm_high(self):
+        """All three major hands (1, 2, 3) individually test SYMM-HIGH."""
+        for h in ["1", "2", "3"]:
+            bucket = self.data["hands"][h]["bucket"]
+            self.assertEqual(bucket, "SYMM-HIGH",
+                msg=f"Hand {h} expected SYMM-HIGH, got {bucket}. "
+                    "If this changes, the 'not an aggregation artifact' "
+                    "framing in durable_findings §1.3 needs revision.")
+
+
+class TestConstructedControl(unittest.TestCase):
+    """
+    Regression tests for results/constructed_control_results.json.
+
+    The first-pass constructed system satisfies items 1–4 and 6 of the revised
+    7-item MVE checklist by design, while failing items 5 (bidirectional
+    symmetry) and 7 (open vocabulary). This locks in that the checklist table's
+    Y/N ratings for constructed systems reflect actual pipeline output.
+
+    NOTE: The JSON keys still use old 8-item numbering internally
+    (e.g., "6_bidirectional_symmetry" = current item 5,
+    "8_open_vocabulary" = current item 7). The code accesses the JSON
+    keys as-is; the comments here use the current 7-item numbering.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        try:
+            cls.data = _load("constructed_control_results.json")
+        except unittest.SkipTest:
+            raise
+
+    def test_constructed_satisfies_multiple_mve_items(self):
+        """
+        The constructed system must satisfy at least 4 of the 7 checklist items.
+        If this drops below 4, the conclusion that items 1–4 and 6 (current
+        numbering) don't discriminate NL from constructed may have been
+        reversed and the checklist table needs re-examination.
+        """
+        self.assertGreaterEqual(self.data["n_items_satisfied"], 4,
+            msg=f"Constructed control now satisfies only "
+                f"{self.data['n_items_satisfied']} items; re-examine §5.")
+
+    def test_constructed_fails_or_bidirectional_symmetry_alone_distinguishes(self):
+        """
+        Bidirectional symmetry (current item 5; JSON key '6_bidirectional_symmetry')
+        plus open vocabulary (current item 7; JSON key '8_open_vocabulary')
+        should be where the first-pass constructed system fails.
+        If the constructed system passes both on first try, the checklist's
+        discriminative power claim must be withdrawn.
+        """
+        mve = self.data["mve_checklist_scoring"]
+        item_6_satisfies = mve["6_bidirectional_symmetry"]["satisfies"]
+        item_8_satisfies = mve["8_open_vocabulary"]["satisfies"]
+        # At least one of 6 or 8 should fail on first design attempt
+        self.assertFalse(item_6_satisfies and item_8_satisfies,
+            msg="First-pass constructed control now satisfies both bidirectional "
+                "symmetry AND open-vocabulary requirements. If this is stable, "
+                "the paper's §5 uniqueness argument must be withdrawn.")
