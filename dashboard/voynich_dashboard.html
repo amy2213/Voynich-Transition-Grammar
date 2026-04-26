@@ -117,8 +117,10 @@ tr.control td { color: var(--text-dim); }
     <button class="tab" onclick="showTab(3)">Self-Clustering</button>
     <button class="tab" onclick="showTab(4)">Cross-Linguistic</button>
     <button class="tab" onclick="showTab(5)">Token Grammar</button>
-    <button class="tab" onclick="showTab(6)">Methodology</button>
-    <button class="tab" onclick="showTab(7)">Paper</button>
+    <button class="tab" onclick="showTab(6)">Per-Scribe</button>
+    <button class="tab" onclick="showTab(7)">Audit Response</button>
+    <button class="tab" onclick="showTab(8)">Methodology</button>
+    <button class="tab" onclick="showTab(9)">Paper</button>
   </div>
 </div>
 
@@ -133,16 +135,17 @@ tr.control td { color: var(--text-dim); }
       <div class="finding"><div class="finding-label">AIIN at 15% across Currier A/B</div><div class="finding-detail">KS p = 0.742. Language-invariant.</div></div>
       <div class="finding"><div class="finding-label">CHEDY→QOK = 2.625x attraction</div><div class="finding-detail">Split-half 95% range: [2.34x, 2.67x]</div></div>
       <div class="finding"><div class="finding-label">AIIN→QOK = 0.504x repulsion</div><div class="finding-detail">Bidirectional. QOK is blocked.</div></div>
-      <div class="finding"><div class="finding-label">Rules are GRAMMATICAL</div><div class="finding-detail">77% of CHEDY tokens participate. 369 unique pairs.</div></div>
+      <div class="finding"><div class="finding-label">Rules are class-distributed</div><div class="finding-detail">77% of CHEDY tokens participate, 369 unique pairs — but predictively weak (family-bigram lift ~0%; concentrated in Hands 2 and 3)</div></div>
     </div>
     <div class="card">
-      <h2>Eliminated Hypotheses</h2><div class="sub">Excluded by the data</div>
-      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Gibberish</div><div class="finding-detail">Chi²/cell 0.7 vs 30.5</div></div></div>
-      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Simple table generation</div><div class="finding-detail">Cannot produce positive self-clustering</div></div></div>
-      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Turkic languages</div><div class="finding-detail">All show SC below 1.0x (SYMM-LOW)</div></div></div>
-      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Indo-European languages</div><div class="finding-detail">All show SC below 1.0x (SYMM-LOW)</div></div></div>
+      <h2>What the Data Rules Out</h2><div class="sub">Hypotheses excluded by the current evidence</div>
+      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Random / gibberish generation</div><div class="finding-detail">Shuffled-token control tests SYMM-LOW (P/S 0.92×/0.97×); χ² per cell 0.7 vs Voynich's 30.5</div></div></div>
+      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Simple letter-substitution ciphers</div><div class="finding-detail">Would preserve source language's suffix dominance; cannot produce SYMM-HIGH from any tested NL source</div></div></div>
+      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Template-based generation</div><div class="finding-detail">Whole-line family templates recur at 1.04× above shuffled control — lines are not template-based</div></div></div>
+      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Bidirectional-morphology natural languages alone</div><div class="finding-detail">Swahili, Ottoman Turkish, Georgian, Tagalog — all four selected for prefix+suffix morphology — test SYMM-LOW</div></div></div>
+      <div class="elim"><span class="elim-x">✗</span><div><div class="finding-label">Medieval scribal abbreviation</div><div class="finding-detail">Even at 90%/95% abbreviation rates, Latin stays SUFFIX-DOM at ratio 0.29 — abbreviation is not a path to SYMM-HIGH</div></div></div>
       <div class="callout callout-blue" style="margin-top:16px;font-size:13px;">
-        <strong>Key result:</strong> Voynich is the only tested system with symmetric-high self-clustering (prefix 1.52x, suffix 1.54x, ratio 0.99). All natural languages with positive SC are suffix-dominant.
+        <strong>What is NOT ruled out:</strong> Voynich is the only tested system with symmetric-high self-clustering (prefix 1.52×, suffix 1.54×, ratio 0.99). All natural-language comparators with positive SC are suffix-dominant. The data rules out random generation, simple substitution ciphers, and template-based mechanisms — but does <em>not</em> rule out sophisticated constructed or engineered systems. A first-pass synthetic constructed control satisfies 5 of 7 MVE items; only items 5 and 7 currently discriminate it from encoded natural language.
       </div>
     </div>
   </div>
@@ -166,18 +169,17 @@ tr.control td { color: var(--text-dim); }
       </div>
     </div>
     <div class="card">
-      <h2>Minimum Viable Explanation</h2><div class="sub">8 properties any Voynich theory must satisfy simultaneously</div>
+      <h2>Minimum Viable Explanation</h2><div class="sub">7 measured properties any Voynich theory must account for</div>
       <div style="font-size:13px;line-height:1.8;">
-        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">1.</strong> Line-bounded grammar — syntax resets at every line break</div>
-        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">2.</strong> Class specificity — CHEDY attracts QOK, not content words generally</div>
-        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">3.</strong> Suffix agreement — adjacent words agree on endings at 1.18–1.75×</div>
-        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">4.</strong> Agreement cascades — feature matching propagates through 3-token chains</div>
-        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">5.</strong> Productive paradigms — hub-centered morphological networks</div>
-        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">6.</strong> Bidirectional symmetry — P/S = 0.99, unique among 17 tested systems</div>
-        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">7.</strong> Stable grammar, shifting vocabulary — same rules, 9–25% vocab overlap</div>
-        <div style="padding:3px 0"><strong style="color:var(--accent)">8.</strong> Open vocabulary — 71.4% hapax, natural frequency distribution</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">1.</strong> Line-bounded transition reset — CHEDY→QOK 2.54× within-line vs 0.85× across line breaks</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">2.</strong> Specific class-level transition — CHEDY→QOK 2.63× while CHEDY→OK 0.83×, CHEDY→OT 0.80× (concentrated in Hands 2 and 3)</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">3.</strong> Suffix agreement — adjacent-word ending-class match rate 1.18–1.75× above chance</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">4.</strong> Agreement cascades — five 3-token chains all survive Benjamini–Hochberg FDR at α=0.05</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">5.</strong> Bidirectional self-clustering — P/S = 0.99, unique among 18 tested systems; holds independently in Hands 1, 2, 3</div>
+        <div style="padding:3px 0;border-bottom:1px solid rgba(42,58,82,0.15)"><strong style="color:var(--accent)">6.</strong> Section-stable coarse grammar with shifting lexicon — within-family Jaccard overlap 0.09–0.25</div>
+        <div style="padding:3px 0"><strong style="color:var(--accent)">7.</strong> Open vocabulary — 71.4% hapax, type/token ratio 0.23</div>
       </div>
-      <div style="margin-top:12px;font-size:12px;color:var(--text-dim);">Encoded structured language is the only tested candidate class compatible with all eight.</div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-dim);">A first-pass synthetic constructed control satisfies 5 of 7. Items 5 and 7 are the only ones that currently discriminate sophisticated constructed systems from encoded natural language. <em>Productive paradigms (formerly item 5 of 8) was retired — see paradigm null model.</em></div>
     </div>
   </div>
 </div>
@@ -214,7 +216,7 @@ tr.control td { color: var(--text-dim); }
       </div>
       <div class="callout callout-accent" style="border-left:3px solid var(--aiin);">
         <div><strong>KS test:</strong> p = 0.742</div>
-        <div><strong>Bootstrap CI for difference:</strong> [−2.0%, +1.9%]</div>
+        <div><strong>Bootstrap CI for difference:</strong> [−2.0%, +2.0%]</div>
         <div style="margin-top:6px;color:var(--text-dim);">Every other family differs significantly between A and B (all p < 0.005). AIIN is the only invariant.</div>
       </div>
     </div>
@@ -259,19 +261,116 @@ tr.control td { color: var(--text-dim); }
   <div class="card">
     <h2>The Grammar Test</h2><div class="sub">Is CHEDY→QOK a few fixed phrases or a class-level rule?</div>
     <div class="grid3" style="margin-bottom:16px;">
-      <div class="stat-box"><div class="stat-val" style="color:var(--attract)">78%</div><div class="stat-label">of CHEDY tokens attract QOK</div><div class="stat-note">(54/69 with ≥5 occurrences)</div></div>
+      <div class="stat-box"><div class="stat-val" style="color:var(--attract)">77%</div><div class="stat-label">of CHEDY tokens attract QOK</div><div class="stat-note">(53/69 with ≥5 occurrences)</div></div>
       <div class="stat-box"><div class="stat-val" style="color:var(--attract)">74%</div><div class="stat-label">of QOK tokens attracted by CHEDY</div><div class="stat-note">(35/47 with ≥5 occurrences)</div></div>
       <div class="stat-box"><div class="stat-val" style="color:var(--repel)">69%</div><div class="stat-label">of AIIN tokens repel QOK</div><div class="stat-note">(36/52 with ≥10 occurrences)</div></div>
     </div>
     <div class="callout callout-green">
       <strong style="color:var(--attract)">Verdict: </strong>
-      369 unique token pairs, top 5 cover only 13.3%. The rule is DISTRIBUTED — this is a grammatical class constraint, not fixed collocations.
+      369 unique token pairs, top 5 cover only 13.3%. The rule is DISTRIBUTED — class-level collocational structure, not fixed phrases. (Predictively weak as syntax: family-bigram lift ~0% over baseline.)
     </div>
   </div>
 </div>
 
-<!-- TAB 6: Methodology -->
+<!-- TAB 6: Per-Scribe -->
 <div class="section" id="sec-6">
+  <div class="card">
+    <h2>Per-Scribe Decomposition</h2><div class="sub">CHEDY→QOK is a property of Hands 2 and 3 — not a uniform manuscript-wide rule</div>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">
+      The Currier hand annotation in the Zandbergen–Landini metadata splits the corpus across five scribal hands. Pooling tokens across hands could produce a manuscript-wide signature even if individual hands behave very differently. The decomposition below tests each hand independently. Bidirectional self-clustering (SYMM-HIGH) holds independently in Hands 1, 2, and 3 (≈94% of the corpus). The CHEDY→QOK transition rule, in contrast, is concentrated in Hands 2 and 3 and is essentially absent in Hand 1.
+    </p>
+    <table>
+      <thead>
+        <tr><th style="text-align:left">Hand</th><th>Tokens</th><th>Prefix SC</th><th>Suffix SC</th><th>P/S</th><th>Bucket</th><th>CHEDY→QOK</th><th>n (obs)</th><th>AIIN%</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Hand 1</td><td>8,997</td><td>1.59x</td><td>1.39x</td><td>1.14</td><td style="color:var(--accent)">SYMM-HIGH</td><td style="color:var(--text-dim)">1.42x</td><td>13</td><td>13.1%</td></tr>
+        <tr><td>Hand 2</td><td>9,154</td><td>1.15x</td><td>1.24x</td><td>0.93</td><td style="color:var(--accent)">SYMM-HIGH</td><td style="color:var(--attract)">2.15x</td><td>374</td><td>8.7%</td></tr>
+        <tr><td>Hand 3</td><td>11,389</td><td>1.31x</td><td>1.32x</td><td>0.99</td><td style="color:var(--accent)">SYMM-HIGH</td><td style="color:var(--attract)">2.28x</td><td>222</td><td>13.0%</td></tr>
+        <tr class="control"><td>Hand 4</td><td>683</td><td>0.47x</td><td>1.26x</td><td>0.37</td><td>SUFFIX-DOM</td><td>7.34x</td><td>2</td><td>4.1%</td></tr>
+        <tr class="control"><td>Hand 5</td><td>890</td><td>1.13x</td><td>2.01x</td><td>0.56</td><td>SUFFIX-DOM</td><td>1.06x</td><td>6</td><td>6.3%</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-blue" style="margin-top:14px;font-size:13px;">
+      <strong>Verdict — partial support:</strong> three of three qualifying hands (≥3,000 tokens) are SYMM-HIGH; two of three show CHEDY→QOK above 1.5×. Hand 1 produces the rule only at 1.42× on n=13 observations. Hands 4 and 5 are too small (&lt;1,000 tokens each) to classify reliably. Driven by <code>results/per_scribe_results.json</code>.
+    </div>
+  </div>
+</div>
+
+<!-- TAB 7: Audit Response -->
+<div class="section" id="sec-7">
+
+  <div class="card">
+    <h2>Cascade Uncertainty (Wilson CI + Benjamini–Hochberg FDR)</h2><div class="sub">5/5 three-token chains survive FDR correction at α=0.05; flagship effect is real but thinly sampled</div>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">
+      Five A→B→C cascade chains were tested. For each chain we computed Wilson 95% intervals on the conditional probability of B→C suffix agreement under A≡B versus A≠B, then a conservative composite CI on the cascade Δ. All five survive Benjamini–Hochberg FDR at α=0.05.
+    </p>
+    <table>
+      <thead>
+        <tr><th style="text-align:left">Chain</th><th>n agree</th><th>n disagree</th><th>Δ (pp)</th><th>Conservative 95% CI</th><th>BH-FDR</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CHEDY→OTHER→CHEDY</td><td>13</td><td>119</td><td>+81.0</td><td>[+48.3, +93.9]</td><td style="color:var(--attract)">pass</td></tr>
+        <tr><td>QOK→OTHER→QOK</td><td>26</td><td>61</td><td>+44.0</td><td>[+13.1, +67.2]</td><td style="color:var(--attract)">pass</td></tr>
+        <tr><td>QOK→QOK→QOK</td><td>27</td><td>16</td><td>+33.0</td><td>[−9.0, +62.7]</td><td style="color:var(--attract)">pass</td></tr>
+        <tr><td>CHEDY→QOK→CHEDY</td><td>26</td><td>45</td><td>+56.0</td><td>[+23.8, +77.2]</td><td style="color:var(--attract)">pass</td></tr>
+        <tr><td>OT→OTHER→OT</td><td>18</td><td>37</td><td>+19.0</td><td>[−11.7, +50.3]</td><td style="color:var(--attract)">pass</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-accent" style="margin-top:14px;font-size:13px;">
+      The flagship CHEDY→OTHER→CHEDY cascade rests on only 13 agreement trials and 119 disagreement trials. The point estimate (+81 pp) is real, but the conservative 95% CI of [+48, +94] pp reflects substantial sampling uncertainty. Two of the five chains have conservative CIs that cross zero. Driven by <code>results/cascade_uncertainty_results.json</code>.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Paradigm Null Model — Finding 1.8 retired</h2><div class="sub">Voynich's log-frequency vs edit-1 variant correlations do not exceed a character-trigram null</div>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">
+      The previous "productive paradigms" finding rested on r = 0.42–0.71 between log-frequency and edit-distance-1 variant counts within each family's top 50. Ten replicates of a character-trigram null — synthetic corpora matching Voynich's bigram statistics but containing no morphology — produced comparable or higher correlations. Voynich's correlations do not exceed the null's 95th percentile in any of the three tested families. Chaucer's Middle English at the same measurement gives r = 0.203, lower than both Voynich and the null. The correlation is a Zipfian-edit-graph combinatorial property, not evidence of productive morphology.
+    </p>
+    <table>
+      <thead>
+        <tr><th style="text-align:left">Family</th><th>Voynich r</th><th>Null mean</th><th>Null 95%ile</th><th>Real / null</th><th>Exceeds null?</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>QOK</td><td>0.602</td><td>0.481</td><td>0.607</td><td>1.25×</td><td style="color:var(--repel)">no</td></tr>
+        <tr><td>CHEDY</td><td>0.384</td><td>0.358</td><td>0.420</td><td>1.07×</td><td style="color:var(--repel)">no</td></tr>
+        <tr><td>AIIN</td><td>0.397</td><td>0.429</td><td>0.512</td><td>0.93×</td><td style="color:var(--repel)">no</td></tr>
+        <tr class="control"><td>Chaucer (NL reference)</td><td>0.203</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-accent" style="margin-top:14px;font-size:13px;">
+      Verdict for all three families: <em>"correlation explained by Zipfian combinatorics (trigram null)"</em>. The "productive paradigms" item has been retired from the Minimum Viable Explanation checklist (formerly item 5 of 8). Driven by <code>results/paradigm_null_results.json</code>.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Constructed-System Control — 5 of 7 MVE items satisfied</h2><div class="sub">A first-pass synthetic generator satisfies most of the checklist by construction; only items 5 and 7 currently discriminate</div>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">
+      A synthetic constructed corpus (~32,000 tokens, 4,000 lines, 4 sections) was generated with deliberately designed grammatical rules — line-bounded resets, A→B class attraction at 2.5×, 70% within-class suffix clustering, ≈15% filler density — and run through the project's own measurement pipeline. The result satisfies 5 of 7 testable MVE items by construction. Items 5 (bidirectional symmetry) and 7 (open vocabulary) were not achieved by this first attempt.
+    </p>
+    <table>
+      <thead>
+        <tr><th style="text-align:left">MVE item</th><th>Outcome</th><th>Key value</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1. Line-bounded transition reset</td><td style="color:var(--attract)">satisfied</td><td>within 2.22× / cross 0.56×</td></tr>
+        <tr><td>2. Specific class-level transition</td><td style="color:var(--attract)">satisfied</td><td>A→B 2.01×</td></tr>
+        <tr><td>3. Suffix agreement</td><td style="color:var(--attract)">satisfied</td><td>B→B 2.24×</td></tr>
+        <tr><td>4. Agreement cascade A→O→A</td><td style="color:var(--attract)">satisfied</td><td>+49.8 pp</td></tr>
+        <tr><td>5. Bidirectional self-clustering</td><td style="color:var(--repel)">not satisfied</td><td>P/S 0.819 / 1.527 — SUFFIX-DOM</td></tr>
+        <tr><td>6. Section-stable grammar with shifting lexicon</td><td style="color:var(--attract)">satisfied</td><td>Jaccard 0.165</td></tr>
+        <tr><td>7. Open vocabulary</td><td style="color:var(--repel)">not satisfied</td><td>15.5% hapax (target &gt;50%)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-accent" style="margin-top:14px;font-size:13px;">
+      Items 1–4 and 6 are satisfied directly by design — they do not discriminate constructed systems from natural language. Items 5 and 7 are the only items that currently distinguish encoded natural language from a sophisticated constructed control. The earlier "encoded NL is the only compatible class" framing has been retired. Driven by <code>results/constructed_control_results.json</code>.
+    </div>
+  </div>
+
+</div>
+
+<!-- TAB 8: Methodology -->
+<div class="section" id="sec-8">
   <div class="card">
     <h2>Methodology</h2><div class="sub">Data, tools, and reproducibility</div>
     <div style="font-size:14px;line-height:1.8;color:var(--text-dim)">
@@ -285,7 +384,13 @@ tr.control td { color: var(--text-dim); }
   <div class="card">
     <h2>Corrections Log</h2>
     <div style="font-size:13px;color:var(--text-dim);line-height:1.7">
-      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• Self-clustering: 0.929x (page-level) to 1.451x (pooled backbone). Method-sensitive.</p>
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• "Only compatible class" framing retired. A first-pass synthetic constructed control satisfies 5 of 7 MVE items by design; only items 5 (bidirectional symmetry) and 7 (open vocabulary) currently discriminate constructed systems from encoded natural language. See <code>results/constructed_control_results.json</code>.</p>
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• "Productive paradigms" (Finding 1.8) retired. Voynich's log-freq vs edit-1 variant correlations (r = 0.42–0.71) do not exceed a character-trigram null containing no morphology. Removed from the MVE checklist (formerly item 5 of 8). See <code>results/paradigm_null_results.json</code>.</p>
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• CHEDY→QOK reframed as scribe-specific. Manuscript-wide 2.625× is concentrated in Hands 2 and 3 (2.15× and 2.28×). Hand 1 produces the rule only at 1.42× on n=13 observations. The earlier "holds across both scribal hands" framing was overstated. See <code>results/per_scribe_results.json</code>.</p>
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• Cascade flagship effect re-reported with uncertainty. CHEDY→OTHER→CHEDY +81 pp point estimate stands, but rests on n=13 agreement / n=119 disagreement trials with conservative 95% CI [+48, +94] pp. Five tested chains all survive Benjamini–Hochberg FDR at α=0.05; two have CIs crossing zero. See <code>results/cascade_uncertainty_results.json</code>.</p>
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• "Grammar" wording narrowed. The CHEDY→QOK class-level constraint is "collocational preference with class-level structure" rather than predictive grammar — family-bigram prediction gives ~0% lift over the baseline majority class.</p>
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• Comparator count corrected from 15 to 16. Mandarin added; Voynich is the target system, not a comparator. 18 systems total in the prefix/suffix table.</p>
+      <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• Self-clustering: 0.929x (page-level) to 1.451x (pooled backbone). Method-sensitive; the bidirectional ratio (0.99) is stable across methods.</p>
       <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• CHEDY→QOK page agreement corrected from 92% to 78%. Earlier figure inflated by selection bias.</p>
       <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• AIIN→QOK page agreement corrected from 91% to 67%. Same selection bias.</p>
       <p style="padding:4px 0;border-bottom:1px solid rgba(42,58,82,0.15)">• Biological self-clustering initially reported as 'not significant.' Rerun shows p < 0.001.</p>
@@ -294,8 +399,8 @@ tr.control td { color: var(--text-dim); }
   </div>
 </div>
 
-<!-- TAB 7: Paper -->
-<div class="section" id="sec-7">
+<!-- TAB 9: Paper -->
+<div class="section" id="sec-9">
   <div class="card">
     <h2>Research Paper</h2><div class="sub">Full write-up with methods, results, and discussion</div>
     <div style="margin-bottom:20px;">
@@ -305,10 +410,10 @@ tr.control td { color: var(--text-dim); }
       </p>
       <p style="font-size:13px;color:var(--text-dim);line-height:1.7;margin-bottom:20px;">
         The paper reports all findings documented on this dashboard plus additional analyses
-        of line-bounded grammar, suffix-agreement cascades, productive morphological paradigms,
+        of line-bounded grammar, suffix-agreement cascades, per-scribe decomposition,
         and glyph-layer architecture. It concludes with a minimum viable explanation checklist:
-        eight quantitative properties that any proposed explanation of the Voynich text must
-        simultaneously satisfy.
+        seven measured properties that any proposed explanation of the Voynich text must
+        account for.
       </p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;">
         <a href="../docs/paper.pdf" target="_blank" style="display:inline-block;padding:12px 24px;background:var(--accent);color:var(--bg);font-weight:600;border-radius:6px;text-decoration:none;font-size:14px;">Read Paper (PDF)</a>
@@ -336,25 +441,25 @@ const FAMILIES = ['QOK','OK','OT','CHEDY','AIIN','OTHER'];
 const FCOLORS = {QOK:'#f59e0b',OK:'#3b82f6',OT:'#8b5cf6',CHEDY:'#ec4899',AIIN:'#10b981',OTHER:'#6b7280'};
 
 const MATRIX = {
-  QOK:[1.55,1.28,1.05,1.45,0.69,0.87], OK:[1.11,1.54,1.20,1.08,0.82,0.93],
-  OT:[0.81,1.10,1.93,0.95,0.85,0.96], CHEDY:[2.66,0.82,0.82,1.12,0.78,0.80],
-  AIIN:[0.44,1.37,1.35,1.01,0.89,1.03], OTHER:[0.77,0.85,0.84,0.90,1.14,1.06]
+  QOK:[1.56,1.24,1.03,1.50,0.73,0.87], OK:[1.07,1.57,1.23,1.04,0.81,0.94],
+  OT:[0.79,1.12,2.05,0.94,0.88,0.95], CHEDY:[2.63,0.82,0.81,1.15,0.77,0.82],
+  AIIN:[0.50,1.30,1.29,0.96,0.92,1.04], OTHER:[0.79,0.86,0.85,0.91,1.12,1.05]
 };
 
 const RULES = [
   {rule:'CHEDY → QOK',ratio:2.625,p:'<0.001'}, {rule:'AIIN → QOK',ratio:0.504,p:'<0.001'},
-  {rule:'QOK → AIIN',ratio:0.86,p:'0.001'}, {rule:'AIIN → OK',ratio:1.18,p:'0.006'},
-  {rule:'AIIN → OT',ratio:1.30,p:'<0.001'}, {rule:'OT → OT',ratio:1.85,p:'<0.001'}
+  {rule:'QOK → AIIN',ratio:0.725,p:'<0.001'}, {rule:'AIIN → OK',ratio:1.302,p:'<0.001'},
+  {rule:'AIIN → OT',ratio:1.29,p:'<0.001'}, {rule:'OT → OT',ratio:2.052,p:'<0.001'}
 ];
 
 const CARRY = [{fam:'OK',ratio:2.73},{fam:'OT',ratio:2.21},{fam:'CHEDY',ratio:1.64},{fam:'QOK',ratio:0.83}];
 
 const SECTIONS = [
-  {name:'Herbal A',qok:3.6,ok:4.2,ot:3.6,chedy:4.1,aiin:14.9,tokens:9893,hand:'1',cur:'A'},
-  {name:'Biological',qok:11.9,ok:3.9,ot:3.8,chedy:16.5,aiin:13.0,tokens:6898,hand:'2',cur:'B'},
-  {name:'Recipes Q20',qok:7.8,ok:5.2,ot:5.9,chedy:9.2,aiin:18.6,tokens:10892,hand:'3',cur:'B'},
-  {name:'Herbal B',qok:5.7,ok:6.8,ot:4.2,chedy:2.6,aiin:10.8,tokens:1984,hand:'1',cur:'A'},
-  {name:'Astronomical',qok:0.7,ok:13.4,ot:16.8,chedy:4.5,aiin:5.5,tokens:685,hand:'4',cur:'?'}
+  {name:'Herbal A',qok:4.0,ok:5.0,ot:4.0,chedy:4.2,aiin:13.3,tokens:9893,hand:'1',cur:'A'},
+  {name:'Biological',qok:15.6,ok:5.1,ot:4.4,chedy:16.5,aiin:7.5,tokens:6898,hand:'2',cur:'B'},
+  {name:'Recipes Q20',qok:10.1,ok:6.9,ot:7.4,chedy:9.3,aiin:13.2,tokens:10892,hand:'3',cur:'B'},
+  {name:'Herbal B',qok:6.0,ok:7.2,ot:4.6,chedy:2.6,aiin:9.7,tokens:1984,hand:'1',cur:'A'},
+  {name:'Astronomical',qok:0.9,ok:13.9,ot:17.7,chedy:4.5,aiin:4.1,tokens:685,hand:'4',cur:'?'}
 ];
 
 const LANGS = [
@@ -455,7 +560,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // AIIN sections
   const asec = document.getElementById('aiin-sections');
-  [{sec:'Astronomical',pct:5.5},{sec:'Herbal B',pct:10.8},{sec:'Biological',pct:13.0},{sec:'Herbal A',pct:14.9},{sec:'Recipes Q20',pct:18.6}].forEach(d => {
+  [{sec:'Astronomical',pct:4.1},{sec:'Herbal B',pct:9.7},{sec:'Biological',pct:7.5},{sec:'Herbal A',pct:13.3},{sec:'Recipes Q20',pct:13.2}].forEach(d => {
     asec.innerHTML += `<div style="padding:10px;background:var(--surface-light);border-radius:6px">
       <div style="font-size:11px;color:var(--text-dim)">${d.sec}</div>
       <div class="mono" style="font-size:20px;font-weight:700;color:var(--aiin)">${d.pct}%</div>
