@@ -4,7 +4,13 @@ The Voynich Manuscript is a 15th-century book that nobody can read. The script i
 
 The answer is narrower than it first appeared. The text shows statistical regularities that operate within lines and reset at line boundaries, above-chance agreement on word endings between adjacent words, and one distinctive property: balanced elevated self-clustering at both word beginnings and word endings, a profile not shared by any of the 16 natural languages we tested. These findings rule out random generation and simple letter-substitution ciphers. They do not rule out sophisticated constructed or engineered systems — a first-pass synthetic constructed control produced 5 of 7 testable checklist properties (see `results/constructed_control_results.json`). The findings narrow the space of viable explanations without localizing a single one.
 
-**[Interactive Dashboard](https://amy2213.github.io/Voynich-Transition-Grammar/dashboard/voynich_dashboard.html)** · **[Research Paper (PDF)](https://amy2213.github.io/Voynich-Transition-Grammar/docs/paper.pdf)** · **[Durable Findings](docs/durable_findings.md)**
+**[Interactive Dashboard](https://amy2213.github.io/Voynich-Transition-Grammar/dashboard/voynich_dashboard.html)** · **[Read Paper (PDF)](https://amy2213.github.io/Voynich-Transition-Grammar/docs/paper.pdf)** · **[Durable Findings](docs/durable_findings.md)**
+
+> **Preprint package (May 2026):** *Voynich Manuscript Token-Structure Analysis: Reproducible Corpus Methods and Cross-Linguistic Baselines.* Status: Preprint package prepared for external archival and submission. PDF: [docs/paper.pdf](docs/paper.pdf) (also available as [docs/voynich-token-structure-analysis-2026-05.pdf](docs/voynich-token-structure-analysis-2026-05.pdf)). arXiv source bundle: [supplementary/arxiv_submission_v2.zip](supplementary/arxiv_submission_v2.zip).
+
+### Claim boundary
+
+This project does not claim semantic decipherment of the Voynich Manuscript. It reports reproducible structural regularities and defines falsifiable constraints for future explanations.
 
 ---
 
@@ -153,6 +159,30 @@ index.html        Redirect to dashboard for GitHub Pages
 - Whether any natural language has bidirectional clustering symmetry (16 tested, none so far)
 - Whether EVA families correspond to paleographic character boundaries
 - Genre-matched structural comparison against medieval herbals, recipe texts, and medical formularies
+
+## Preprint / Research Package
+
+**Title:** Voynich Manuscript Token-Structure Analysis: Reproducible Corpus Methods and Cross-Linguistic Baselines
+**Author:** Amy Laird (Independent Researcher)
+**Date:** May 2026
+**Status:** Preprint package prepared for external archival and submission.
+
+**Description:** This paper presents a reproducible computational analysis of the Voynich Manuscript as a structured token system. It does not claim decipherment or translation. It tests line-bounded effects, token-family transition behavior, cross-linguistic comparator corpora, and stress tests against natural-language baselines.
+
+**Files:**
+- Manuscript PDF: [docs/paper.pdf](docs/paper.pdf) (canonical link, kept stable for GitHub Pages)
+- Same PDF, dated filename: [docs/voynich-token-structure-analysis-2026-05.pdf](docs/voynich-token-structure-analysis-2026-05.pdf)
+- LaTeX source: [docs/main.tex](docs/main.tex), [docs/main.bbl](docs/main.bbl), [docs/references.bib](docs/references.bib)
+- Figures: [docs/figures/](docs/figures/)
+- arXiv source bundle: [supplementary/arxiv_submission_v2.zip](supplementary/arxiv_submission_v2.zip)
+- Bundle README: [docs/arxiv_submission_README.txt](docs/arxiv_submission_README.txt)
+- Previous version: [docs/archive/paper_april_2026.pdf](docs/archive/paper_april_2026.pdf)
+
+**External links:**
+- GitHub Repository: <https://github.com/amy2213/Voynich-Transition-Grammar>
+- Zenodo DOI: [pending]
+- OSF Preprint: [pending]
+- arXiv: [pending]
 
 ## License
 
