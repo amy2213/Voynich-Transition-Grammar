@@ -4,3 +4,7 @@ __pycache__/
 .DS_Store
 .vscode/
 *.code-workspace
+
+# Generated release asset packages (built locally for `gh release upload`)
+release_assets/
+voynich-research-package-v*.zip
