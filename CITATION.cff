@@ -28,3 +28,14 @@ keywords:
   - digital-humanities
   - historical-cryptography
   - morphological-analysis
+preferred-citation:
+  type: article
+  title: "Voynich Manuscript Token-Structure Analysis: Reproducible Corpus Methods and Cross-Linguistic Baselines"
+  authors:
+    - family-names: "Laird"
+      given-names: "Amy"
+      orcid: "https://orcid.org/0009-0001-5479-0007"
+  year: 2026
+  month: 5
+  notes: "Preprint package prepared for external archival and submission. Zenodo DOI, OSF preprint, and arXiv ID pending."
+  url: "https://amy2213.github.io/Voynich-Transition-Grammar/docs/paper.pdf"

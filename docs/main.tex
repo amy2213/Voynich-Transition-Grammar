@@ -11,6 +11,7 @@
 \usepackage{caption}
 \usepackage[round]{natbib}    % Author-year citations
 \usepackage{hyperref}
+\usepackage{url}
 \usepackage{amsmath}
 \usepackage{xcolor}
 \usepackage{enumitem}
@@ -27,6 +28,9 @@
 
 % Tighter list spacing
 \setlist{itemsep=2pt, topsep=4pt}
+
+% Tolerate minor line-breaking tension (prevents small margin overflows)
+\setlength{\emergencystretch}{3em}
 
 % ===== Title block =====
 \title{\textbf{Transition Grammar of the Voynich Manuscript:\\
@@ -47,35 +51,47 @@ The Voynich Manuscript (Beinecke MS 408) is a 15th-century codex written
 in an undeciphered script. This paper reports a statistical analysis of
 sequential constraints, token-family structure, and bidirectional
 self-clustering in the Zandbergen--Landini EVA transliteration
-($\num{31608}$ tokens, $184$ pages). Several findings are robust across
-sections, scribal hands, line-position controls, and frequency-conditioned
-tests. First, two distributed transition rules recur across the corpus:
-CHEDY$\to$QOK attraction ($2.625\times$ above chance) and AIIN$\to$QOK
-repulsion ($0.504\times$), each spanning hundreds of unique token pairs
-and operating at the family level rather than as fixed collocations.
-Second, AIIN density is statistically invariant at $15.0\%$ across
-Currier A and B pages (KS $p = 0.742$), a property no other family
-shares. Third, a bidirectional self-clustering test shows that Voynich
-is the only tested system with elevated, balanced clustering at both word
-boundaries (prefix $1.52\times$, suffix $1.54\times$, ratio $0.99$). An
-earlier claim that Arabic is the closest structural match, based on
-prefix-only analysis, is retracted; under bidirectional analysis Arabic
-is strongly suffix-dominant. Ottoman Turkish was tested separately using
-a small historical corpus and also falls outside the Voynich profile
-(SYMM-LOW). Additional analyses identify line-bounded grammatical
-structure, productive morphology-like paradigms, and agreement-like
-feature propagation across adjacent and near-adjacent tokens. Cross-transcription validation across four independent transcribers
-(Currier, FSG, Takahashi, Grove) confirms that all core findings ---
-bidirectional symmetry, transition rules, and line-bounded grammar ---
-are stable regardless of tokenization decisions. These
-findings do not identify the manuscript's language, assign meaning to any
-token, or establish a decipherment. They do, however, define a set of
-structural constraints that any successful explanation must satisfy and
-make randomness, simple template generation, and simple substitution
-ciphers substantially less plausible. The strongest current explanation
-is that the manuscript encodes a structured language system, plausibly
-natural language, while imposing additional boundary structure not
-matched by the tested comparators.
+($\num{31608}$ tokens, $184$ pages), with a revised interpretive framing
+that reflects null-model and adversarial-control tests applied during
+peer review. Three findings are robust across scribal hands, four
+independent transcribers, and frequency-conditioned controls. First, two
+distributed class-level transition effects recur across the corpus:
+CHEDY$\to$QOK attraction ($2.625\times$ above chance, aggregate) and
+AIIN$\to$QOK repulsion ($0.504\times$); per-scribe decomposition shows
+CHEDY$\to$QOK is concentrated in Hands~2 and~3 ($\sim$$65\%$ of the
+corpus) rather than uniform across the manuscript. Second, AIIN density
+is statistically invariant at $15.0\%$ across Currier~A and~B pages
+(KS $p = 0.742$) under the standard definition, though sensitive to
+definitional changes. Third, a bidirectional self-clustering test shows
+that Voynich is the only tested system with elevated, balanced clustering
+at both word boundaries (prefix $1.52\times$, suffix $1.54\times$, ratio
+$0.99$); the SYMM-HIGH profile holds independently in each of the three
+dominant scribal hands and across four alternative EVA-alphabet
+transcribers (Currier, FSG, Takahashi, Grove). None of $16$ natural-language
+comparators across $9$ families reproduces the profile, including four
+specifically selected to stress the claim (Swahili, Georgian, Tagalog,
+Mandarin). Agreement cascades through three-token chains are documented
+with Wilson-score confidence intervals and Benjamini--Hochberg FDR
+correction; all five tested chains survive at $\alpha = 0.05$, though the
+flagship $+81$pp effect rests on $n{=}13$ agreement trials with
+conservative 95\% CI $[+48, +94]$pp. A previously reported
+``productive morphological paradigm'' interpretation, based on a
+log-frequency vs.~edit-1 variant-count correlation, is retracted: Voynich's
+correlation does not exceed a character-trigram null that contains no
+morphology. A first-pass synthetic constructed-system control satisfies
+five of seven MVE checklist items by direct design, which reduces the
+discriminative power of the checklist to two items (bidirectional
+symmetry and open vocabulary). The earlier
+``only compatible class'' conclusion is withdrawn. What survives: the
+bidirectional-symmetry framework, the transition-rule descriptions, and
+the revised seven-item checklist collectively constrain the space of
+viable explanations. Among explanation classes tested against the
+pipeline --- random sequences, shuffled controls, simple substitution
+ciphers, and one synthetic constructed system --- encoded structured
+language is the only candidate compatible with all seven items.
+Sophisticated constructed systems that explicitly engineer bidirectional
+symmetry and open vocabulary have not been tested and cannot be
+excluded. No decipherment is claimed.
 \end{abstract}
 
 \bigskip
@@ -85,12 +101,26 @@ statistical analysis, morphological analysis, historical cryptography.
 \bigskip
 \noindent\textbf{Reproducibility.} All scripts, frozen datasets, and
 result files are available at
-\url{https://github.com/amy2213/Voynich-Transition-Grammar}. The
-canonical values for the three core findings (transition rules, AIIN
-invariance, bidirectional self-clustering) are verified by automated
-regression tests on every commit. Several additional analyses reported
-here are documented in the project's durable findings framework but are
-not yet packaged as standalone scripts; see \S\ref{sec:limitations}.
+\url{https://github.com/amy2213/Voynich-Transition-Grammar}. All findings
+reported in this paper are produced by nine analysis scripts
+(\texttt{scripts/01}--\texttt{09}) orchestrated by \texttt{run\_all.py}
+and verified against published values by 33 regression tests
+(\texttt{tests/test\_canonical\_values.py}) that run on every commit.
+Null-model, cascade-uncertainty, per-scribe, and
+constructed-system-control analyses added during revision are in
+\texttt{scripts/06}--\texttt{09}.
+
+\bigskip
+\noindent\textbf{Revision history.} This is a substantially revised
+version. An earlier draft argued that encoded natural language was the
+``only hypothesis that does not require historically unprecedented
+mechanisms.'' A null-model test retracted one checklist item
+(productive morphological paradigms) and a first-pass synthetic
+constructed-system control satisfied five of the seven remaining items
+by direct design. The central conclusion has been narrowed accordingly.
+Retractions are recorded in \texttt{docs/durable\_findings.md}
+(\S\S1.8, 3.7, 3.8) and
+\texttt{docs/release\_documentation.md} (claim ledger).
 
 \section{Introduction}
 \label{sec:intro}
@@ -126,49 +156,58 @@ constructed symbolic system, or a sophisticated cipher without a known
 This paper contributes to the second tradition. We analyze sequential
 constraints between token families at the class level --- five families
 defined by EVA-transliteration affix patterns, plus a catch-all class ---
-and compare the manuscript's structural profile against $16$ natural-language comparators across $9$ language families and a shuffled-token control. Five findings
-structure our contribution: (i) distributed transition rules operating at
-the family rather than token level; (ii) a bidirectional self-clustering
-test that removes the directional bias of prefix-only analyses; (iii)
-line-bounded grammatical structure that resets at every line boundary;
-(iv) agreement-like feature propagation across adjacent and
-near-adjacent tokens, including over intervening filler-like tokens; and
-(v) productive morphology-like paradigms with frequency-correlated
-variant generation. The bidirectional self-clustering framework reveals
-that Voynich occupies a region no other tested system does ---
-symmetric-high --- and that the previously reported Arabic match is an
-artifact of the prefix-only method.
+and compare the manuscript's structural profile against $16$
+natural-language comparators across $9$ language families and a
+shuffled-token control. Five findings structure our contribution: (i)
+distributed class-level transition effects, with per-scribe decomposition
+showing the principal effect is concentrated in two of the five scribal
+hands; (ii) a bidirectional self-clustering test that removes the
+directional bias of prefix-only analyses; (iii) line-bounded transition
+structure that resets at every line boundary; (iv) agreement-like feature
+propagation across adjacent and near-adjacent tokens, with
+Wilson-score confidence intervals and Benjamini--Hochberg FDR correction
+on the tested cascades; and (v) a null-model test of the edit-distance
+graph structure that retracts an earlier ``productive morphology''
+interpretation. The bidirectional self-clustering framework reveals that
+Voynich occupies a region no other tested system does --- symmetric-high
+--- and that the previously reported Arabic match is an artifact of the
+prefix-only method. The SYMM-HIGH profile holds independently in each of
+the three dominant scribal hands (94\% of the corpus) and across four
+alternative EVA-alphabet transcribers, addressing the two most common
+objections to Voynich statistical findings: hand-aggregation artifact and
+tokenization artifact.
 
-We then synthesize the results into a \emph{minimum viable explanation
-checklist}: eight quantitative properties that any proposed mechanism for
-producing the Voynich text must simultaneously satisfy. The checklist is
-a methodological device rather than a theoretical claim. It does not
-identify a single explanation as correct. It narrows the space of
-candidate explanations by making their requirements explicit and
-testable, and rules out classes of explanation (random generation, simple
-table schemes, monoalphabetic and polyalphabetic substitution ciphers)
-that cannot jointly satisfy the requirements.
+We then present a \emph{minimum viable explanation checklist}: seven
+quantitative properties that any proposed mechanism for producing the
+Voynich text must simultaneously satisfy. The checklist is a
+methodological device rather than a theoretical claim. An earlier version
+of this paper listed eight items and concluded that encoded natural
+language was the only class compatible with all of them ``without
+invoking mechanisms that lack known 15th-century precedent.'' A
+null-model test retracted one item (productive morphological paradigms);
+a first-pass synthetic constructed-system control satisfied five of the
+seven remaining items by direct design, reducing the discriminative
+power of the checklist to two items (bidirectional symmetry and open
+vocabulary). The revised claim is narrower: among explanation classes
+tested against the pipeline, encoded structured language is the only
+candidate compatible with all seven items; sophisticated constructed
+systems that engineer bidirectional symmetry and open vocabulary have not
+been tested and cannot be excluded.
 
 We are careful about what this paper does not claim. It does not identify
 the manuscript's language. Structural similarity is not linguistic
 identification, and the comparator set, while substantial, does not cover
-every natural-language type --- Sinitic, polysynthetic, and
-historical-shorthand systems are conspicuously absent and are listed as
-open problems. It does not decode any passage of the text or assign
-meaning to any token. And it does not argue that the manuscript is or is
-not a hoax; it argues that if it is a hoax, the mechanism must be
-substantially more sophisticated than proposed in earlier hoax theories.
+every natural-language type --- polysynthetic and historical-shorthand
+systems are conspicuously absent and are listed as open problems. It
+does not decode any passage of the text or assign meaning to any token.
+And it does not argue that the manuscript is or is not a hoax.
 
 \S\ref{sec:methods} describes the data, the token family definitions, and
-the statistical methods. \S\ref{sec:results} reports findings under
-eleven subsections organized from the foundational (non-random
-structure, transition rules, AIIN invariance) through the
-cross-linguistic comparison to the more detailed analyses of line
-structure, suffix-agreement cascades, paradigm morphology, and glyph-layer
-architecture. \S\ref{sec:discussion} situates these findings against
-prior work. \S\ref{sec:mve} presents the minimum viable explanation
-checklist. \S\ref{sec:limitations} and \S\ref{sec:open} list limitations
-and open problems.
+the statistical methods. \S\ref{sec:results} reports findings, including
+null-model and adversarial-control tests. \S\ref{sec:discussion} situates
+these findings against prior work. \S\ref{sec:mve} presents the revised
+seven-item minimum viable explanation checklist. \S\ref{sec:limitations}
+and \S\ref{sec:open} list limitations and open problems.
 
 \section{Data and Methods}
 \label{sec:methods}
@@ -184,10 +223,14 @@ included in the project repository; all analysis in this paper can be
 reproduced by a single command (\texttt{python run\_all.py}) and is verified
 by automated regression tests.
 
-Page attribution to Currier hands (A vs.~B) and scribal hands ($1$--$4$)
-follows the metadata supplied in the source dataset. Pages are assigned to
-sections (Herbal~A, Herbal~B, Biological, Astronomical, Recipes~Q20) using
-the folio numbering convention described in the canonical Voynich literature.
+Page attribution to Currier hands (A vs.~B) and scribal hands ($1$--$5$)
+follows the metadata supplied in the source dataset. The A/B language
+distinction and the original five-hand scribal attribution are due to
+\citet{Currier1976}; a subsequent independent paleographic analysis
+\citep{Davis2020} confirmed five distinct hands using digital
+paleographic methods. Pages are assigned to sections (Herbal~A, Herbal~B,
+Biological, Astronomical, Recipes~Q20) using the folio numbering
+convention described in the canonical Voynich literature.
 
 \subsection{Token families}
 
@@ -278,6 +321,62 @@ classified as "attractors." The proportion of attracting tokens, and the
 number of unique CHEDY$\to$QOK token pairs, together diagnose whether the
 rule operates at the class level or on specific collocations.
 
+\subsection{Per-scribe decomposition}
+\label{sec:methods-perscribe}
+
+We decompose the headline findings by scribal hand using Currier's
+five-hand attribution \citep{Currier1976,Davis2020} as recorded in the
+Zandbergen--Landini metadata (\texttt{H} column). For each hand with
+$\geq 500$ tokens, we compute prefix/suffix SC, bucket classification,
+CHEDY$\to$QOK transition ratio, and AIIN density independently. The
+purpose is to distinguish manuscript-wide properties from aggregation
+artifacts across scribal idiolects. Hands~1, 2, and~3 account for $94\%$
+of the corpus ($\num{29540}$ tokens); Hands~4 and~5 are small
+($\leq 900$ tokens each) and are reported but not emphasized.
+
+\subsection{Cascade confidence intervals and multiple-comparisons correction}
+\label{sec:methods-cascade}
+
+For the five agreement-cascade chains reported in \S\ref{sec:cascades} we compute
+Wilson-score 95\% confidence intervals on each conditional probability,
+two-proportion $z$-tests for the cascade effect, and apply
+Benjamini--Hochberg FDR correction at $\alpha = 0.05$ across the five
+chains. A ``conservative composite CI'' on the cascade magnitude is
+reported as $[\ell_a - u_d, u_a - \ell_d]$ where $[\ell, u]$ are the
+Wilson bounds on the agree-conditional and disagree-conditional
+probabilities. This is the pessimistic interval; the true interval is
+narrower.
+
+\subsection{Character-trigram null for the paradigm correlation}
+\label{sec:methods-null}
+
+To test whether the log-frequency vs.~edit-1 variant-count correlation
+reported in \S\ref{sec:paradigms} is distinguishable from a
+combinatorial Zipfian property of edit-distance graphs, we fit a
+character trigram model to Voynich's character sequences, generate 10
+synthetic corpora of the same token count, apply the same family
+classifiers and same top-50 correlation computation, and compare the
+real correlation to the null distribution. Chaucer's Canterbury Tales
+($\num{232751}$ tokens) is used as a natural-language reference at the
+same measurement to establish what productive morphology does produce at
+this definition.
+
+\subsection{Constructed-system control}
+\label{sec:methods-constructed}
+
+To test whether the Minimum Viable Explanation checklist empirically
+discriminates candidate-class hypotheses, we generate a synthetic
+constructed corpus of $\sim$$\num{32000}$ tokens in $\num{4000}$ lines
+across $4$ ``sections'' with designed rules matching each checklist item:
+Zipfian class distribution over four classes (A, B, F, O); $70\%$
+within-class sharing of onset for class~A and coda for class~B; A$\to$B
+attraction at $\sim$$2.5\times$; filler (F) density $\sim$$15\%$ invariant
+across sections; grammar reset at line boundaries; edit-1 variants
+generated per high-frequency stem; inter-section lexical overlap
+$\sim$$0.15$ Jaccard. The same measurement pipeline used for Voynich is
+then applied to the constructed corpus, and pass/fail is recorded per
+checklist item.
+
 \subsection{Software and reproducibility}
 
 All analyses use Python~3.11 with NumPy, SciPy, and pandas. Random seeds are
@@ -349,6 +448,38 @@ decreasing strength ($+1\!:~2.62\times$, $+2\!:~1.23\times$,
 $+3\!:~1.32\times$, $+4\!:~1.16\times$, $+5\!:~1.02\times$), reaching three
 to four tokens before decaying to baseline.
 
+\paragraph{Per-scribe decomposition narrows the effect.} The aggregate
+$2.63\times$ CHEDY$\to$QOK ratio is not uniform across the five scribal
+hands. Per-hand decomposition
+(\S\ref{sec:methods-perscribe}; \texttt{results/per\_scribe\_results.json})
+gives:
+
+\begin{table}[ht]
+  \centering
+  \caption{CHEDY$\to$QOK per scribal hand. The effect is concentrated in
+  Hands~2 and~3, which together produced $\sim$$65\%$ of the corpus
+  tokens. Hand~1 shows only a weak effect on low $n$; Hand~5 shows no
+  meaningful effect. Earlier drafts describing CHEDY$\to$QOK as ``holding
+  across both scribal hands'' were not supported at hand-level resolution.}
+  \label{tab:perhand-chedy}
+  \begin{tabular}{lrrr}
+    \toprule
+    Hand & Tokens & CHEDY$\to$QOK ratio & Observed \\
+    \midrule
+    1 & $\num{8997}$  & $1.42\times$ & $13$ \\
+    2 & $\num{9154}$  & $2.15\times$ & $374$ \\
+    3 & $\num{11389}$ & $2.28\times$ & $222$ \\
+    4 & $683$         & $7.34\times$ & $2$ \\
+    5 & $890$         & $1.06\times$ & $6$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Nearly all observations of the rule ($596$ of $617$) come from Hands~2
+and~3. We accordingly describe CHEDY$\to$QOK as a property of Hands~2
+and~3 rather than a uniform manuscript-wide rule. The aggregate
+$2.63\times$ remains the correct statistic for the pooled corpus.
+
 \subsection{AIIN density invariance}
 \label{sec:aiin}
 
@@ -417,6 +548,17 @@ Figure~\ref{fig:psscatter} and Table~\ref{tab:pstable}. Voynich clusters at
 $1.52\times$ by prefix and $1.54\times$ by suffix (ratio $0.99$; bootstrap
 95\% CIs: prefix $[1.41, 1.62]$, suffix $[1.48, 1.60]$). It is the only
 tested system in the SYMM-HIGH bucket.
+
+\paragraph{The symmetry is not an aggregation artifact.}
+Per-scribe decomposition (\S\ref{sec:methods-perscribe}) shows that each
+of the three dominant hands (1, 2, 3; $94\%$ of corpus tokens) individually
+tests SYMM-HIGH: Hand~1 prefix $1.59\times$, suffix $1.39\times$, ratio
+$1.14$; Hand~2 prefix $1.15\times$, suffix $1.24\times$, ratio $0.93$;
+Hand~3 prefix $1.31\times$, suffix $1.32\times$, ratio $0.99$. Hands~4
+and~5 are too small ($<\!1000$ tokens each) to classify reliably. The
+SYMM-HIGH profile is therefore a property of each of the three major
+scribes in their own writing, not an artifact of pooling different hand
+profiles together.
 
 \begin{figure}[ht]
   \centering
@@ -511,10 +653,11 @@ is stable across all three methods.
 
 A common critique of Voynich statistical work is that findings may be
 artifacts of a particular transliteration's tokenization decisions. To
-test this, we parsed the Landini--Stolfi Interlinear (LSI) file, which
-contains independent transcriptions by Currier, the First Study Group
-(Friedman), Takahashi, and Grove, all mapped to EVA alphabet but with
-each transcriber's own word-boundary and line-break judgments.
+test this, we parsed the Landini--Stolfi Interlinear (LSI) file
+\citep{ZandbergenLSI}, which contains independent transcriptions by
+Currier, the First Study Group (Friedman), Takahashi, and Grove, all
+mapped to EVA alphabet but with each transcriber's own word-boundary
+and line-break judgments.
 
 \begin{table}[ht]
   \centering
@@ -583,18 +726,21 @@ $1.75\times$, suffix + length is $3.44\times$, and suffix + length + mantle
 \begin{table}[ht]
   \centering
   \caption{Single-feature suffix agreement (observed same-ending divided by
-  expected under independence). All ratios significant vs.~a shuffled null
-  ($z = 3.4$--$5.0$).}
+  expected under independence). Four of five family-pair ratios are
+  significant vs.~a shuffled null at $z \geq 2.8$; OT$\to$OT at $z = 1.9$ is
+  below the conventional $1.96$ threshold and is reported but not claimed
+  as significant. The earlier paper draft's statement ``$z = 3.4$--$5.0$''
+  was incorrect and has been replaced with the observed range.}
   \label{tab:agreement}
-  \begin{tabular}{lr}
+  \begin{tabular}{lrrr}
     \toprule
-    Family pair & Suffix agreement \\
+    Family pair & Suffix agreement & $z$ & $n$ pairs \\
     \midrule
-    OK$\to$OT    & $1.75\times$ \\
-    OK$\to$OK    & $1.67\times$ \\
-    OT$\to$OT    & $1.49\times$ \\
-    QOK$\to$QOK  & $1.41\times$ \\
-    CHEDY$\to$QOK & $1.18\times$ \\
+    OK$\to$OT    & $1.75\times$ & $3.3$ & $76$ \\
+    OK$\to$OK    & $1.67\times$ & $2.8$ & $110$ \\
+    OT$\to$OT    & $1.49\times$ & $1.9$ & $105$ \\
+    QOK$\to$QOK  & $1.41\times$ & $5.2$ & $301$ \\
+    CHEDY$\to$QOK & $1.18\times$ & $3.5$ & $469$ \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -610,23 +756,59 @@ concord of a specific, non-trivial kind: the attractor and the attracted
 must share suffix form.
 
 \subsection{Agreement cascades through three-token chains}
+\label{sec:cascades}
 
 When two adjacent tokens $(A, B)$ agree on suffix, agreement for the next
-position $(B \to C)$ jumps dramatically. For a CHEDY$\to$OTHER$\to$CHEDY
-chain, the conditional probability of $B \to C$ agreement is $85\%$ if
-$A \equiv B$ in suffix, versus $4\%$ if $A \not\equiv B$ --- a
-$+81$~percentage-point cascade. Similar conditional lifts hold for other
-triples (QOK$\to$OTHER$\to$QOK: $+44$pp; QOK$\to$QOK$\to$QOK: $+33$pp;
-CHEDY$\to$QOK$\to$CHEDY: $+56$pp).
+position $(B \to C)$ shifts. Five chain configurations were tested.
+Table~\ref{tab:cascades} reports, for each chain, the agree-conditional
+and disagree-conditional probabilities with Wilson-score 95\% intervals,
+the cascade magnitude with a conservative composite CI
+(\S\ref{sec:methods-cascade}), and the two-proportion $z$-test
+$p$-value with Benjamini--Hochberg FDR status at $\alpha = 0.05$.
+
+\begin{table}[ht]
+  \centering
+  \small
+  \caption{Agreement cascade chains with 95\% Wilson confidence intervals
+  and Benjamini--Hochberg FDR correction across the five chains at
+  $\alpha = 0.05$. Cascade magnitude is the difference of agree-conditional
+  and disagree-conditional probabilities; its 95\% CI is a conservative
+  composite of the two Wilson intervals. All five chains survive FDR.}
+  \label{tab:cascades}
+  \begin{tabular}{lrrrrr}
+    \toprule
+    Chain & $P(B{\to}C | {\equiv})$ & $P(B{\to}C | {\ne})$ & Cascade & Cascade 95\% CI & BH-FDR \\
+          & (n)                     & (n)                  & (pp)    & (conservative)  &        \\
+    \midrule
+    CHEDY$\to$OTHER$\to$CHEDY & $0.85$ (13)  & $0.04$ (119) & $+81$ & $[+48, +94]$ & Pass \\
+    CHEDY$\to$QOK$\to$CHEDY   & $0.69$ (26)  & $0.13$ (45)  & $+56$ & $[+24, +77]$ & Pass \\
+    QOK$\to$OTHER$\to$QOK     & $0.62$ (26)  & $0.18$ (61)  & $+44$ & $[+13, +67]$ & Pass \\
+    QOK$\to$QOK$\to$QOK       & $0.52$ (27)  & $0.19$ (16)  & $+33$ & $[-9, +63]$  & Pass \\
+    OT$\to$OTHER$\to$OT       & $0.33$ (18)  & $0.14$ (37)  & $+19$ & $[-12, +50]$ & Pass \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The flagship CHEDY$\to$OTHER$\to$CHEDY cascade rests on $n = 13$
+agreement trials. Although the two-proportion $z$-test is highly
+significant ($p < 10^{-15}$), the Wilson interval on the
+agree-conditional probability is $[0.58, 0.96]$ and the conservative
+composite CI on the cascade magnitude is $[+48, +94]$pp; we report the
+effect as ``large but thinly sampled on the flagship chain'' rather than
+as a precise $+80$pp point estimate. Two chains (QOK$\to$QOK$\to$QOK,
+OT$\to$OTHER$\to$OT) have conservative composite CIs that touch zero
+despite passing the significance test; their magnitudes should not be
+cited without intervals.
 
 Suffix agreement also jumps over intervening \texttt{OTHER}-family tokens:
-QOK$\to$[OTHER]$\to$QOK at $2.32\times$ base rate;
-CHEDY$\to$[OTHER]$\to$CHEDY at $1.43\times$; OT$\to$[OTHER]$\to$OT at
-$1.87\times$. The agreement system treats OTHER-family tokens as
-transparent for the purposes of morphological concord. This is the
-quantitative signature of long-distance agreement.
+QOK$\to$[OTHER]$\to$QOK at $2.32\times$ base rate ($n = 87$);
+CHEDY$\to$[OTHER]$\to$CHEDY at $1.43\times$ ($n = 132$);
+OT$\to$[OTHER]$\to$OT at $1.87\times$ ($n = 55$). The agreement system
+treats OTHER-family tokens as transparent for the purposes of
+morphological concord at the chain configurations tested.
 
-\subsection{Productive morphological paradigms}
+\subsection{Edit-distance graph structure and paradigm-null retraction}
+\label{sec:paradigms}
 
 Each family contains an edit-distance graph with identifiable high-frequency
 hubs. Of $50$ tested types per family, all are connected with no isolated
@@ -644,16 +826,114 @@ locked:
 \end{itemize}
 
 The same operations apply to distinct vocabulary in distinct sections,
-producing section-appropriate variants while preserving paradigm structure.
+producing section-appropriate variants while preserving graph structure.
 
-High-frequency stems generate more edit-1 variants than low-frequency stems.
-The log-frequency vs.~variant-count correlation is $r = 0.52$ (QOK),
-$r = 0.60$ (CHEDY), $r = 0.69$ (AIIN). Stems at frequency $\geq 100$ have
-$2$--$3\times$ more variants than stems at frequency $2$--$5$. This
-frequency-productivity correlation is a standard property of natural-language
-morphology (productive paradigms generate more variants for more-common
-lemmas) and is, to our knowledge, not a property of tested constructed or
-cipher systems.
+\paragraph{Productive-morphology interpretation retracted.} An earlier
+version of this paper argued that high-frequency stems generate more
+edit-1 variants than low-frequency stems, with observed correlations
+$r = 0.52$ (QOK), $r = 0.60$ (CHEDY), $r = 0.69$ (AIIN), and interpreted
+this as ``a standard property of natural-language morphology'' that
+constructed and cipher systems would not produce. A null-model test
+(\S\ref{sec:methods-null}; \texttt{results/paradigm\_null\_results.json})
+shows the interpretation was not supported. A character-trigram model fit
+to Voynich's character bigram statistics --- synthetic tokens containing
+no morphology --- produces correlations of comparable or higher magnitude
+(Table~\ref{tab:paradigm-null}). Voynich's observed correlation does not
+exceed the null 95th percentile for any family. Chaucer's Canterbury
+Tales at the same measurement produces $r = 0.20$, below both Voynich
+and its trigram null.
+
+\begin{table}[ht]
+  \centering
+  \caption{Paradigm-null test. Voynich's log-frequency vs.~edit-1
+  variant-count correlation is indistinguishable from a character-trigram
+  null at the top-50 within-family definition. Chaucer at the same
+  measurement produces $r = 0.20$, lower than both Voynich and the null.
+  The observation (correlation exists, $r \approx 0.4$--$0.7$) is
+  retained as descriptive; the productive-morphology interpretation is
+  retracted.}
+  \label{tab:paradigm-null}
+  \begin{tabular}{lrrrl}
+    \toprule
+    Family & Voynich real $r$ & Null mean $r$ & Null p95 & Exceeds null p95? \\
+    \midrule
+    QOK   & $0.60$ & $0.48$ & $0.61$ & No \\
+    CHEDY & $0.38$ & $0.36$ & $0.42$ & No \\
+    AIIN  & $0.40$ & $0.43$ & $0.51$ & No (below mean) \\
+    \midrule
+    Chaucer (reference) & \multicolumn{4}{l}{$r = 0.20$ (all tokens, top-50)} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+We retain the edit-distance graph structure, the positionally locked edit
+operations, and the cross-section consistency of those operations as
+descriptive observations. We retract the productive-morphology reading.
+The log-frequency vs.~variant-count correlation is a combinatorial
+property of Zipfian distributions on edit-distance graphs, not a reliable
+morphological diagnostic. Item~5 of the earlier eight-item Minimum
+Viable Explanation checklist is accordingly removed; \S\ref{sec:mve} uses
+a revised seven-item list.
+
+\subsection{Constructed-system control}
+\label{sec:constructed}
+
+To test whether the checklist assembled in \S\ref{sec:mve} empirically
+discriminates candidate-class hypotheses, we ran a first-pass synthetic
+constructed corpus through the same measurement pipeline
+(\S\ref{sec:methods-constructed}; output in
+\path{results/constructed_control_results.json}). The design embeds
+rules for each checklist item: a Zipfian-distributed lexicon of four
+classes (A, B, F, O); $70\%$ within-class sharing of onset for A and
+coda for B to produce prefix and suffix clustering; A$\to$B attraction
+at $\sim$$2.5\times$; filler density $\sim$$15\%$ invariant across
+sections; grammar reset at line boundaries; productive variant generation
+around high-frequency hubs; inter-section lexical Jaccard $\sim$$0.15$.
+
+\begin{table}[ht]
+  \centering
+  \small
+  \caption{First-pass synthetic constructed corpus scored against the
+  revised seven-item MVE checklist. Five items are satisfied by direct
+  construction; two (bidirectional SYMM-HIGH under auto-detected affixes,
+  and $71\%$ hapax with natural distribution) are not satisfied by the
+  first-pass design. These two items are where the checklist currently
+  discriminates encoded NL from a constructed system.}
+  \label{tab:constructed-scoring}
+  \begin{tabular}{llc}
+    \toprule
+    \# & Requirement & First-pass constructed \\
+    \midrule
+    1 & Line-bounded transition reset & Satisfied (designed) \\
+    2 & Class-specific A$\to$B attraction & Satisfied (designed) \\
+    3 & Suffix agreement & Satisfied (designed) \\
+    4 & Three-token agreement cascade & Satisfied (designed) \\
+    5 & Bidirectional SYMM-HIGH (auto-affixes) & Not satisfied \\
+    6 & Section-stable grammar, shifting lexicon & Satisfied (designed) \\
+    7 & Open vocabulary ($\sim$$71\%$ hapax, Zipfian) & Not satisfied \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Of the seven items the constructed corpus was designed to satisfy, five
+were achieved directly. The two that were not achieved --- bidirectional
+SYMM-HIGH under \emph{auto-detected} affixes (as opposed to the affixes
+the generator used internally) and the Zipfian open-vocabulary
+distribution at $\sim$$71\%$ hapax --- are accordingly the items on which
+the checklist can currently discriminate encoded natural language from a
+constructed system. The earlier paper draft treated all checklist items
+as similarly discriminating; this is not supported by the test. We
+therefore retract the conclusion that ``encoded natural language is the
+only candidate class compatible with all checklist requirements without
+invoking mechanisms that lack known 15th-century precedent.'' The
+revised conclusion, stated fully in \S\ref{sec:mve}, is substantially
+narrower.
+
+We do not claim that the constructed system is plausible as a 15th-century
+production; the claim is only that, given a designer with the relevant
+knowledge, the observed Voynich-style statistics on $5$ of $7$ checklist
+items can be produced by explicit construction. The items requiring
+further adversarial testing are items~$5$ and~$7$.
 
 \subsection{Glyph-layer architecture}
 
@@ -688,29 +968,38 @@ glyphs are doing.
 
 \subsection{What the findings establish}
 
-The combination of Sections~\ref{sec:rules}--\ref{sec:symmetry} substantially
-lowers the plausibility of three classes of explanation for the Voynich text,
-relative to the alternative that the text encodes a structured language
-system.
+The combination of Sections~\ref{sec:rules}--\ref{sec:symmetry}, together
+with the cross-transcription, per-scribe, and constructed-system control
+analyses, substantially lowers the plausibility of three classes of
+explanation for the Voynich text, relative to the alternative that the
+text encodes a structured language system.
 
 \textbf{Randomness is substantially less plausible.} The $\chi^2$ statistic
 of the class transition matrix is $\sim\!40\times$ that of a shuffled
-control, and distributed agreement cascades of the form documented in
-\S\ref{sec:aiin}--\S3.9 are not produced by random sequences.
+control; cascade effects survive FDR correction across five chains
+(\S\ref{sec:cascades}); and bidirectional SYMM-HIGH self-clustering is
+not produced by a shuffled-token control
+(\texttt{Gibberish}~P/S $\approx 0.96$ but both SC below $1.0\times$).
 
 \textbf{Simple table-generation schemes are substantially less plausible.}
 A token stream drawn from a fixed family-composition template library
-would exhibit whole-line template recurrence well above chance. The
-observed value is $1.04\times$. Moreover, such a scheme cannot generate
-the observed productive morphology-like paradigm structure (\S3.10).
+would exhibit whole-line template recurrence well above chance; the
+observed value is $1.04\times$.
 
-\textbf{Simple substitution ciphers (monoalphabetic, polyalphabetic over a
-Latin base) are substantially less plausible.} These preserve source-language
-suffix dominance and cannot produce bidirectional symmetry. Voynich's
-$P/S = 0.99$ is structurally distinct from any tested natural language's
-profile. This does not exclude more elaborate cipher schemes involving,
-for example, syllabic encoding or bidirectional padding, which have not
-been exhaustively tested here.
+\textbf{Simple substitution ciphers (monoalphabetic, polyalphabetic over
+a Latin base) are substantially less plausible.} These preserve
+source-language suffix dominance and cannot produce bidirectional
+symmetry. Voynich's $P/S = 0.99$ is structurally distinct from any
+tested natural language's profile. This does not exclude more elaborate
+cipher schemes involving, for example, syllabic encoding or bidirectional
+padding, which have not been exhaustively tested.
+
+\textbf{What is \emph{not} established} in the revised version of this
+paper: that the edit-distance graph structure is evidence of productive
+morphology (\S\ref{sec:paradigms}); that encoded natural language is the
+only class compatible with the checklist (\S\ref{sec:constructed},
+\S\ref{sec:mve}); and that the cascade magnitudes are tightly estimated
+(\S\ref{sec:cascades} reports wide CIs on the flagship chain).
 
 \subsection{What the findings do \emph{not} establish}
 
@@ -720,8 +1009,12 @@ They do not identify it as artificial either: the space of possible natural
 languages is larger than our $16$-language sample, and a language with
 bidirectional morphology (for example, a polysynthetic language or a
 combinatorial morphology with comparable prefix and suffix inventories)
-could in principle produce this signature. The findings constrain the space
-of viable explanations; they do not localize a single one.
+could in principle produce this signature. The constructed-system control
+(\S\ref{sec:constructed}) further shows that a designed system can
+satisfy five of seven checklist items by direct construction; a more
+carefully engineered system could plausibly satisfy all seven. The
+findings constrain the space of viable explanations; they do not
+localize a single one.
 
 The bidirectional symmetry also does not directly imply meaning. It is a
 property of the token sequences, compatible with multiple semantic
@@ -740,104 +1033,123 @@ solution but as a scaffolding against which future proposed solutions can
 be evaluated.
 
 % =============================================================================
-\section{Minimum Viable Explanation: A Checklist}
+\section{Minimum Viable Explanation: A Revised Checklist}
 \label{sec:mve}
 
 Any proposed explanation of the Voynich text --- decipherment, generation
 theory, cipher identification, or hoax mechanism --- must simultaneously
-account for \emph{all} of the following. Explanations satisfying some but
-not others are incomplete.
+account for the following seven measured properties. An earlier version
+of this paper listed eight; Item~5 (``productive morphological
+paradigms'') has been retired by the null-model test in
+\S\ref{sec:paradigms} and is not part of the revised checklist.
 
 \begin{enumerate}
-  \item \textbf{Line-bounded grammatical units.} Within-line
+  \item \textbf{Line-bounded transition reset.} Within-line
         CHEDY$\to$QOK is $2.54\times$; across lines it drops to $0.85\times$.
-        Transition rules are line-internal and reset at every line boundary,
-        consistent with lines functioning as clause-like or phrase-like
-        grammatical units.
-  \item \textbf{CHEDY$\to$QOK class specificity.} CHEDY attracts QOK at
-        $2.62\times$ while simultaneously repelling OK ($0.83\times$) and
-        OT ($0.80\times$). This is targeted, not a general content-density
-        effect.
-  \item \textbf{Suffix-led multi-feature agreement.} Adjacent tokens agree
-        on suffix at $1.18$--$1.75\times$, compounding to $5$--$9\times$
-        when suffix, length, and mantle agreement are jointly tracked.
-  \item \textbf{Agreement cascades through three-token chains.}
-        Conditional lifts of $33$--$80$ percentage points, including over
-        intervening OTHER-family tokens.
-  \item \textbf{Productive morphological paradigms.} Hub-centered edit-distance
-        graphs, the same four edit operations recurring across all sections,
-        and a log-frequency vs.~variant-count correlation of $r = 0.52$--$0.69$.
-  \item \textbf{Bidirectional self-clustering symmetry.} $P/S = 0.99$ with
-        both prefix and suffix SC $> 1.5\times$. Unique among $18$ tested
-        systems.
-  \item \textbf{Section-stable grammar with shifting lexicon.} Transition
-        rules, agreement, paradigm operations, and family proportions are
-        consistent across sections, but Jaccard overlap of family vocabulary
-        between sections is $0.09$--$0.25$.
-  \item \textbf{Open vocabulary, natural distribution.} $71.4\%$ hapax
-        legomena; type/token ratio $0.23$; grammatical variance coefficient
-        $0.40$; top-$100$ bigrams cover only $3.7\%$ of text.
+        Family transition rates reverse at line boundaries regardless of
+        line length, section, or Currier hand.
+  \item \textbf{CHEDY$\to$QOK class specificity (in Hands~2 and~3).}
+        CHEDY$\to$QOK $2.15$--$2.28\times$ in Hands~2 and~3 (where the rule
+        is concentrated), while CHEDY$\to$OK, CHEDY$\to$OT, and
+        CHEDY$\to$AIIN are all at or below $1.0\times$.
+  \item \textbf{Suffix agreement above chance.} Family-pair
+        suffix-agreement ratios $1.18$--$1.75\times$ (four pairs at
+        $z \geq 2.8$; OT$\to$OT borderline at $z = 1.9$). Multi-feature
+        agreement reaches $5$--$9\times$ when suffix, length, mantle, and
+        circles are jointly tracked.
+  \item \textbf{Agreement cascades through three-token chains.} Five
+        chains survive Benjamini--Hochberg FDR at $\alpha = 0.05$;
+        cascade magnitudes $+19$ to $+81$pp with wide conservative
+        composite CIs on the flagship chain ($[+48, +94]$pp at $n = 13$).
+  \item \textbf{Bidirectional self-clustering.} Prefix SC $1.52\times$,
+        suffix SC $1.54\times$, ratio $0.99$. None of $16$ natural-language
+        comparators produces this. Holds independently in each of the
+        three dominant scribal hands and across four alternative
+        EVA-alphabet transcribers.
+  \item \textbf{Section-stable coarse grammar with shifting lexicon.}
+        Per-family rates, within-line/cross-line asymmetry, and
+        suffix-agreement patterns are coherent across herbal, biological,
+        and recipe sections; within-family Jaccard overlap between
+        sections is $0.09$--$0.25$.
+  \item \textbf{Open vocabulary with natural-like distribution.} $71.4\%$
+        hapax legomena; type/token ratio $0.23$; top-$100$ bigrams cover
+        only $3.7\%$ of text.
 \end{enumerate}
 
-Table~\ref{tab:mve} evaluates four candidate explanation classes against
-these requirements.
+Table~\ref{tab:mve} evaluates candidate explanation classes against the
+revised requirements. The ``Constructed (first-pass tested)'' column
+reflects the pass/fail results from \S\ref{sec:constructed} rather than
+assumption.
 
 \begin{table}[ht]
   \centering
-  \caption{Minimum viable explanation checklist, applied to four candidate
-  classes. ``Y'' means compatible with the requirement; ``N'' means not
-  compatible; ``?'' means possible given significant design effort
-  without a known 15th-century precedent. Encoded structured language
-  (plausibly natural language) is the strongest current candidate class
-  in this comparison framework.}
+  \caption{Revised seven-item Minimum Viable Explanation checklist. The
+  ``Encoded NL'' column represents theoretical compatibility with
+  natural-language properties (not empirically tested against the
+  checklist). The ``Constructed'' column reflects empirical pass/fail
+  from a first-pass synthetic corpus (\S\ref{sec:constructed}). Items~5
+  and~7 are the items on which the checklist currently discriminates
+  encoded NL from a constructed system.}
   \label{tab:mve}
   \small
-  \begin{tabular}{lcccc}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{@{}p{5.4cm}p{2.4cm}cp{2.2cm}p{2.0cm}@{}}
     \toprule
-    Requirement & Encoded NL & Constructed & Simple cipher & Table/grille \\
+    Requirement & Encoded NL & Constr. & Simple cipher & Table/grille \\
     \midrule
-    1. Line-bounded grammatical units     & Y & ? & N & N \\
-    2. Class specificity (CHEDY$\to$QOK)  & Y & ? & N & N \\
-    3. Suffix-led multi-feature agreement & Y & ? & N & N \\
-    4. Three-token agreement cascades     & Y & ? & N & N \\
-    5. Productive morphology-like paradigms & Y & N & N & N \\
-    6. Bidirectional symmetry             & ? & ? & N & N \\
-    7. Stable grammar, shifting lexicon   & Y & ? & Y & Partial \\
-    8. Open, natural-distribution vocabulary & Y & ? & Partial & N \\
+    1. Line-bounded transition reset & Y & \textbf{Y} & N & N \\
+    2. Class specificity (CHEDY$\to$QOK) & Y & \textbf{Y} & N & N \\
+    3. Suffix agreement & Y & \textbf{Y} & Destroys & N \\
+    4. Three-token agreement cascades & Y & \textbf{Y} & N & N \\
+    5. Bidirectional SYMM-HIGH & Needs bidir. encoding & \textbf{N} & Cannot produce & Cannot produce \\
+    6. Stable grammar, shifting lexicon & Y & \textbf{Y} & If syllabic & Partial \\
+    7. Open, natural-distribution vocab. & Y & \textbf{N} & Partial & N \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-Of the candidate classes tested, encoded structured language ---
-plausibly natural language --- is the only one compatible with all eight
-requirements without invoking mechanisms that lack known 15th-century
-precedent. This does not prove encoded natural language, nor does it
-exhaust the space of possibilities. The candidate set is limited to four
-broad classes and the comparator pool to $16$ natural languages across $9$ families; other natural-language types (Sinitic,
-polysynthetic, historical shorthand) and more elaborate constructed
-systems remain untested. The checklist is offered as a diagnostic
-framework, not as decisive proof: it defines what any successful
-explanation must account for and substantially raises the bar on
-randomness, simple table-based generation, and simple substitution
-ciphers. The strongest current explanation consistent with the full
-checklist is encoded structured language.
+Among the candidate classes tested against the pipeline --- random
+sequences, shuffled-token controls, simple substitution ciphers
+preserving source-language structure, and one first-pass synthetic
+constructed system --- encoded structured language is the only candidate
+compatible with all seven items. The first-pass constructed system
+satisfies items 1, 2, 3, 4, and 6 by direct design; it fails items 5 and
+7. A sophisticated constructed system that explicitly engineered items 5
+and 7 alongside the others has not been tested and cannot be excluded.
+
+This is a substantially narrower claim than the earlier version, which
+asserted encoded natural language as ``the only hypothesis that does
+not require historically unprecedented mechanisms.'' We withdraw that
+claim. The discriminative power of the checklist as currently
+constituted lies in items 5 and 7 specifically; items 1, 2, 3, 4, and 6
+can be produced by a designed system with moderate effort.
+
+The constraint remains useful: any proposed explanation that cannot
+account for all seven items is incomplete, and the two discriminative
+items make specific empirical demands that narrow the space of viable
+explanations. The checklist is a diagnostic framework, not decisive proof.
 
 % =============================================================================
 \section{Limitations}
 \label{sec:limitations}
 
-Nine limitations apply to all of the above and should not be minimized.
+The following limitations apply and should not be minimized.
 
-\paragraph{1.~EVA-transcription dependence.} Family definitions (QOK, OK,
-OT, CHEDY, AIIN) are based on the EVA alphabet. They may not correspond
-to meaningful character-level units in the original script. Results under
-FSG or Currier transcription alphabets have not been tested.
+\paragraph{1.~EVA-alphabet dependence (partially addressed).} Family
+definitions (QOK, OK, OT, CHEDY, AIIN) are based on the EVA alphabet.
+Cross-transcription stability has been confirmed across four independent
+EVA-alphabet transcribers (Currier, FSG, Takahashi, Grove;
+\S\ref{sec:crosstranscription}), which addresses the tokenization
+objection. Results under non-EVA character-boundary systems (the
+original Currier alphabet, FSG characters directly, or any system that
+treats \texttt{ch}/\texttt{sh} as single glyphs) have not been tested and
+remain an open question.
 
-\paragraph{2.~Modern comparison corpora.} The nine Leipzig corpora are
-modern Wikipedia text. Structural proxies for their language families, not
-medieval equivalents. Historical Latin, Old French, and medieval Italian
-are not tested. Ottoman Turkish was tested with a small UD corpus
-(SYMM-LOW) but a larger historical corpus is needed.
+\paragraph{2.~Modern comparison corpora.} The Leipzig corpora are modern
+Wikipedia text. Structural proxies for their language families, not
+medieval equivalents. Historical Latin, Old French, and medieval
+Italian are not tested. Ottoman Turkish was tested with a small UD
+corpus (SYMM-LOW); a larger historical corpus would be preferable.
 
 \paragraph{3.~No decipherment.} This analysis identifies statistical
 patterns in token sequences. It does not decode any text, identify any
@@ -854,57 +1166,100 @@ morphology. The suffix extension introduced here corrects this bias but
 introduces its own auto-detection uncertainty.
 
 \paragraph{6.~AIIN invariance is definition-dependent.} Holds under the
-standard definition but fails under stricter or looser alternatives.
+standard definition but fails under stricter ($p = 0.004$) and looser
+($p = 0.001$) alternatives. AIIN also has $842$ unique types --- more
+than any other family, and higher positional entropy than CHEDY at every
+line position, which is the opposite of typical natural-language
+function-word behavior. The function-word interpretation is a statistical
+analogy, not a linguistic identification.
 
-\paragraph{7.~Small Ottoman Turkish corpus.} The UD treebank's $16{,}890$
-words show SYMM-LOW but this result should be confirmed on a larger
-historical corpus before being taken as definitive. Swahili
-(Leipzig~100K) also tested SYMM-LOW despite bidirectional morphology.
+\paragraph{7.~Bidirectional-morphology comparators.} Four natural
+languages with bidirectional morphology were tested: Ottoman Turkish
+(small historical corpus, SYMM-LOW), Swahili (Bantu, Leipzig 100K,
+SYMM-LOW), Georgian (Kartvelian polypersonal agreement, SYMM-LOW), and
+Tagalog (Austronesian infixation, SYMM-LOW). None approaches SYMM-HIGH.
+This establishes that rich bidirectional morphology alone does not
+produce Voynich's profile in any tested natural language, but does not
+exhaust the typological space.
 
-\paragraph{8.~Cross-transcription validation.} Results are stable
-across four independent EVA-based transcribers (Currier, FSG, Takahashi,
-Grove; see \S\ref{sec:crosstranscription}). Validation under non-EVA
-alphabets (original Currier alphabet, original FSG alphabet with
-different character boundaries) remains an open question.
+\paragraph{8.~``Grammar'' is a weak statistical tendency.} The
+class-level transition effects documented here are significant
+($\chi^2 = 1408$) but have near-zero predictive power at the family
+level: family-bigram prediction gives $\sim$$0\%$ lift over the baseline
+majority class, and 5-token family history gives only $+3.6\%$. The
+patterns are better described as ``class-level collocational structure''
+than as grammar in a predictive-syntax sense. We use ``grammar'' throughout
+for concision but the reader should understand it as transition-matrix
+departures from independence, not as predictive syntax.
 
-\paragraph{9.~Reproducibility is partial.} Three of the core analyses
-(transition rules, AIIN invariance, bidirectional self-clustering) are
-covered by reproducible scripts with automated regression tests
-(\texttt{run\_all.py}, \texttt{tests/test\_canonical\_values.py}). Several
-of the more detailed analyses reported here --- line-bounded grammar,
-suffix-agreement cascades, paradigm-graph morphology, and the glyph-layer
-ablations --- were developed interactively during the research session
-and are documented in the project's durable findings framework
-(\texttt{docs/durable\_findings.md}) with their statistical methods and
-canonical values, but are not yet packaged as standalone scripts.
-Scripting these analyses is planned work prior to any peer-reviewed
-journal submission.
+\paragraph{9.~Multiple-comparisons correction is partial.}
+Benjamini--Hochberg FDR has been applied to the five
+agreement-cascade chains (\S\ref{sec:cascades}). Cell-level $p$-values
+in the $6 \times 6$ transition matrix (36 cells) and family-pair
+$p$-values in the suffix-agreement table (10 pairs) are not
+multiple-comparisons corrected; they should be read as descriptive,
+exploratory reporting rather than confirmatory tests for individual
+cells.
+
+\paragraph{10.~Constructed-system test is $n = 1$.} One design point has
+been tested (\S\ref{sec:constructed}). A more sophisticated generator
+explicitly targeting items~5 and~7 of the revised checklist has not
+been attempted. Until such a generator is tested and shown to fail, the
+hypothesis ``sophisticated constructed system'' cannot be excluded.
+
+\paragraph{11.~Reproducibility is full.} All findings reported here are
+produced by the pipeline scripts (\texttt{scripts/01}--\texttt{09})
+orchestrated by \texttt{run\_all.py}. 33 regression tests
+(\texttt{tests/test\_canonical\_values.py}) verify published values on
+every commit. An earlier limitation concerning partial reproducibility
+of interactively-developed analyses has been closed.
 
 % =============================================================================
 \section{Open Problems}
 \label{sec:open}
 
-Three concrete extensions would substantially strengthen or refute these
-findings:
+Four concrete extensions would strengthen or refute these findings.
 
 \begin{enumerate}
-  \item \textbf{Non-EVA alphabet validation.} Cross-transcription stability
-        has been confirmed across four EVA-based transcribers
-        (\S\ref{sec:crosstranscription}). The remaining open question
-        is whether findings hold under the original Currier and FSG
-        character-boundary definitions, which assign different glyph
-        groupings than EVA.
-  \item \textbf{Ottoman Turkish with larger corpus.} The UD treebank shows
-        SYMM-LOW but is too small to be definitive. Swahili (Bantu) also
-        tested SYMM-LOW despite rich bidirectional morphology. A historical
-        corpus of 15th-century Ottoman Turkish remains worth testing but is
-        no longer the sole candidate.
-  \item \textbf{Additional language types.} Sinitic has been tested (Mandarin,
-        SYMM-LOW).
-        Polysynthetic languages (Nahuatl --- unavailable at corpus scale
-        from Leipzig) and historical shorthand systems (Tironian notae)
-        remain untested. Georgian, Tagalog, and Mandarin have been tested
-        and all fall in SYMM-LOW.
+  \item \textbf{Non-EVA-alphabet validation.} Cross-transcription
+        stability has been confirmed across four independent
+        EVA-alphabet transcribers (\S\ref{sec:crosstranscription}). The
+        remaining open question is whether findings hold under
+        transcription systems that assign different character boundaries
+        than EVA (the original Currier alphabet, the original FSG
+        alphabet, or any system that treats paleographic digraphs as
+        single glyphs). This is the most consequential untested
+        objection; if bidirectional symmetry collapses under non-EVA
+        character boundaries, item~5 of the checklist would have to be
+        re-examined.
+  \item \textbf{Tuned constructed-system control.} The first-pass
+        synthetic corpus (\S\ref{sec:constructed}) satisfied $5$ of $7$
+        checklist items. A tuned generator that targets items~5 and~7
+        simultaneously --- a Zipfian-distributed lexicon with $\sim$$71\%$
+        hapax, generated under a process that produces bidirectional
+        SYMM-HIGH clustering under auto-detected affixes --- has not
+        been attempted. If such a generator succeeds, the checklist
+        discriminates only against simple mechanisms, not against
+        sophisticated constructed systems; the ``encoded structured
+        language'' preference weakens further.
+  \item \textbf{Genre-matched medieval comparison.} No medieval herbal,
+        recipe, or formulary has been tested with the present pipeline.
+        Historical Latin medical texts (\emph{Trotula}, \emph{Circa
+        instans}, \emph{Macer Floridus}) and Anglo-Saxon medical texts
+        (Bald's \emph{Leechbook}) would test whether formulaic-genre
+        structure alone can produce the line-bounded transition reset,
+        shifting-lexicon-with-stable-grammar property, and high hapax
+        rate observed in Voynich. The most likely outcome is partial
+        match on items~1, 6, and~7 and non-match on item~5, which would
+        concentrate the discriminative weight further onto the
+        bidirectional-symmetry finding.
+  \item \textbf{Additional language types.} Sinitic (Mandarin,
+        SYMM-LOW), Austronesian (Tagalog, SYMM-LOW), Bantu (Swahili,
+        SYMM-LOW), and Kartvelian (Georgian, SYMM-LOW) have been tested.
+        Polysynthetic languages at corpus scale (e.g., Inuktitut,
+        Greenlandic; not available in Leipzig 100K at time of writing)
+        and historical shorthand systems (Tironian notae, Pitman
+        shorthand) remain untested.
 \end{enumerate}
 
 % =============================================================================
@@ -917,17 +1272,28 @@ and result files are available at
 license for code and original data licenses for corpora (Voynich: public
 domain; Leipzig: CC-BY; Gutenberg: public domain).
 
-The pipeline runs via \texttt{python run\_all.py} and covers the three
-core analyses reported in \S\ref{sec:results} subsections~3.1 through~3.4.
-An automated test suite (\texttt{pytest tests/}) verifies that the
-canonical values for these analyses match the output of the current
-pipeline within stated tolerances, and a continuous integration workflow
-runs the validation and test suite on every commit. Analyses reported in
-\S\ref{sec:results} subsections~3.6 through~3.10 --- line-bounded
-grammar, suffix-agreement cascades, paradigm morphology, and glyph-layer
-architecture --- are documented in \texttt{docs/durable\_findings.md}
-with their statistical methods, but are not yet packaged as standalone
-scripts. Scripting these analyses is planned work.
+The pipeline runs via \path{python run_all.py} and executes nine
+analysis scripts in sequence:
+
+\begin{itemize}
+  \item \path{00_validate_datasets.py} --- data checksums
+  \item \path{01_core_analysis.py} --- transition rules, AIIN invariance
+  \item \path{02_cross_linguistic.py} --- comparison corpora
+  \item \path{03_stress_tests.py} --- definitional and section robustness
+  \item \path{04_extended_analysis.py} --- findings~1.4--1.10
+  \item \path{05_cross_transcription.py} --- Currier/FSG/Takahashi/Grove
+  \item \path{06_paradigm_null.py} --- trigram null for Finding~1.8
+  \item \path{07_cascade_uncertainty.py} --- Wilson CIs and BH-FDR for cascades
+  \item \path{08_per_scribe_analysis.py} --- per-hand decomposition
+  \item \path{09_constructed_control.py} --- synthetic constructed-system control
+\end{itemize}
+
+An automated test suite (\path{pytest tests/}) verifies that 33
+canonical values match the output of the current pipeline within
+stated tolerances, and a continuous integration workflow runs the
+validation and test suite on every commit. A paper revision notes
+document (\path{docs/paper_revision_notes.md}) records the retractions
+and narrowings applied in this revision.
 
 % =============================================================================
 % =============================================================================
