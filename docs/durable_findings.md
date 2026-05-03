@@ -1,6 +1,6 @@
 # Durable Findings
 
-Status as of April 2026. All claims tested against controls, conditioning, section splits, Currier types, frequency matching, and shuffled null models. This document records what survived, what was narrowed, and what was retired. The canonical source for all wording is the revised paper (`docs/paper.pdf`).
+Status as of May 2026. All claims tested against controls, conditioning, section splits, Currier types, frequency matching, and shuffled null models. This document records what survived, what was narrowed, and what was retired. The canonical source for all wording is the revised preprint (`docs/paper.pdf`).
 
 Dataset: Zandbergen–Landini EVA transliteration, 31,608 tokens, 184 pages, 4,197 lines. Comparison set: 16 natural-language comparators (13 Leipzig Wikipedia 100K including Swahili, Georgian, Tagalog, and Mandarin Chinese; 2 Gutenberg literary; 1 Ottoman Turkish UD treebank), 1 shuffled-token control.
 
