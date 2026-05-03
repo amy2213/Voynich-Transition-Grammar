@@ -186,7 +186,7 @@ index.html        Redirect to dashboard for GitHub Pages
 - GitHub Repository: <https://github.com/amy2213/Voynich-Transition-Grammar>
 - GitHub Release: <https://github.com/amy2213/Voynich-Transition-Grammar/releases/tag/v1.0.0-preprint>
 - Project Dashboard: <https://amy2213.github.io/Voynich-Transition-Grammar/>
-- Preprint PDF: <https://amy2213.github.io/Voynich-Transition-Grammar/voynich-token-structure-analysis-2026-05.pdf>
+- Preprint PDF: <https://amy2213.github.io/Voynich-Transition-Grammar/docs/voynich-token-structure-analysis-2026-05.pdf>
 - Zenodo DOI: pending
 - OSF Preprint: pending
 - arXiv: pending
