@@ -260,15 +260,18 @@ transcription alphabets are not tested here and remain an open question.
 
 \subsection{Comparison corpora}
 
-We compare Voynich against $16$ natural-language comparators:
-$2$ historical literary texts (Middle English Chaucer, Gutenberg~\#22120;
-KJV English, Gutenberg~\#10900) and $13$ Wikipedia-derived corpora from the
-Leipzig Corpora Collection (Turkish, Hungarian, Finnish, Hebrew, Arabic,
-Latin, North Azerbaijani, Italian, Estonian, Swahili, Georgian, Tagalog,
-Mandarin Chinese; all \texttt{wikipedia\_2021\_100K} editions). A shuffled-token control (\texttt{Gibberish}) is derived from the
-Voynich corpus itself by random permutation. An additional small corpus
-(Ottoman Turkish, $16{,}890$ words, UD treebank) is tested separately given
-its relevance as a potential historical match.
+We compare Voynich against $16$ natural-language comparators, decomposed
+as follows: $13$ Wikipedia-derived modern-proxy corpora from the Leipzig
+Corpora Collection (Turkish, Hungarian, Finnish, Hebrew, Arabic, Latin,
+North Azerbaijani, Italian, Estonian, Swahili, Georgian, Tagalog, and
+Mandarin Chinese; all \texttt{wikipedia\_2021\_100K} editions); $2$
+historical literary texts (Middle English Chaucer, Gutenberg~\#22120;
+KJV English, Gutenberg~\#10900); and $1$ small Ottoman Turkish UD
+treebank ($16{,}890$ words; flagged as small in \S\ref{sec:limitations}).
+A shuffled-token control (\texttt{Gibberish}) is derived from the
+Voynich corpus itself by random permutation, bringing the total tested
+set to $18$ systems (Voynich + $16$ natural-language comparators +
+$1$ shuffled-token control).
 
 The Leipzig corpora are modern-language proxies, not medieval texts. This is
 an explicit limitation, discussed in \S\ref{sec:limitations}.

@@ -37,6 +37,14 @@ When you group Voynich words into families by their beginning characters and mea
 
 Full table with all 18 systems in [results/prefix_suffix_analysis.json](results/prefix_suffix_analysis.json). This comparison covers 13 modern-proxy languages (Leipzig Wikipedia 100K), 2 historical literary texts (Gutenberg), 1 Ottoman Turkish UD treebank, and 1 shuffled-token control.
 
+### Comparator Set Terminology
+
+To keep counts consistent throughout this repository:
+
+> The comparison set contains **18 tested systems** total: the Voynich corpus, **16 natural-language comparators**, and **1 shuffled-token Voynich control**. The 16 natural-language comparators consist of **13 Leipzig Wikipedia 100K modern-proxy corpora**, **2 historical literary texts** (Project Gutenberg), and **1 small Ottoman Turkish UD treebank**.
+
+Voynich itself is the target system, not a comparator. The shuffled-token "Gibberish" control is generated from the Voynich corpus by random permutation. The arithmetic is `1 + 16 + 1 = 18`, with `13 + 2 + 1 = 16` for the natural-language subset.
+
 This matters because it constrains what the writing system can be. A simple letter-substitution cipher would preserve the source language's suffix dominance. Whatever produced Voynich imposes regularity at both word boundaries simultaneously. This is consistent with several structured generating mechanisms, including some encoding-based and constructed-system possibilities; current data do not discriminate among them.
 
 ---
