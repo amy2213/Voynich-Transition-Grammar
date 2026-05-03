@@ -1,5 +1,7 @@
 # Voynich Manuscript: Transition Grammar Analysis
 
+[![DOI](https://zenodo.org/badge/1214800385.svg)](https://doi.org/10.5281/zenodo.19996904)
+
 The Voynich Manuscript is a 15th-century book that nobody can read. The script is unknown, the language (if it is a language) is unidentified, and every proposed decipherment has failed verification. This project doesn't try to decode it. Instead, it measures the statistical structure of the text and asks: what kind of system could have produced these patterns?
 
 The answer is narrower than it first appeared. The text shows statistical regularities that operate within lines and reset at line boundaries, above-chance agreement on word endings between adjacent words, and one distinctive property: balanced elevated self-clustering at both word beginnings and word endings, a profile not shared by any of the 16 natural languages we tested. Within the limited candidate classes implemented in the current pipeline, these findings are inconsistent with random generation and with simple letter-substitution ciphers. They are *not* a basis for excluding sophisticated constructed, hybrid, stenographic, or unmodeled historical mechanisms — a first-pass synthetic constructed control already produced 5 of 7 testable checklist properties (see `results/constructed_control_results.json`). The findings narrow the space of viable explanations against tested models; they do not localize a single one.
@@ -208,10 +210,11 @@ index.html        Redirect to dashboard for GitHub Pages
 ### External links
 
 - GitHub Repository: <https://github.com/amy2213/Voynich-Transition-Grammar>
-- GitHub Release: <https://github.com/amy2213/Voynich-Transition-Grammar/releases/tag/v1.0.0-preprint>
+- GitHub Release: <https://github.com/amy2213/Voynich-Transition-Grammar/releases/tag/v1.0.1-preprint>
 - Project Dashboard: <https://amy2213.github.io/Voynich-Transition-Grammar/>
 - Preprint PDF: <https://amy2213.github.io/Voynich-Transition-Grammar/docs/voynich-token-structure-analysis-2026-05.pdf>
-- Zenodo DOI: pending
+- Zenodo archived release DOI: <https://doi.org/10.5281/zenodo.19996904>
+- Zenodo latest-version DOI: <https://doi.org/10.5281/zenodo.19996905>
 - OSF Preprint: pending
 - arXiv: pending
 

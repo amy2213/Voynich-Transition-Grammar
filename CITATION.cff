@@ -8,9 +8,17 @@ authors:
     orcid: "https://orcid.org/0009-0001-5479-0007"
 repository-code: "https://github.com/amy2213/Voynich-Transition-Grammar"
 url: "https://amy2213.github.io/Voynich-Transition-Grammar/"
-version: "v1.0.0-preprint"
-date-released: "2026-05-02"
+doi: "10.5281/zenodo.19996904"
+version: "v1.0.1-preprint"
+date-released: "2026-05-03"
 license: MIT
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.19996904"
+    description: "Zenodo archived release DOI for v1.0.1-preprint"
+  - type: doi
+    value: "10.5281/zenodo.19996905"
+    description: "Zenodo concept (latest-version) DOI"
 keywords:
   - voynich-manuscript
   - computational-linguistics
@@ -29,5 +37,6 @@ preferred-citation:
       orcid: "https://orcid.org/0009-0001-5479-0007"
   year: 2026
   month: 5
-  notes: "Preprint package prepared for external archival and submission. Zenodo DOI, OSF preprint, and arXiv ID pending."
+  doi: "10.5281/zenodo.19996904"
+  notes: "Archived on Zenodo (release DOI 10.5281/zenodo.19996904; concept/latest-version DOI 10.5281/zenodo.19996905). OSF preprint and arXiv ID pending."
   url: "https://amy2213.github.io/Voynich-Transition-Grammar/docs/voynich-token-structure-analysis-2026-05.pdf"
