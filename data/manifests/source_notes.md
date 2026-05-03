@@ -115,3 +115,19 @@ These would need a separate sourcing pass to include properly.
 - **Purpose:** Cross-transcription stability validation. Tests whether bidirectional symmetry and transition rules are artifacts of ZL tokenization decisions.
 - **Result:** All 4 major transcribers (C, F, H, V) independently produce SYMM-HIGH.
 - **Citation:** Landini, G. & Zandbergen, R. (1998). INTERLN.EVT, European Voynich Manuscript Transcription project. Edited by J. Stolfi, release 1.6e6. Available at voynich.nu.
+
+---
+
+## Frozen Dataset Byte Stability Note (refreshed 2026-05-02)
+
+Frozen text-format datasets in `data/raw/` (Gutenberg `.txt` corpora, the LSI IVTFF file, and Ottoman Turkish CoNLL-U files) are now declared `-text` / `binary` in the repository's `.gitattributes` so that Git's autocrlf does not rewrite line endings on Windows checkouts. This freezes byte content across platforms.
+
+When the byte-stability rule was added, the following expected SHA-256 entries in `dataset_manifest.json` were refreshed to record the canonical (LF, what is actually committed in the repo blob) hash. The earlier values had been computed against a Windows-checkout-with-CRLF working tree, which caused the Linux-CI dataset-validation step (`scripts/00_validate_datasets.py`) to fail even though the underlying data was unchanged:
+
+| Language | File | Old expected SHA-256 (CRLF) | New expected SHA-256 (LF, canonical) |
+|---|---|---|---|
+| Middle English | `chaucer_canterbury_tales_22120.txt` | `dc58a1b4…6b979` | `223770e4…fbb37e` |
+| English | `king_james_bible_10900.txt` | `43968092…cf02d1` | `954b7510…b91e2` |
+| Voynich (LSI Interlinear) | `LSI_ivtff_0d.txt` | `3f3f2af1…121afa` | `ab6f89c1…267f21` |
+
+Semantic content is identical (CRLF and LF are equivalent for text corpora; Python's default text mode normalizes either). Token counts, line counts, and downstream analysis output are unaffected. The Ottoman Turkish CoNLL-U files were not updated because their manifest entries already recorded the LF-canonical hash. Numerical results in `results/` and the 33 regression tests in `tests/test_canonical_values.py` were unchanged by this refresh.

@@ -30,7 +30,7 @@
     "historical_or_modern": "historical",
     "proxy_status": "no",
     "license": "public_domain",
-    "checksum_sha256": "dc58a1b4b07f1a3bc06458d57da5a329aab80c88eb4f6acbb2a34f3b5576b979",
+    "checksum_sha256": "223770e4727bb8040fba39b32952cf8fdb33bb2ed17150c3d0820f6f17fbb37e",
     "notes": "Canterbury Tales in Middle English"
   },
   {
@@ -47,7 +47,7 @@
     "historical_or_modern": "early_modern",
     "proxy_status": "no",
     "license": "public_domain",
-    "checksum_sha256": "43968092331866bb573225e879a4ce3333fb72660b3ce99173042da9e1cf02d1",
+    "checksum_sha256": "954b7510414aaf3f9e2671ef457aae09e7ef0ac4f92e4117c76f8698d49b91e2",
     "notes": "King James Bible"
   },
   {
@@ -316,17 +316,17 @@
     "checksum_sha256": "52ee97deb37c240bb142ec27fe19394470f3da2305837990394301ce4177ff66",
     "proxy_status": "no",
     "historical_or_modern": "historical",
-    "notes": "14th-20th century texts. 16,890 words. Small corpus \u2014 wider CIs expected. Tests SYMM-LOW.",
+    "notes": "14th-20th century texts. 16,890 words. Small corpus — wider CIs expected. Tests SYMM-LOW.",
     "license": "CC-BY-SA"
   },
   {
     "dataset_id": "lsi_interlinear",
     "language": "Voynich (LSI Interlinear)",
-    "source": "voynich.nu (Ren\u00e9 Zandbergen)",
+    "source": "voynich.nu (René Zandbergen)",
     "source_url": "http://www.voynich.nu/data/beta/LSI_ivtff_0d.txt",
     "file_name": "LSI_ivtff_0d.txt",
     "local_path": "data/raw/voynich",
-    "checksum_sha256": "3f3f2af18cde10efe75c582f49b07b651c3397022fcbfa5854fecc424c121afa",
+    "checksum_sha256": "ab6f89c1e33352c030e9c9a81ff494b1743e9af3a3a59b95e37c979e39267f21",
     "proxy_status": "no",
     "historical_or_modern": "historical",
     "notes": "Landini-Stolfi Interlinear file. Contains transcriptions by Currier, FSG/Friedman, Takahashi, Grove, and others, all mapped to EVA. Used for cross-transcription stability validation.",

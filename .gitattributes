@@ -1,0 +1,6 @@
+# Frozen raw datasets must be byte-stable across platforms.
+# Treating them as binary stops Git's autocrlf from rewriting line endings
+# on Windows checkouts, which previously caused dataset_manifest.json
+# checksum drift between Windows-developed branches and Linux CI runs.
+data/raw/** -text
+data/raw/** binary
