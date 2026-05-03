@@ -102,12 +102,19 @@ digital humanities.
 \bigskip
 \noindent\textbf{Reproducibility.} All scripts, frozen datasets, and
 result files are available at
-\url{https://github.com/amy2213/Voynich-Transition-Grammar}. All findings
-reported in this paper are produced by nine analysis scripts
-(\texttt{scripts/01}--\texttt{09}) orchestrated by \texttt{run\_all.py}
-and verified against published values by 33 regression tests
-(\texttt{tests/test\_canonical\_values.py}) that run on every commit.
-Null-model, cascade-uncertainty, per-scribe, and
+\url{https://github.com/amy2213/Voynich-Transition-Grammar}. The default
+pipeline (\texttt{run\_all.py}) reproduces the core analysis, comparator
+analysis, stress tests, extended analysis, paradigm null, cascade
+uncertainty, per-scribe analysis, and constructed-control results
+(\texttt{scripts/01}--\texttt{04}, \texttt{scripts/06}--\texttt{09}). The
+cross-transcription analysis (\texttt{scripts/05\_cross\_transcription.py})
+is implemented as a separate script because it consumes the LSI
+interlinear file \texttt{LSI\_ivtff\_0d.txt} (Landini \& Zandbergen 1998),
+which is sourced separately from the Hugging Face dataset used by the
+default pipeline; the LSI file is bundled with the repository and
+precomputed outputs are provided. All published values are verified by
+33 regression tests (\texttt{tests/test\_canonical\_values.py}) that run
+on every commit. Null-model, cascade-uncertainty, per-scribe, and
 constructed-system-control analyses added during revision are in
 \texttt{scripts/06}--\texttt{09}.
 
@@ -1208,12 +1215,20 @@ explicitly targeting items~5 and~7 of the revised checklist has not
 been attempted. Until such a generator is tested and shown to fail, the
 hypothesis ``sophisticated constructed system'' cannot be excluded.
 
-\paragraph{11.~Reproducibility is full.} All findings reported here are
-produced by the pipeline scripts (\texttt{scripts/01}--\texttt{09})
-orchestrated by \texttt{run\_all.py}. 33 regression tests
-(\texttt{tests/test\_canonical\_values.py}) verify published values on
-every commit. An earlier limitation concerning partial reproducibility
-of interactively-developed analyses has been closed.
+\paragraph{11.~Reproducibility is scoped, not unbounded.} The default
+pipeline (\texttt{run\_all.py}) reproduces the core analysis, comparator
+analysis, stress tests, extended analysis, paradigm null, cascade
+uncertainty, per-scribe analysis, and constructed-control results
+(\texttt{scripts/01}--\texttt{04} and \texttt{scripts/06}--\texttt{09}).
+The cross-transcription analysis (\texttt{scripts/05\_cross\_transcription.py})
+is run manually because it consumes the LSI interlinear file
+(\texttt{LSI\_ivtff\_0d.txt}, sourced separately from the dataset used by
+the default pipeline); the LSI file is bundled and precomputed outputs
+are committed to \texttt{results/cross\_transcription\_results.json}.
+33 regression tests (\texttt{tests/test\_canonical\_values.py}) verify
+published values on every commit. An earlier limitation concerning
+partial reproducibility of interactively-developed analyses has been
+closed.
 
 % =============================================================================
 \section{Open Problems}
@@ -1273,8 +1288,8 @@ and result files are available at
 license for code and original data licenses for corpora (Voynich: public
 domain; Leipzig: CC-BY; Gutenberg: public domain).
 
-The pipeline runs via \path{python run_all.py} and executes nine
-analysis scripts in sequence:
+The default pipeline runs via \path{python run_all.py} and executes the
+following analysis scripts in sequence:
 
 \begin{itemize}
   \item \path{00_validate_datasets.py} --- data checksums
@@ -1282,12 +1297,24 @@ analysis scripts in sequence:
   \item \path{02_cross_linguistic.py} --- comparison corpora
   \item \path{03_stress_tests.py} --- definitional and section robustness
   \item \path{04_extended_analysis.py} --- findings~1.4--1.10
-  \item \path{05_cross_transcription.py} --- Currier/FSG/Takahashi/Grove
   \item \path{06_paradigm_null.py} --- trigram null for Finding~1.8
   \item \path{07_cascade_uncertainty.py} --- Wilson CIs and BH-FDR for cascades
   \item \path{08_per_scribe_analysis.py} --- per-hand decomposition
   \item \path{09_constructed_control.py} --- synthetic constructed-system control
 \end{itemize}
+
+The cross-transcription analysis is implemented as a separate script,
+\path{scripts/05_cross_transcription.py}, and is run manually rather
+than as part of the default pipeline. It consumes the LSI interlinear
+file \path{LSI_ivtff_0d.txt} (Landini \& Zandbergen 1998, voynich.nu
+beta data), which is bundled with this repository at
+\path{data/raw/voynich/LSI_ivtff_0d.txt} but is sourced separately from
+the AncientLanguages/Voynich Hugging Face dataset that the default
+pipeline depends on. The precomputed cross-transcription output is
+committed at \path{results/cross_transcription_results.json}; to
+regenerate it, run the script directly. This separation prevents the
+default pipeline from claiming to reproduce an analysis whose input is
+sourced separately.
 
 An automated test suite (\path{pytest tests/}) verifies that 33
 canonical values match the output of the current pipeline within

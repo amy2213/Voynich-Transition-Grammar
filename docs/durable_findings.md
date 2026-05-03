@@ -250,7 +250,7 @@ A first-pass synthetic constructed corpus (`scripts/09_constructed_control.py`) 
 
 5. No decipherment is claimed or attempted.
 
-6. All findings are reproducible via scripts 01–09 in `run_all.py`. 33 regression tests verify canonical values on every commit.
+6. The default pipeline (`run_all.py`) reproduces the core, cross-linguistic, stress, extended, paradigm-null, cascade-uncertainty, per-scribe, and constructed-control results (`scripts/01`–`scripts/04`, `scripts/06`–`scripts/09`). The cross-transcription analysis (`scripts/05_cross_transcription.py`) is run separately because it consumes the LSI interlinear file `LSI_ivtff_0d.txt` (sourced separately from the Hugging Face dataset used by the default pipeline); the LSI file is bundled at `data/raw/voynich/LSI_ivtff_0d.txt` and the precomputed output is committed at `results/cross_transcription_results.json`. 33 regression tests verify canonical values on every commit.
 
 ---
 

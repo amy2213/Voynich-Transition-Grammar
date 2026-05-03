@@ -13,9 +13,16 @@ Runs (in order):
   8. scripts/08_per_scribe_analysis.py  — per-hand decomposition
   9. scripts/09_constructed_control.py  — synthetic constructed-system control
 
-Script 05_cross_transcription.py requires a separate data file (LSI_ivtff_0d.txt)
-and is not included in the default pipeline. Run it manually if the LSI file is
-available.
+Script 05_cross_transcription.py is intentionally NOT part of the default
+pipeline. It consumes the LSI interlinear file LSI_ivtff_0d.txt (Landini &
+Zandbergen 1998, voynich.nu beta data), which is sourced separately from
+the AncientLanguages/Voynich Hugging Face dataset that the default pipeline
+depends on. The LSI file is bundled at data/raw/voynich/LSI_ivtff_0d.txt
+(provenance in data/manifests/source_notes.md) and a precomputed output is
+committed at results/cross_transcription_results.json. To regenerate it
+manually:
+
+    python scripts/05_cross_transcription.py
 
 Results are written to results/ as JSON files. 33 regression tests in
 tests/test_canonical_values.py verify canonical values on every commit.

@@ -103,6 +103,20 @@ python run_all.py --tests
 
 Raw data is bundled in this repository. Canonical values are verified by `tests/test_canonical_values.py` and a CI workflow runs validation on every push.
 
+## Cross-Transcription Reproducibility Note
+
+The default pipeline in `run_all.py` reproduces the core analysis, comparator analysis, stress tests, extended analysis, paradigm null, cascade uncertainty, per-scribe analysis, and constructed-control results (`scripts/01`–`scripts/04`, `scripts/06`–`scripts/09`).
+
+The cross-transcription analysis (`scripts/05_cross_transcription.py`) is **not** part of the default pipeline. It is run separately because it consumes a different input artifact — the LSI interlinear file `LSI_ivtff_0d.txt` (Landini & Zandbergen 1998, voynich.nu beta data) — which sits outside the AncientLanguages/Voynich Hugging Face dataset that the default pipeline depends on. The LSI file is bundled in this repository at [data/raw/voynich/LSI_ivtff_0d.txt](data/raw/voynich/LSI_ivtff_0d.txt) with provenance recorded in [data/manifests/source_notes.md](data/manifests/source_notes.md), and the precomputed analysis output is committed at [results/cross_transcription_results.json](results/cross_transcription_results.json).
+
+To re-run the cross-transcription analysis from the bundled LSI file:
+
+```bash
+python scripts/05_cross_transcription.py
+```
+
+This separation prevents the default pipeline from claiming to reproduce an analysis whose input is sourced separately.
+
 ## Repository contents
 
 ```
