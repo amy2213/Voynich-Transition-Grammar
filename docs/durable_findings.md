@@ -220,7 +220,7 @@ A first-pass synthetic constructed corpus (`scripts/09_constructed_control.py`) 
 
 **Interpretation:** Items 1–4 and 6 are cheaply engineered. The items that meaningfully discriminate encoded NL from a constructed system are items 5 and 7. A tuned generator targeting items 5 and 7 specifically has not been attempted. Until it is tested and shown to fail, the constructed-system hypothesis cannot be excluded.
 
-**Revised conclusion:** Among candidate explanations tested with this pipeline, encoded structured language is the only candidate compatible with all seven items. Random generation, simple substitution ciphers, and the first-pass constructed control are not. Sophisticated constructed systems that explicitly engineer items 5 and 7 have not been tested and cannot be excluded. Current data do not discriminate among several structured generating mechanisms, including encoding-based and constructed-system possibilities.
+**Revised conclusion:** Among the limited candidate classes implemented in the current pipeline, encoded structured language is the only tested class that satisfies all seven checklist items. Random generation, simple substitution ciphers, and the first-pass constructed control do not. This should be read as a constraint on tested models, not as exclusion of constructed, hybrid, stenographic, or unmodeled historical mechanisms; sophisticated constructed systems that explicitly engineer items 5 and 7 have not been tested. Current data do not discriminate among several structured generating mechanisms, including encoding-based and constructed-system possibilities.
 
 ---
 
