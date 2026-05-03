@@ -8,3 +8,14 @@ __pycache__/
 # Generated release asset packages (built locally for `gh release upload`)
 release_assets/
 voynich-research-package-v*.zip
+
+# LaTeX build artifacts
+docs/main.aux
+docs/main.blg
+docs/main.log
+docs/main.out
+docs/main.pdf
+docs/main.toc
+docs/main.synctex.gz
+docs/main.fdb_latexmk
+docs/main.fls
