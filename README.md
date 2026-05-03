@@ -111,6 +111,8 @@ python run_all.py --tests
 
 Raw data is bundled in this repository. Canonical values are verified by `tests/test_canonical_values.py` and a CI workflow runs validation on every push.
 
+For a step-by-step reviewer-facing guide — environment, default pipeline, validation and tests, cross-transcription script, expected outputs, and known limitations — see [REPRODUCIBILITY.md](REPRODUCIBILITY.md).
+
 ## Cross-Transcription Reproducibility Note
 
 The default pipeline in `run_all.py` reproduces the core analysis, comparator analysis, stress tests, extended analysis, paradigm null, cascade uncertainty, per-scribe analysis, and constructed-control results (`scripts/01`–`scripts/04`, `scripts/06`–`scripts/09`).
