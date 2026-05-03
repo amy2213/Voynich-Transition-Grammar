@@ -8,9 +8,11 @@ The answer is narrower than it first appeared. The text shows statistical regula
 
 > **Preprint package (May 2026):** *Voynich Manuscript Token-Structure Analysis: Reproducible Corpus Methods and Cross-Linguistic Baselines.* Status: Preprint package prepared for external archival and submission. PDF: [docs/paper.pdf](docs/paper.pdf) (also available as [docs/voynich-token-structure-analysis-2026-05.pdf](docs/voynich-token-structure-analysis-2026-05.pdf)). arXiv source bundle: [supplementary/arxiv_submission_v2.zip](supplementary/arxiv_submission_v2.zip).
 
-### Claim boundary
+## Claim Boundary
 
-This project does not claim semantic decipherment of the Voynich Manuscript. It reports reproducible structural regularities and defines falsifiable constraints for future explanations.
+This project does not claim semantic decipherment or translation of the Voynich Manuscript. It reports reproducible structural regularities and defines falsifiable constraints that future explanations should address.
+
+The paper and archived release package are the canonical scholarly artifacts. The dashboard is an interactive companion for exploring results.
 
 ---
 
@@ -162,14 +164,15 @@ index.html        Redirect to dashboard for GitHub Pages
 
 ## Preprint / Research Package
 
-**Title:** Voynich Manuscript Token-Structure Analysis: Reproducible Corpus Methods and Cross-Linguistic Baselines
-**Author:** Amy Laird (Independent Researcher)
-**Date:** May 2026
-**Status:** Preprint package prepared for external archival and submission.
+- **Title:** Voynich Manuscript Token-Structure Analysis: Reproducible Corpus Methods and Cross-Linguistic Baselines
+- **Author:** Amy Laird (Independent Researcher)
+- **Date:** May 2026
+- **Status:** Preprint package prepared for external archival and submission.
 
-**Description:** This paper presents a reproducible computational analysis of the Voynich Manuscript as a structured token system. It does not claim decipherment or translation. It tests line-bounded effects, token-family transition behavior, cross-linguistic comparator corpora, and stress tests against natural-language baselines.
+**Description.** This paper presents a reproducible computational analysis of the Voynich Manuscript as a structured token system. It does not claim decipherment or translation. It tests line-bounded effects, token-family transition behavior, cross-linguistic comparator corpora, and stress tests against natural-language baselines.
 
-**Files:**
+### Files
+
 - Manuscript PDF: [docs/paper.pdf](docs/paper.pdf) (canonical link, kept stable for GitHub Pages)
 - Same PDF, dated filename: [docs/voynich-token-structure-analysis-2026-05.pdf](docs/voynich-token-structure-analysis-2026-05.pdf)
 - LaTeX source: [docs/main.tex](docs/main.tex), [docs/main.bbl](docs/main.bbl), [docs/references.bib](docs/references.bib)
@@ -178,11 +181,15 @@ index.html        Redirect to dashboard for GitHub Pages
 - Bundle README: [docs/arxiv_submission_README.txt](docs/arxiv_submission_README.txt)
 - Previous version: [docs/archive/paper_april_2026.pdf](docs/archive/paper_april_2026.pdf)
 
-**External links:**
+### External links
+
 - GitHub Repository: <https://github.com/amy2213/Voynich-Transition-Grammar>
-- Zenodo DOI: [pending]
-- OSF Preprint: [pending]
-- arXiv: [pending]
+- GitHub Release: <https://github.com/amy2213/Voynich-Transition-Grammar/releases/tag/v1.0.0-preprint>
+- Project Dashboard: <https://amy2213.github.io/Voynich-Transition-Grammar/>
+- Preprint PDF: <https://amy2213.github.io/Voynich-Transition-Grammar/voynich-token-structure-analysis-2026-05.pdf>
+- Zenodo DOI: pending
+- OSF Preprint: pending
+- arXiv: pending
 
 ## License
 
