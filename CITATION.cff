@@ -1,16 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software or its findings, please cite it as below."
-title: "Voynich Manuscript: Transition Grammar Analysis"
-abstract: >-
-  Statistical analysis of sequential word-family constraints in the Voynich
-  Manuscript (Beinecke MS 408), compared against 16 natural-language
-  comparators across 9 language families and 1 shuffled-token control.
-  Identifies two robust transition rules (CHEDY→QOK at 2.63x, AIIN→QOK
-  at 0.50x), AIIN density invariance at 15% across Currier A/B, and a
-  bidirectional self-clustering signature (prefix 1.52x, suffix 1.54x,
-  ratio 0.99) unique among tested systems. Cross-transcription validation
-  confirms all findings are stable across 4 independent transcribers.
-  No decipherment or language identification is claimed.
+title: "Voynich Manuscript Token-Structure Analysis: Reproducible Corpus Methods and Cross-Linguistic Baselines"
 type: software
 authors:
   - family-names: "Laird"
@@ -18,16 +8,18 @@ authors:
     orcid: "https://orcid.org/0009-0001-5479-0007"
 repository-code: "https://github.com/amy2213/Voynich-Transition-Grammar"
 url: "https://amy2213.github.io/Voynich-Transition-Grammar/"
-version: "1.1.0"
-date-released: "2026-04-21"
+version: "v1.0.0-preprint"
+date-released: "2026-05-02"
 license: MIT
 keywords:
   - voynich-manuscript
   - computational-linguistics
-  - statistical-analysis
+  - corpus-linguistics
+  - statistical-text-analysis
   - digital-humanities
   - historical-cryptography
-  - morphological-analysis
+  - undeciphered-manuscripts
+
 preferred-citation:
   type: article
   title: "Voynich Manuscript Token-Structure Analysis: Reproducible Corpus Methods and Cross-Linguistic Baselines"
@@ -38,4 +30,4 @@ preferred-citation:
   year: 2026
   month: 5
   notes: "Preprint package prepared for external archival and submission. Zenodo DOI, OSF preprint, and arXiv ID pending."
-  url: "https://amy2213.github.io/Voynich-Transition-Grammar/docs/paper.pdf"
+  url: "https://amy2213.github.io/Voynich-Transition-Grammar/docs/voynich-token-structure-analysis-2026-05.pdf"
