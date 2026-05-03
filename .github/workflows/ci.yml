@@ -32,7 +32,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: pip
+          # No `cache: pip` here: this job does not run pip install, so the
+          # pip cache directory is never created and post-job cache cleanup
+          # would fail with "Cache folder path is retrieved for pip but
+          # doesn't exist on disk: /home/runner/.cache/pip". The
+          # test-canonical-values job below does install deps and keeps
+          # pip caching enabled.
 
       - name: Verify dataset checksums
         run: python scripts/00_validate_datasets.py
