@@ -77,6 +77,13 @@ methods.
 ## Metadata validation
 
 `CITATION.cff` was parsed as YAML, its declared CFF version was checked, and
-its release version was matched to `VERSION`. A dedicated CFF schema validator
-was not available in the isolated environment, so formal schema validation
-remains an external release check.
+its release version was matched to `VERSION`. It was then validated with
+Draft 7 JSON Schema semantics against the official CFF 1.2.0 `schema.json`.
+The schema was obtained from the `citation-file-format/citation-file-format`
+repository at validation time and had SHA-256:
+
+```text
+0b8d22140da702d766df318dcff3a91af2f39521298dcf36d76315fd99cc169b
+```
+
+Result: valid, with zero schema violations.

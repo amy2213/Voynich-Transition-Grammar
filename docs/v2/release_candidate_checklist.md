@@ -11,6 +11,7 @@ GitHub release, minting a DOI, or submitting to a preprint service.
 - [x] Version identifier is explicit and consistent.
 - [x] Citation metadata names the current paper and does not reuse the May
   Version 1 release DOI.
+- [x] `CITATION.cff` passes the official CFF 1.2.0 JSON Schema.
 - [x] MIT software license is present.
 - [x] Current paper source and rendered PDF are tracked.
 - [x] Superseded publication artifacts are labeled and archived.
@@ -41,7 +42,6 @@ GitHub release, minting a DOI, or submitting to a preprint service.
 
 ## External actions requiring separate approval
 
-- [ ] Validate `CITATION.cff` with a dedicated CFF 1.2 schema validator.
 - [ ] Review author name, affiliation, email, ORCID, title, and abstract.
 - [ ] Decide whether `2.0.0-rc1` should become final `2.0.0`.
 - [ ] Merge the audited branch to `main`.
