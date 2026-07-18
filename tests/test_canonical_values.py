@@ -532,8 +532,8 @@ class TestReleaseCandidate(unittest.TestCase):
 
     def test_version_and_citation_metadata_are_current(self):
         citation = (PROJECT_ROOT / "CITATION.cff").read_text(encoding="utf-8")
-        self.assertEqual(self.version, "2.0.0-rc1")
-        self.assertIn('version: "2.0.0-rc1"', citation)
+        self.assertEqual(self.version, "2.0.0")
+        self.assertIn('version: "2.0.0"', citation)
         self.assertIn("Boundary-Aware Token-Structure Analysis", citation)
         self.assertNotIn("v1.0.1-preprint", citation)
         self.assertNotIn("voynich-token-structure-analysis-2026-05.pdf", citation)
@@ -561,7 +561,7 @@ class TestReleaseCandidate(unittest.TestCase):
         )
         bundle = PROJECT_ROOT / manifest["bundle"]
         paper = PROJECT_ROOT / manifest["paper"]
-        self.assertEqual(manifest["release_candidate"], self.version)
+        self.assertEqual(manifest["release_version"], self.version)
         self.assertTrue(manifest["independent_build_completed"])
         self.assertEqual(manifest["bundle_sha256"], self._sha256(bundle))
         self.assertEqual(manifest["paper_sha256"], self._sha256(paper))

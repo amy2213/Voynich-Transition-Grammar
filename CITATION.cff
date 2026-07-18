@@ -12,8 +12,8 @@ abstract: >-
   Voynich Manuscript. The project makes no decipherment, translation,
   language-identification, or natural-language-proof claim.
 repository-code: "https://github.com/amy2213/Voynich-Transition-Grammar"
-url: "https://github.com/amy2213/Voynich-Transition-Grammar/tree/v2-audit-consolidation"
-version: "2.0.0-rc1"
+url: "https://github.com/amy2213/Voynich-Transition-Grammar"
+version: "2.0.0"
 date-released: "2026-07-18"
 license: MIT
 keywords:
@@ -33,4 +33,4 @@ preferred-citation:
       orcid: "https://orcid.org/0009-0001-5479-0007"
   year: 2026
   month: 7
-  url: "https://github.com/amy2213/Voynich-Transition-Grammar/blob/v2-audit-consolidation/docs/paper.pdf"
+  url: "https://github.com/amy2213/Voynich-Transition-Grammar/blob/main/docs/paper.pdf"
