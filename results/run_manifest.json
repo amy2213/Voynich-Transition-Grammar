@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
-  "pipeline": "v2_phase1_canonical",
-  "generated_at_utc": "2026-07-18T16:34:05.703440+00:00",
-  "code_revision": "5e7f4ce45ccea2918bfb45b7e57de7d788e8ac24",
+  "pipeline": "v2_phase2_canonical",
+  "generated_at_utc": "2026-07-18T17:18:43.808609+00:00",
+  "code_revision": "6c5707c667b8ded34fac2a92c687f8dcd3605fd4",
   "python": "3.12.13",
   "input_hashes": {
     "voynich_parquet": "24c7bf7d0a999455825e75fefe5993faf8c3b7b9415923ff6b27c51eb297d759",
@@ -13,14 +13,14 @@
       "id": "validate_datasets",
       "command": "python scripts/00_validate_datasets.py",
       "exit_code": 0,
-      "elapsed_seconds": 0.291,
+      "elapsed_seconds": 0.275,
       "status": "passed"
     },
     {
       "id": "core_within_line",
       "command": "python scripts/01_core_analysis.py",
       "exit_code": 0,
-      "elapsed_seconds": 66.094,
+      "elapsed_seconds": 62.679,
       "status": "passed",
       "output": "results/core_analysis_results.json",
       "output_fresh": true,
@@ -30,21 +30,31 @@
       "id": "classifier_overlap",
       "command": "python scripts/21_ambiguity_audit.py",
       "exit_code": 0,
-      "elapsed_seconds": 0.524,
+      "elapsed_seconds": 0.541,
       "status": "passed",
       "output": "results/classifier_overlap_report.json",
       "output_fresh": true,
       "output_sha256": "a5df667a0f1e71ce01cc690e00bba1919b90862cbefc14a4670136553e3f28e4"
     },
     {
+      "id": "prefix_suffix_v2",
+      "command": "python scripts/10_prefix_suffix_analysis.py",
+      "exit_code": 0,
+      "elapsed_seconds": 348.689,
+      "status": "passed",
+      "output": "results/prefix_suffix_v2.json",
+      "output_fresh": true,
+      "output_sha256": "7fd12cb653889f8ca8769dc1bd6678462613a77c303989e5ee2a4922f5934a0e"
+    },
+    {
       "id": "full_test_report",
       "command": "python scripts/22_generate_test_report.py",
       "exit_code": 0,
-      "elapsed_seconds": 0.834,
+      "elapsed_seconds": 0.833,
       "status": "passed",
       "output": "results/test_report.json",
       "output_fresh": true,
-      "output_sha256": "5e30e123156a95f493f47d6712edcf6af83f770e3d7427321547aff9d85a1ab6"
+      "output_sha256": "a3a13df8c63ec5b1274717ebb7c3bc1effd78acd48c2eb559aff669408810815"
     }
   ],
   "complete": true

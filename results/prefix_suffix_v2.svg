@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="530" viewBox="0 0 900 530">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:Arial,sans-serif;font-size:12px}.title{font-size:17px;font-weight:bold}.axis{stroke:#444;stroke-width:1}.prefix{stroke:#315ea8;fill:#315ea8}.suffix{stroke:#c85a32;fill:#c85a32}</style>
+<text x="20" y="26" class="title">Boundary-aware, size-matched prefix and suffix self-clustering</text>
+<text x="20" y="46">Median and 95% replicate interval; OTHER excluded</text>
+<line x1="190.0" y1="62" x2="190.0" y2="500" stroke="#ddd"/>
+<text x="190.0" y="520" text-anchor="middle">0.00</text>
+<line x1="320.0" y1="62" x2="320.0" y2="500" stroke="#ddd"/>
+<text x="320.0" y="520" text-anchor="middle">0.58</text>
+<line x1="450.0" y1="62" x2="450.0" y2="500" stroke="#ddd"/>
+<text x="450.0" y="520" text-anchor="middle">1.16</text>
+<line x1="580.0" y1="62" x2="580.0" y2="500" stroke="#ddd"/>
+<text x="580.0" y="520" text-anchor="middle">1.73</text>
+<line x1="710.0" y1="62" x2="710.0" y2="500" stroke="#ddd"/>
+<text x="710.0" y="520" text-anchor="middle">2.31</text>
+<line x1="840.0" y1="62" x2="840.0" y2="500" stroke="#ddd"/>
+<text x="840.0" y="520" text-anchor="middle">2.89</text>
+<text x="180" y="82" text-anchor="end">VOYNICH</text>
+<line x1="464.6" y1="74" x2="518.4" y2="74" class="prefix"/>
+<circle cx="489.5" cy="74" r="3" class="prefix"/>
+<line x1="502.2" y1="82" x2="539.5" y2="82" class="suffix"/>
+<circle cx="517.7" cy="82" r="3" class="suffix"/>
+<text x="180" y="110" text-anchor="end">Arabic</text>
+<line x1="456.9" y1="102" x2="584.9" y2="102" class="prefix"/>
+<circle cx="523.8" cy="102" r="3" class="prefix"/>
+<line x1="361.1" y1="110" x2="413.1" y2="110" class="suffix"/>
+<circle cx="387.1" cy="110" r="3" class="suffix"/>
+<text x="180" y="138" text-anchor="end">Latin</text>
+<line x1="286.7" y1="130" x2="373.0" y2="130" class="prefix"/>
+<circle cx="312.2" cy="130" r="3" class="prefix"/>
+<line x1="751.0" y1="138" x2="817.5" y2="138" class="suffix"/>
+<circle cx="783.9" cy="138" r="3" class="suffix"/>
+<text x="180" y="166" text-anchor="end">Estonian</text>
+<line x1="313.7" y1="158" x2="380.2" y2="158" class="prefix"/>
+<circle cx="347.5" cy="158" r="3" class="prefix"/>
+<line x1="502.0" y1="166" x2="671.0" y2="166" class="suffix"/>
+<circle cx="625.9" cy="166" r="3" class="suffix"/>
+<text x="180" y="194" text-anchor="end">Hebrew</text>
+<line x1="275.0" y1="186" x2="393.9" y2="186" class="prefix"/>
+<circle cx="317.0" cy="186" r="3" class="prefix"/>
+<line x1="541.1" y1="194" x2="615.1" y2="194" class="suffix"/>
+<circle cx="573.6" cy="194" r="3" class="suffix"/>
+<text x="180" y="222" text-anchor="end">Finnish</text>
+<line x1="300.0" y1="214" x2="362.3" y2="214" class="prefix"/>
+<circle cx="329.9" cy="214" r="3" class="prefix"/>
+<line x1="485.8" y1="222" x2="521.7" y2="222" class="suffix"/>
+<circle cx="503.5" cy="222" r="3" class="suffix"/>
+<text x="180" y="250" text-anchor="end">Hungarian</text>
+<line x1="291.2" y1="242" x2="339.3" y2="242" class="prefix"/>
+<circle cx="312.6" cy="242" r="3" class="prefix"/>
+<line x1="311.6" y1="250" x2="362.4" y2="250" class="suffix"/>
+<circle cx="338.1" cy="250" r="3" class="suffix"/>
+<text x="180" y="278" text-anchor="end">Turkish</text>
+<line x1="304.9" y1="270" x2="356.8" y2="270" class="prefix"/>
+<circle cx="329.1" cy="270" r="3" class="prefix"/>
+<line x1="318.2" y1="278" x2="405.8" y2="278" class="suffix"/>
+<circle cx="365.0" cy="278" r="3" class="suffix"/>
+<text x="180" y="306" text-anchor="end">Italian</text>
+<line x1="305.2" y1="298" x2="345.4" y2="298" class="prefix"/>
+<circle cx="325.7" cy="298" r="3" class="prefix"/>
+<line x1="338.1" y1="306" x2="398.8" y2="306" class="suffix"/>
+<circle cx="372.0" cy="306" r="3" class="suffix"/>
+<text x="180" y="334" text-anchor="end">North Azerbaijani</text>
+<line x1="316.8" y1="326" x2="389.3" y2="326" class="prefix"/>
+<circle cx="350.5" cy="326" r="3" class="prefix"/>
+<line x1="334.2" y1="334" x2="409.9" y2="334" class="suffix"/>
+<circle cx="378.9" cy="334" r="3" class="suffix"/>
+<text x="180" y="362" text-anchor="end">Swahili</text>
+<line x1="359.9" y1="354" x2="389.5" y2="354" class="prefix"/>
+<circle cx="374.2" cy="354" r="3" class="prefix"/>
+<line x1="395.9" y1="362" x2="430.6" y2="362" class="suffix"/>
+<circle cx="414.3" cy="362" r="3" class="suffix"/>
+<text x="180" y="390" text-anchor="end">Georgian</text>
+<line x1="380.6" y1="382" x2="452.9" y2="382" class="prefix"/>
+<circle cx="411.5" cy="382" r="3" class="prefix"/>
+<line x1="355.2" y1="390" x2="393.9" y2="390" class="suffix"/>
+<circle cx="372.5" cy="390" r="3" class="suffix"/>
+<text x="180" y="418" text-anchor="end">Tagalog</text>
+<line x1="285.2" y1="410" x2="305.1" y2="410" class="prefix"/>
+<circle cx="294.9" cy="410" r="3" class="prefix"/>
+<line x1="315.1" y1="418" x2="337.6" y2="418" class="suffix"/>
+<circle cx="328.3" cy="418" r="3" class="suffix"/>
+<text x="180" y="446" text-anchor="end">Middle English</text>
+<line x1="254.3" y1="438" x2="280.8" y2="438" class="prefix"/>
+<circle cx="266.1" cy="438" r="3" class="prefix"/>
+<line x1="258.9" y1="446" x2="295.9" y2="446" class="suffix"/>
+<circle cx="280.0" cy="446" r="3" class="suffix"/>
+<text x="180" y="474" text-anchor="end">KJV English</text>
+<line x1="231.7" y1="466" x2="279.8" y2="466" class="prefix"/>
+<circle cx="248.2" cy="466" r="3" class="prefix"/>
+<line x1="205.4" y1="474" x2="217.6" y2="474" class="suffix"/>
+<circle cx="211.2" cy="474" r="3" class="suffix"/>
+<text x="190" y="60" class="prefix">Prefix</text>
+<text x="245" y="60" class="suffix">Suffix</text>
+</svg>
