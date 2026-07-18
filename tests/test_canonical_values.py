@@ -29,10 +29,12 @@ Each test has a docstring stating the published value, its source, and the
 tolerance rationale.
 """
 
+import hashlib
 import json
 import os
 import sys
 import unittest
+import zipfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
@@ -512,6 +514,60 @@ class TestCurrentPublicClaims(unittest.TestCase):
             "untested mechanisms",
         ):
             self.assertIn(limitation, combined)
+
+
+class TestReleaseCandidate(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.version = (PROJECT_ROOT / "VERSION").read_text(encoding="utf-8").strip()
+        cls.release_root = PROJECT_ROOT / "release" / f"v{cls.version}"
+
+    @staticmethod
+    def _sha256(path):
+        digest = hashlib.sha256()
+        with open(path, "rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+        return digest.hexdigest()
+
+    def test_version_and_citation_metadata_are_current(self):
+        citation = (PROJECT_ROOT / "CITATION.cff").read_text(encoding="utf-8")
+        self.assertEqual(self.version, "2.0.0-rc1")
+        self.assertIn('version: "2.0.0-rc1"', citation)
+        self.assertIn("Boundary-Aware Token-Structure Analysis", citation)
+        self.assertNotIn("v1.0.1-preprint", citation)
+        self.assertNotIn("voynich-token-structure-analysis-2026-05.pdf", citation)
+
+    def test_arxiv_zip_is_minimal_and_self_contained(self):
+        bundle = self.release_root / (
+            f"Voynich_Transition_Grammar_v{self.version}_arxiv.zip"
+        )
+        expected = {
+            "README.txt",
+            "main.tex",
+            "main.bbl",
+            "references.bib",
+            "figures/prefix_suffix_v2.pdf",
+        }
+        with zipfile.ZipFile(bundle) as archive:
+            self.assertEqual(set(archive.namelist()), expected)
+            main = archive.read("main.tex").decode("utf-8")
+        self.assertIn("figures/prefix_suffix_v2.pdf", main)
+        self.assertNotIn("../", main)
+
+    def test_release_manifest_hashes_bundle_and_built_pdf(self):
+        manifest = json.loads(
+            (self.release_root / "manifest.json").read_text(encoding="utf-8")
+        )
+        bundle = PROJECT_ROOT / manifest["bundle"]
+        paper = PROJECT_ROOT / manifest["paper"]
+        self.assertEqual(manifest["release_candidate"], self.version)
+        self.assertTrue(manifest["independent_build_completed"])
+        self.assertEqual(manifest["bundle_sha256"], self._sha256(bundle))
+        self.assertEqual(manifest["paper_sha256"], self._sha256(paper))
+        self.assertEqual(manifest["build_log_warning_count"], 0)
+        self.assertEqual(manifest["build_log_undefined_reference_count"], 0)
+        self.assertEqual(manifest["build_log_overfull_count"], 0)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "release_candidate": "2.0.0-rc1",
+  "generated_at_utc": "2026-07-18T18:26:47.897074+00:00",
+  "source_directory": "release/v2.0.0-rc1/arxiv",
+  "source_sha256": {
+    "README.txt": "16e1391fa66e89c5f8b7a016bbaabef60606fec73029a2774586c719565e1619",
+    "figures/prefix_suffix_v2.pdf": "bbafc0e9cd188c9ef71c1bef99c3bf855c43deb8a5301694b9e3bd01d80ed4f8",
+    "main.bbl": "efa6d391b93b0ad84be0e0ef330e18a41d19a5a31b4989fff6408fc8ee75c14b",
+    "main.tex": "194ef425af051be7ead99453e23031cdab3bc4d7ae05481a15e36e6150f0ea9d",
+    "references.bib": "173164732af1681d34084efc561b7708c968594aee329710c9e68d34ccbfdd4d"
+  },
+  "bundle": "release/v2.0.0-rc1/Voynich_Transition_Grammar_v2.0.0-rc1_arxiv.zip",
+  "bundle_sha256": "b297cc44cdb5719aca6fb41c59464e780005ecfc690511cc67e0198872b7572a",
+  "independent_build_command": "latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex",
+  "independent_build_completed": true,
+  "paper": "release/v2.0.0-rc1/paper.pdf",
+  "paper_sha256": "d2046526a9778b78e4b70db758f5315f5d002b842221f4a1842b6cd1f405db35",
+  "canonical_paper_sha256": "5ee1933c791490efcfab63ff213120d3e2dc70f644d5ddbaf6fa0692c46f4189",
+  "build_log": "release/v2.0.0-rc1/build.log",
+  "build_log_sha256": "8f857f3256f8f9e9368a223724108d3bbeb537276649fbd80d9f2636f75067eb",
+  "build_log_warning_count": 0,
+  "build_log_undefined_reference_count": 0,
+  "build_log_overfull_count": 0
+}
