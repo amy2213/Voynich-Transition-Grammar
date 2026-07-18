@@ -67,22 +67,12 @@ print(f"Loading LSI file: {lsi_path}")
 
 # ─── Parse IVTFF ────────────────────────────────────────────────────────────
 
-def parse_tokens(text):
-    """Clean a raw IVTFF text line into tokens."""
-    # Remove inline comments: {anything} and %anything and <!...>
-    text = re.sub(r'\{[^}]*\}', '', text)
-    text = re.sub(r'%[^ ]*', '', text)
-    text = re.sub(r'<[^>]*>', '', text)
-    # Remove structural markers
-    text = text.replace('!', '').replace('=', '').replace('-', '')
-    # Remove uncertainty markers
-    text = text.replace('?', '').replace('*', '')
-    # Split on dots (word separators in EVA) and whitespace
-    text = text.replace('.', ' ')
-    tokens = text.strip().split()
-    # Filter empty and very short tokens
-    tokens = [t for t in tokens if len(t) >= 2 and t.isalpha()]
-    return tokens
+# MIGRATED: the IVTFF tokenizer now lives in _canonical alongside the parquet
+# tokenizer, with the measured 1,310-token difference between them documented
+# there. Previously the two diverged silently in separate files.
+import sys as _sys0, os as _os0
+_sys0.path.insert(0, _os0.path.dirname(_os0.path.abspath(__file__)))
+from _canonical import parse_tokens_ivtff as parse_tokens  # noqa: E402,F401
 
 # Parse all data lines
 # Format: <fNNNr.LL,+PP;T> text...
@@ -124,16 +114,22 @@ for t in sorted(lines_by_transcriber.keys()):
     n_tokens = sum(len(l['tokens']) for l in lines_by_transcriber[t])
     print(f"  {t}: {n_lines} lines, {n_tokens} tokens")
 
-# ─── Family classification (same as all other scripts) ──────────────────────
+# ─── Family classification ──────────────────────────────────────────────────
+#
+# MIGRATED to the shared canonical module. The comment previously here read
+# "same as all other scripts" — it was not. This file carried a sixth copy of
+# the classifier using the substring-first order, while 01/08 used
+# prefix-first. Case-folding is retained because the LSI interlinear mixes
+# case across transcribers.
+
+import sys as _sys
+_sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _canonical import classify as _canon_classify  # noqa: E402
+
 
 def classify(tok):
-    tok = tok.lower()
-    if "aiin" in tok or "ain" in tok: return "AIIN"
-    if tok.startswith("qok"): return "QOK"
-    if tok.startswith("ok") and not tok.startswith("qok"): return "OK"
-    if tok.startswith("ot"): return "OT"
-    if any(p in tok for p in ["chedy", "shedy", "chey", "shey"]): return "CHEDY"
-    return "OTHER"
+    return _canon_classify(tok.lower())
+
 
 FAMS = ["QOK", "OK", "OT", "CHEDY", "AIIN", "OTHER"]
 
@@ -298,6 +294,54 @@ for code, name in TARGET_TRANSCRIBERS.items():
         "family_distribution": {f: round(fam_dist.get(f, 0) / n_tokens * 100, 1) for f in FAMS},
     }
 
+def compute_zl_baseline():
+    """Compute the ZL baseline row with the SAME functions used for C/F/H/V.
+
+    Reads the ZL parquet snapshot (the input the rest of the pipeline uses)
+    rather than the LSI interlinear, so the baseline reflects the canonical
+    corpus. Returns None if the snapshot is unavailable.
+    """
+    import pandas as pd
+    pq = os.path.join(PROJECT_ROOT, "data", "raw", "voynich",
+                      "AncientLanguages_Voynich_snapshot", "train.parquet")
+    if not os.path.exists(pq):
+        return None
+    df = pd.read_parquet(pq)
+    zl = df[df["source_name"] == "Zandbergen-Landini"]
+    zl_lines = []
+    for text in zl["text"]:
+        toks = parse_tokens(text) if isinstance(text, str) else []
+        if toks:
+            zl_lines.append(toks)
+    toks = [t for l in zl_lines for t in l]
+    if len(toks) < 500:
+        return None
+    classes = [classify(t) for t in toks]
+    pfx, sfx, ratio = compute_prefix_suffix_sc(toks)
+    if pfx is None or sfx is None:
+        return None
+    if pfx > 1.1 and sfx > 1.1:
+        bucket = ("SYMM-HIGH" if 0.80 <= ratio <= 1.25
+                  else ("PREFIX-DOM" if ratio > 1.25 else "SUFFIX-DOM"))
+    elif sfx > 1.1:
+        bucket = "SUFFIX-DOM"
+    elif pfx > 1.1:
+        bucket = "PREFIX-DOM"
+    else:
+        bucket = "SYMM-LOW"
+    return {
+        "name": "ZL (computed)",
+        "n_tokens": len(toks),
+        "n_lines": len(zl_lines),
+        "chedy_qok": round(compute_transition_ratio(classes, "CHEDY", "QOK"), 3),
+        "aiin_qok": round(compute_transition_ratio(classes, "AIIN", "QOK"), 3),
+        "prefix_sc": round(float(pfx), 3),
+        "suffix_sc": round(float(sfx), 3),
+        "ps_ratio": round(float(ratio), 3),
+        "bucket": bucket,
+    }
+
+
 # ─── Comparison summary ─────────────────────────────────────────────────────
 
 print(f"\n\n{'='*70}")
@@ -317,8 +361,22 @@ for code in ['C', 'F', 'H', 'V']:
     bkt = r['bucket'] or "n/a"
     print(f"  {r['name']:<13} {r['n_tokens']:>7} {cq:>6} {aq:>6} {pfx:>7} {sfx:>7} {rat:>6} {bkt}")
 
-# Add ZL baseline for comparison
-print(f"  {'ZL (baseline)':<13} {'31608':>7} {'2.63':>6} {'0.50':>6} {'1.52':>7} {'1.54':>7} {'0.99':>6} SYMM-HIGH")
+# ─── ZL baseline — COMPUTED, not hardcoded ──────────────────────────────────
+#
+# This row was previously a print statement containing literal strings
+# ('2.63', '0.50', '1.52', '1.54', '0.99'). The four alternative transcriptions
+# were auto-analysed and then compared against a baseline that was typed in,
+# which is not a comparison. It is now computed by the same functions, from the
+# same parquet snapshot the rest of the pipeline uses.
+
+zl_baseline = compute_zl_baseline()
+if zl_baseline:
+    print(f"  {'ZL (computed)':<13} {zl_baseline['n_tokens']:>7} "
+          f"{zl_baseline['chedy_qok']:>6.2f} {zl_baseline['aiin_qok']:>6.2f} "
+          f"{zl_baseline['prefix_sc']:>7.2f} {zl_baseline['suffix_sc']:>7.2f} "
+          f"{zl_baseline['ps_ratio']:>6.2f} {zl_baseline['bucket']}")
+else:
+    print(f"  {'ZL (computed)':<13} unavailable — parquet snapshot not found")
 
 # ─── Save results ────────────────────────────────────────────────────────────
 
@@ -328,18 +386,16 @@ output = {
                    "but differ in tokenization (word boundaries) and coverage.",
     "source_file": "LSI_ivtff_0d.txt (voynich.nu/data/beta/)",
     "transcribers": results,
-    "zl_baseline": {
-        "chedy_qok": 2.625,
-        "aiin_qok": 0.504,
-        "prefix_sc": 1.524,
-        "suffix_sc": 1.544,
-        "ps_ratio": 0.99,
-        "bucket": "SYMM-HIGH",
-        "n_tokens": 31608,
-    },
+    "zl_baseline": zl_baseline,
+    "zl_baseline_note": ("Computed by this script from the ZL parquet snapshot "
+                         "using the same functions applied to the alternative "
+                         "transcriptions. Previously these were hardcoded "
+                         "literals, so the baseline was not comparable to the "
+                         "rows it was being compared against."),
 }
 
 with open(output_path, "w") as f:
     json.dump(output, f, indent=2)
 
 print(f"\nResults saved to {os.path.relpath(output_path, PROJECT_ROOT)}")
+

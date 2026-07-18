@@ -52,12 +52,36 @@ def wilson_ci(k, n, z=1.96):
 
 
 def norm_sf(x):
-    """One-tailed survival of standard normal."""
+    """Upper-tail survival of the standard normal."""
     return 0.5 * (1 - erf(x / sqrt(2)))
 
 
+def norm_two_tailed(z):
+    """Two-tailed p-value for a z statistic."""
+    return 2.0 * norm_sf(abs(z))
+
+
+def newcombe_wilson_diff(k1, n1, k2, n2, z=1.96):
+    """Newcombe-Wilson hybrid-score 95% CI for a difference of proportions.
+
+    Correct interval for p1 - p2 at small n. The previous approach subtracted
+    the far endpoints of two independent Wilson intervals, which is valid but
+    markedly over-wide (a conservative bound, not a 95% interval). At n=13 the
+    difference is large enough to change how the flagship effect reads.
+    Newcombe (1998), Statistics in Medicine 17:873-890, method 10.
+    """
+    if n1 == 0 or n2 == 0:
+        return (None, None)
+    p1, p2 = k1 / n1, k2 / n2
+    l1, u1 = wilson_ci(k1, n1, z)
+    l2, u2 = wilson_ci(k2, n2, z)
+    lower = (p1 - p2) - sqrt((p1 - l1) ** 2 + (u2 - p2) ** 2)
+    upper = (p1 - p2) + sqrt((u1 - p1) ** 2 + (p2 - l2) ** 2)
+    return (max(-1.0, lower), min(1.0, upper))
+
+
 def two_prop_z(k1, n1, k2, n2):
-    """Two-proportion z-test for p1 > p2. Returns (z, one-tailed p)."""
+    """Two-proportion z-test for p1 != p2. Returns (z, two-tailed p)."""
     if n1 == 0 or n2 == 0:
         return 0.0, 1.0
     p1, p2 = k1 / n1, k2 / n2
@@ -66,7 +90,9 @@ def two_prop_z(k1, n1, k2, n2):
     if var <= 0:
         return 0.0, 1.0
     z = (p1 - p2) / sqrt(var)
-    return z, norm_sf(z)
+    # Two-tailed. The earlier one-tailed test presupposed the direction of an
+    # effect that was discovered in the same data, which inflates significance.
+    return z, norm_two_tailed(z)
 
 
 def bh_fdr(pvalues, alpha=0.05):
@@ -97,14 +123,22 @@ def main():
     for chain_name, d in chains.items():
         n_agree = d["n_agree"]
         n_disagree = d["n_disagree"]
-        p_agree = d["if_agree_pct"] / 100.0
-        p_disagree = d["if_disagree_pct"] / 100.0
-        # Reconstruct integer counts from rounded percentages
-        k_agree = round(p_agree * n_agree)
-        k_disagree = round(p_disagree * n_disagree)
+        # Raw success counts, emitted by 04_extended_analysis.py. Previously
+        # these were reconstructed as round(pct * n) from percentages already
+        # rounded to whole numbers, which at n=13 can shift the count by +/-1
+        # and move the interval materially.
+        if "k_agree" not in d or "k_disagree" not in d:
+            raise KeyError(
+                "extended_analysis_results.json lacks raw cascade counts "
+                "(k_agree/k_disagree). Re-run scripts/04_extended_analysis.py.")
+        k_agree = d["k_agree"]
+        k_disagree = d["k_disagree"]
+        p_agree = k_agree / n_agree
+        p_disagree = k_disagree / n_disagree
         ci_agree = wilson_ci(k_agree, n_agree)
         ci_disagree = wilson_ci(k_disagree, n_disagree)
         z, p = two_prop_z(k_agree, n_agree, k_disagree, n_disagree)
+        nw = newcombe_wilson_diff(k_agree, n_agree, k_disagree, n_disagree)
         processed.append({
             "chain": chain_name,
             "n_agree_trials": n_agree,
@@ -118,16 +152,22 @@ def main():
                 round((ci_agree[0] - ci_disagree[1]) * 100, 1),
                 round((ci_agree[1] - ci_disagree[0]) * 100, 1),
             ],
+            "cascade_pp_ci95_newcombe": [
+                round(100 * nw[0], 1) if nw[0] is not None else None,
+                round(100 * nw[1], 1) if nw[1] is not None else None,
+            ],
+            "k_agree": k_agree,
+            "k_disagree": k_disagree,
             "two_prop_z": round(z, 2),
-            "two_prop_p_one_tailed": p,
+            "two_prop_p_two_tailed": p,
         })
 
     # Apply BH FDR
-    pvalues = [d["two_prop_p_one_tailed"] for d in processed]
+    pvalues = [d["two_prop_p_two_tailed"] for d in processed]
     passes = bh_fdr(pvalues, alpha=0.05)
     for d, ok in zip(processed, passes):
         d["survives_bh_fdr_alpha_0.05"] = bool(ok)
-        d["two_prop_p_one_tailed"] = float(f"{d['two_prop_p_one_tailed']:.2e}")
+        d["two_prop_p_two_tailed"] = float(f"{d['two_prop_p_two_tailed']:.2e}")
 
     summary = {
         "description": (
@@ -154,7 +194,7 @@ def main():
         print(f"    p(agree|≡) = {d['p_if_agree']} [n={d['n_agree_trials']}] CI {d['ci95_p_if_agree']}")
         print(f"    p(agree|≠) = {d['p_if_disagree']} [n={d['n_disagree_trials']}] CI {d['ci95_p_if_disagree']}")
         print(f"    cascade Δ = {d['cascade_pp_point_estimate']}pp, conservative CI {d['cascade_pp_ci95_conservative']}")
-        print(f"    z = {d['two_prop_z']}, p = {d['two_prop_p_one_tailed']}, BH-FDR pass = {d['survives_bh_fdr_alpha_0.05']}")
+        print(f"    z = {d['two_prop_z']}, p = {d['two_prop_p_two_tailed']}, BH-FDR pass = {d['survives_bh_fdr_alpha_0.05']}")
 
     out_path = os.path.join(PROJECT_ROOT, "results", "cascade_uncertainty_results.json")
     with open(out_path, "w") as f:
@@ -164,3 +204,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

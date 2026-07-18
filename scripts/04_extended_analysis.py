@@ -59,13 +59,12 @@ def parse_tokens(text):
     return [t for t in text.strip().split()
             if not t.startswith("%") and not t.startswith("{") and t not in ["-", "=", "!"]]
 
-def classify(tok):
-    if "aiin" in tok or "ain" in tok: return "AIIN"
-    if tok.startswith("qok"): return "QOK"
-    if tok.startswith("ok") and not tok.startswith("qok"): return "OK"
-    if tok.startswith("ot"): return "OT"
-    if any(p in tok for p in ["chedy", "shedy", "chey", "shey"]): return "CHEDY"
-    return "OTHER"
+# MIGRATED: family classification now comes from the shared canonical
+# module. The local copy used a different priority order than
+# 01_core_analysis.py, which disagreed on 3.59% of tokens.
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from _canonical import classify  # noqa: E402,F401
 
 def get_section(page):
     m = re.match(r"f(\d+)", page)
@@ -404,6 +403,12 @@ def trigram_cascade(fam_a, fam_b, fam_c, feature_fn):
         "cascade_pp": round(cascade, 0) if cascade is not None else None,
         "n_agree": chain_agree_total,
         "n_disagree": chain_disagree_total,
+        # Raw success counts. Previously only the rounded percentages were
+        # stored, forcing 07_cascade_uncertainty.py to reconstruct integers via
+        # round(pct * n) — which at n=13 can be off by one and materially move
+        # the interval. Downstream inference must use these, not the percentages.
+        "k_agree": chain_agree_agree,
+        "k_disagree": chain_disagree_agree,
     }
 
 chains = [
@@ -743,3 +748,4 @@ with open(output_path, "w") as f:
 print(f"\n{'=' * 70}")
 print(f"Results saved to {os.path.relpath(output_path, PROJECT_ROOT)}")
 print(f"{'=' * 70}")
+

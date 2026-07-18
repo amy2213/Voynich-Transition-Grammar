@@ -63,18 +63,12 @@ def parse_tokens(text):
     return out
 
 
-def classify(tok):
-    if tok.startswith("qok"):
-        return "QOK"
-    if tok.startswith("ok"):
-        return "OK"
-    if tok.startswith("ot"):
-        return "OT"
-    if any(s in tok for s in ("chedy", "shedy", "chey", "shey")):
-        return "CHEDY"
-    if "aiin" in tok or "ain" in tok:
-        return "AIIN"
-    return "OTHER"
+# MIGRATED: family classification now comes from the shared canonical
+# module. The local copy used a different priority order than
+# 01_core_analysis.py, which disagreed on 3.59% of tokens.
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from _canonical import classify  # noqa: E402,F401
 
 
 def transition_ratio(tokens_flat, src_fam, dst_fam):
@@ -279,3 +273,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

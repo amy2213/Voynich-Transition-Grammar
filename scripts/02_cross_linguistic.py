@@ -23,19 +23,56 @@ PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(PROJECT_ROOT, "data", "raw")
 RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")
 
-def is_aiin(tok): return "aiin" in tok or "ain" in tok
-def is_qok(tok): return tok.startswith("qok")
-def is_ok(tok): return tok.startswith("ok") and not tok.startswith("qok")
-def is_ot(tok): return tok.startswith("ot")
-def is_chedy(tok): return any(p in tok for p in ["chedy","shedy","chey","shey"])
+# MIGRATED: family predicates now come from the shared canonical module.
+# Previously defined locally, which is how the ordering divergence arose.
+import sys as _sys
+_sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _canonical import (  # noqa: E402
+    is_aiin, is_qok, is_ok, is_ot, is_chedy, classify as canon_classify,
+)
 
-def classify_voynich(tok):
-    if is_aiin(tok): return "FUNC"
-    if is_qok(tok): return "QOK"
-    if is_ok(tok): return "OK"
-    if is_ot(tok): return "OT"
-    if is_chedy(tok): return "CHEDY"
-    return "OTHER"
+# ─── FUNC mapping policy ─────────────────────────────────────────────────────
+#
+# This script deliberately differs from the rest of the pipeline: it relabels
+# one Voynich family as FUNC so that the carry-through metric ("does a function
+# word let a family pass through to the next token?") has a Voynich analogue of
+# the comparator languages' function-word class.
+#
+# That analogy is imperfect and the imperfection matters. For comparators, FUNC
+# membership is a WHOLE-TOKEN test (token is in the top-100 short frequent
+# list). For Voynich, AIIN membership is a SUBSTRING test. Those are not the
+# same kind of predicate. Assigning `qokaiin` to FUNC because it contains
+# "aiin" is analogous to classifying English "unfortunately" as the function
+# word "for" because it contains those letters.
+#
+# Two policies are therefore provided:
+#
+#   FUNC_POLICY = "aiin_first"  -- historical behaviour. Mirrors the comparator
+#       procedure structurally (comparators also test FUNC first), at the cost
+#       of routing prefix-family tokens into FUNC on a substring match.
+#
+#   FUNC_POLICY = "canonical"   -- assign families with the canonical
+#       prefix-first classifier, then relabel only those tokens whose canonical
+#       family is AIIN. Consistent with scripts 01/03/04/08; `qokaiin` stays
+#       QOK. Recommended.
+#
+# Both are reported by default so the choice is visible rather than inherited.
+FUNC_POLICY = "canonical"
+
+
+def classify_voynich(tok, policy=None):
+    policy = policy or FUNC_POLICY
+    if policy == "aiin_first":
+        if is_aiin(tok): return "FUNC"
+        if is_qok(tok): return "QOK"
+        if is_ok(tok): return "OK"
+        if is_ot(tok): return "OT"
+        if is_chedy(tok): return "CHEDY"
+        return "OTHER"
+    if policy == "canonical":
+        fam = canon_classify(tok)
+        return "FUNC" if fam == "AIIN" else fam
+    raise ValueError(f"unknown FUNC_POLICY: {policy!r}")
 
 def get_top_families(words, n=5):
     pc = Counter()
@@ -111,8 +148,8 @@ def compute_metrics(words, func_words, label):
             "mean_self_cluster":round(np.mean(scl),3) if scl else 1.0,
             "mean_carry_through":round(np.mean(carry),2) if carry else 1.0}
 
-def compute_voynich_metrics(words, label):
-    classes=[classify_voynich(w) for w in words]
+def compute_voynich_metrics(words, label, policy=None):
+    classes=[classify_voynich(w, policy) for w in words]
     ac=list(set(classes))
     tr=defaultdict(lambda:defaultdict(int))
     sc=defaultdict(int);dc=defaultdict(int);total=len(classes)-1
@@ -144,7 +181,7 @@ def compute_voynich_metrics(words, label):
     fd=[]
     for st in range(0,len(words)-50,50):
         pg=words[st:st+50]
-        fd.append(sum(1 for w in pg if is_aiin(w))/50)
+        fd.append(sum(1 for w in pg if classify_voynich(w, policy)=="FUNC")/50)
     return {"label":label,"total_words":len(words),
             "func_density":round(np.mean(fd)*100,1) if fd else 0,
             "func_cv":round(np.std(fd)/np.mean(fd),3) if fd and np.mean(fd)>0 else 0,
@@ -199,6 +236,19 @@ def main():
     
     R={}
     R["VOYNICH"]=compute_voynich_metrics(vt,"VOYNICH")
+    R["VOYNICH"]["func_policy"]=FUNC_POLICY
+    # Report the alternative policy alongside, so the choice is auditable.
+    _alt = "aiin_first" if FUNC_POLICY=="canonical" else "canonical"
+    _a = compute_voynich_metrics(vt, f"VOYNICH [{_alt}]", policy=_alt)
+    if _a:
+        R["VOYNICH"]["alt_policy"]={
+            "policy":_alt,
+            "mean_self_cluster":_a["mean_self_cluster"],
+            "func_density":_a["func_density"],
+            "max_attraction":_a["max_attraction"],
+            "max_repulsion":_a["max_repulsion"],
+            "mean_carry_through":_a["mean_carry_through"],
+        }
     g=vt.copy();np.random.shuffle(g)
     R["GIBBERISH"]=compute_voynich_metrics(g,"GIBBERISH (shuffled)")
     
@@ -269,3 +319,4 @@ def main():
     print(f"Saved to results/cross_linguistic_results.json")
 
 if __name__=="__main__": main()
+
