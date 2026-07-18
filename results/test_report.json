@@ -1,22 +1,22 @@
 {
   "schema_version": "1.0",
-  "generated_at_utc": "2026-07-18T17:25:36.825069+00:00",
+  "generated_at_utc": "2026-07-18T17:54:58.006284+00:00",
   "python": "3.12.13",
   "pytest": {
     "command": "python -m pytest -ra tests/test_canonical_values.py --junitxml=results/test_report.junit.xml",
     "exit_code": 0,
-    "tests": 31,
+    "tests": 34,
     "failures": 0,
     "errors": 0,
     "skipped": 0,
-    "passed": 31,
+    "passed": 34,
     "warnings": 0
   },
   "direct_python": {
     "command": "python tests/test_canonical_values.py",
     "exit_code": 0,
-    "tests": 31,
-    "passed": 31
+    "tests": 34,
+    "passed": 34
   },
   "complete": true
 }
