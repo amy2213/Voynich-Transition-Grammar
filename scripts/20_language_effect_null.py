@@ -65,7 +65,11 @@ from collections import defaultdict
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _canonical import load_corpus, classify  # noqa: E402
+from _canonical import (  # noqa: E402
+    classify,
+    load_corpus,
+    sample_two_disjoint_contiguous_blocks,
+)
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")
@@ -102,16 +106,9 @@ def run_null(pages, page_lines, n1, n2, perms, rng):
     if len(pages) < n1 + n2:
         return out
     for _ in range(perms):
-        blk1 = blk2 = None
-        for _ in range(40):
-            i = int(rng.integers(0, len(pages) - n1 + 1))
-            blk1 = pages[i:i + n1]
-            rest = pages[:i] + pages[i + n1:]
-            if len(rest) < n2:
-                continue
-            j = int(rng.integers(0, len(rest) - n2 + 1))
-            blk2 = rest[j:j + n2]
-            break
+        blk1, blk2 = sample_two_disjoint_contiguous_blocks(
+            pages, n1, n2, rng
+        )
         if not blk1 or not blk2:
             continue
         l1 = [l for p in blk1 for l in page_lines[p]]
@@ -162,6 +159,22 @@ def report(name, ga, gb, pages, page_lines, perms, rng):
     return res
 
 
+def bh_adjust(records):
+    """Benjamini-Hochberg adjustment across every reported cell test."""
+    ordered = sorted(records, key=lambda item: item[2]["p_empirical"])
+    m = len(ordered)
+    adjusted = [0.0] * m
+    running = 1.0
+    for rank_from_end in range(m - 1, -1, -1):
+        p = ordered[rank_from_end][2]["p_empirical"]
+        rank = rank_from_end + 1
+        running = min(running, p * m / rank)
+        adjusted[rank_from_end] = running
+    for (analysis, cell, record), value in zip(ordered, adjusted):
+        record["p_bh_all_reported_cells"] = round(value, 4)
+        record["survives_bh_alpha_0.05"] = bool(value < 0.05)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--perms", type=int, default=1500)
@@ -201,16 +214,24 @@ def main():
         restricted = report("RESTRICTED — herbal_A only (section held constant)",
                             ha, hb, hpages, page_lines, args.perms, rng)
 
+    all_records = (
+        [("pooled", cell, record) for cell, record in pooled.items()]
+        + [("restricted_herbal_A", cell, record)
+           for cell, record in restricted.items()]
+    )
+    bh_adjust(all_records)
+
     # ── Verdict ──
     print("\n" + "=" * 78)
-    n_clear = sum(1 for v in pooled.values() if v["clears_null"])
+    n_clear = sum(1 for v in pooled.values() if v["survives_bh_alpha_0.05"])
     n_tot = len(pooled)
-    clears = [k for k, v in pooled.items() if v["clears_null"]]
+    clears = [k for k, v in pooled.items() if v["survives_bh_alpha_0.05"]]
     print(f"POOLED: {n_clear}/{n_tot} cells clear the contiguous-block null")
     if clears:
         print(f"  clearing: {', '.join(clears)}")
     if restricted:
-        rc = [k for k, v in restricted.items() if v["clears_null"]]
+        rc = [k for k, v in restricted.items()
+              if v["survives_bh_alpha_0.05"]]
         print(f"RESTRICTED: {len(rc)}/{len(restricted)} clear"
               + (f" ({', '.join(rc)})" if rc else ""))
 
@@ -221,11 +242,12 @@ def main():
                    "probably because Currier A and B occupy nearly disjoint "
                    "folio ranges. Redesign before drawing conclusions.")
     elif n_clear:
-        verdict = (f"{n_clear} of {n_tot} cells clear a null that section and "
-                   "quire partitions both failed. Transition structure differs "
-                   "by Currier language beyond what arbitrary positional splits "
-                   "produce. This is the only surviving structural partition in "
-                   "the manuscript.")
+        verdict = (f"{n_clear} of {n_tot} pooled cells remain associated with "
+                   "Currier labels after BH correction across all pooled and "
+                   "restricted cell tests. This is promising descriptive "
+                   "evidence, but the design does not isolate language from "
+                   "scribal hand, transcription practice, folio position, or "
+                   "section mixture.")
     else:
         verdict = ("No cell clears the null. The Currier A/B contrast is "
                    "positional like section and quire, and no structural "
@@ -240,7 +262,10 @@ def main():
         "caveat": ("Currier A and B occupy largely distinct folio ranges, so "
                    "the contiguous-block null may be weakly constraining here. "
                    "Check whether ALL cells clear; if so the design is "
-                   "uninformative rather than the result strong."),
+                   "uninformative rather than the result strong. Page labels can "
+                   "also overlap and Currier label remains confounded with hand, "
+                   "position, section, and transcription practice."),
+        "multiple_testing": "BH across all pooled and restricted cell tests",
         "seed": SEED, "n_permutations": args.perms,
         "pooled": pooled, "restricted_herbal_A": restricted,
         "verdict": verdict,

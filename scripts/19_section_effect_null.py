@@ -60,7 +60,11 @@ from collections import Counter, defaultdict
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _canonical import load_corpus, classify  # noqa: E402
+from _canonical import (  # noqa: E402
+    classify,
+    load_corpus,
+    sample_two_disjoint_contiguous_blocks,
+)
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RESULTS_DIR = os.path.join(PROJECT_ROOT, "results")
@@ -134,19 +138,9 @@ def main():
     # ── Build nulls ──
     def draw_two_blocks():
         """Two disjoint contiguous page blocks of the real section sizes."""
-        need = n_bio_pages + n_rec_pages
-        if len(pages) < need:
-            return None, None
-        for _ in range(40):
-            i = int(rng.integers(0, len(pages) - n_bio_pages + 1))
-            blk1 = pages[i:i + n_bio_pages]
-            rest = pages[:i] + pages[i + n_bio_pages:]
-            if len(rest) < n_rec_pages:
-                continue
-            j = int(rng.integers(0, len(rest) - n_rec_pages + 1))
-            blk2 = rest[j:j + n_rec_pages]
-            return blk1, blk2
-        return None, None
+        return sample_two_disjoint_contiguous_blocks(
+            pages, n_bio_pages, n_rec_pages, rng
+        )
 
     def lines_of(block):
         return [l for p in block for l in page_lines[p]]
@@ -206,14 +200,27 @@ def main():
                 "p_empirical": round(p2, 4), "n_null": len(arr2),
                 "clears_null": bool(p2 < 0.05)}
 
+    # Correct across the four reported tests (two cells x two statistics).
+    flat_tests = [test for cell in results.values() for test in cell.values()]
+    ordered = sorted(flat_tests, key=lambda test: test["p_empirical"])
+    running = 1.0
+    adjusted = [0.0] * len(ordered)
+    for index in range(len(ordered) - 1, -1, -1):
+        rank = index + 1
+        running = min(running, ordered[index]["p_empirical"] * len(ordered) / rank)
+        adjusted[index] = running
+    for test, value in zip(ordered, adjusted):
+        test["p_bh_all_reported_tests"] = round(value, 4)
+        test["clears_null_bh"] = bool(value < 0.05)
+
     # ── Verdict ──
     print("\n" + "=" * 78)
     aiin = results.get("AIIN->QOK", {})
     chedy = results.get("CHEDY->QOK", {})
-    a_diff = aiin.get("difference", {}).get("clears_null")
-    a_val = aiin.get("biological_value", {}).get("clears_null")
-    c_diff = chedy.get("difference", {}).get("clears_null")
-    c_val = chedy.get("biological_value", {}).get("clears_null")
+    a_diff = aiin.get("difference", {}).get("clears_null_bh")
+    a_val = aiin.get("biological_value", {}).get("clears_null_bh")
+    c_diff = chedy.get("difference", {}).get("clears_null_bh")
+    c_val = chedy.get("biological_value", {}).get("clears_null_bh")
 
     print(f"AIIN→QOK  difference clears null: {a_diff}")
     print(f"AIIN→QOK  bio value  clears null: {a_val}")
@@ -248,6 +255,7 @@ def main():
                    "the real biological and recipes_Q20 page counts, drawn "
                    "repeatedly. CHEDY->QOK included as a negative control."),
         "seed": SEED, "n_permutations": args.perms,
+        "multiple_testing": "BH across two cells and two reported statistics",
         "observed": {f"{s}->{d}": {k: (round(v, 3) if v else None)
                                    for k, v in obs[(s, d)].items()}
                      for s, d in CELLS},
