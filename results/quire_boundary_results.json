@@ -1,0 +1,129 @@
+{
+  "description": "Tests whether transition structure shifts at quire (production) boundaries or content boundaries.",
+  "quire_assignment": [
+    {
+      "quire": "Q1",
+      "folio_from": 1,
+      "folio_to": 8
+    },
+    {
+      "quire": "Q2",
+      "folio_from": 9,
+      "folio_to": 16
+    },
+    {
+      "quire": "Q3",
+      "folio_from": 17,
+      "folio_to": 24
+    },
+    {
+      "quire": "Q4",
+      "folio_from": 25,
+      "folio_to": 32
+    },
+    {
+      "quire": "Q5",
+      "folio_from": 33,
+      "folio_to": 40
+    },
+    {
+      "quire": "Q6",
+      "folio_from": 41,
+      "folio_to": 48
+    },
+    {
+      "quire": "Q7",
+      "folio_from": 49,
+      "folio_to": 56
+    },
+    {
+      "quire": "Q8",
+      "folio_from": 57,
+      "folio_to": 66
+    },
+    {
+      "quire": "Q9",
+      "folio_from": 67,
+      "folio_to": 68
+    },
+    {
+      "quire": "Q10",
+      "folio_from": 69,
+      "folio_to": 70
+    },
+    {
+      "quire": "Q11",
+      "folio_from": 71,
+      "folio_to": 72
+    },
+    {
+      "quire": "Q12",
+      "folio_from": 73,
+      "folio_to": 74
+    },
+    {
+      "quire": "Q13",
+      "folio_from": 75,
+      "folio_to": 84
+    },
+    {
+      "quire": "Q14",
+      "folio_from": 85,
+      "folio_to": 86
+    },
+    {
+      "quire": "Q15",
+      "folio_from": 87,
+      "folio_to": 90
+    },
+    {
+      "quire": "Q16",
+      "folio_from": 91,
+      "folio_to": 92
+    },
+    {
+      "quire": "Q17",
+      "folio_from": 93,
+      "folio_to": 96
+    },
+    {
+      "quire": "Q18",
+      "folio_from": 97,
+      "folio_to": 102
+    },
+    {
+      "quire": "Q19",
+      "folio_from": 103,
+      "folio_to": 108
+    },
+    {
+      "quire": "Q20",
+      "folio_from": 109,
+      "folio_to": 116
+    }
+  ],
+  "quire_assignment_caveat": "Assignment from the published collation of Beinecke MS 408. Q8 (ff.57-66) is contested in the literature; Q12 is largely lost; the foldouts in Q9-Q11 and Q14 complicate the count. This is an input assumption, not data \u2014 if the collation is wrong, this test is wrong.",
+  "seed": 42,
+  "n_permutations": 300,
+  "test_a_quire_vs_contiguous_null": {
+    "observed_mean_cv": 0.4202012476750639,
+    "null_mean": 0.41084852249334425,
+    "null_95th": 0.4720850159964758,
+    "empirical_p": 0.4219269102990033,
+    "verdict": "Quire boundaries do NOT produce more heterogeneity than arbitrary contiguous groupings."
+  },
+  "test_b_quire_vs_section": {
+    "quire_mean_cv": 0.3483863854878749,
+    "n_quire_groups": 6,
+    "section_mean_cv": 0.3402705138645421,
+    "n_section_groups": 4,
+    "verdict": "QUIRE partition shows more heterogeneity \u2014 favours a production artifact."
+  },
+  "test_c_within_section_across_quire": {
+    "herbal_A/A": {
+      "n_quires": 7,
+      "mean_cv": 0.2868,
+      "cells": 2
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "description": "Contiguous-block null applied to the Currier A/B contrast \u2014 the last structural partition untested against the control that section and quire failed.",
+  "caveat": "Currier A and B occupy largely distinct folio ranges, so the contiguous-block null may be weakly constraining here. Check whether ALL cells clear; if so the design is uninformative rather than the result strong.",
+  "seed": 42,
+  "n_permutations": 1000,
+  "pooled": {
+    "QOK->QOK": {
+      "currier_a": 2.349,
+      "currier_b": 1.274,
+      "diff": 1.074,
+      "null_mean": 0.013,
+      "null_ci": [
+        -0.713,
+        0.826
+      ],
+      "p_empirical": 0.001,
+      "n_null": 1000,
+      "clears_null": true
+    },
+    "CHEDY->QOK": {
+      "currier_a": 1.458,
+      "currier_b": 2.278,
+      "diff": -0.82,
+      "null_mean": 0.152,
+      "null_ci": [
+        -0.497,
+        0.48
+      ],
+      "p_empirical": 0.01,
+      "n_null": 1000,
+      "clears_null": true
+    },
+    "AIIN->QOK": {
+      "currier_a": 0.875,
+      "currier_b": 0.376,
+      "diff": 0.499,
+      "null_mean": -0.058,
+      "null_ci": [
+        -0.62,
+        0.508
+      ],
+      "p_empirical": 0.1029,
+      "n_null": 1000,
+      "clears_null": false
+    },
+    "OT->OT": {
+      "currier_a": 1.663,
+      "currier_b": 1.937,
+      "diff": -0.274,
+      "null_mean": -0.089,
+      "null_ci": [
+        -0.488,
+        0.317
+      ],
+      "p_empirical": 0.2587,
+      "n_null": 1000,
+      "clears_null": false
+    }
+  },
+  "restricted_herbal_A": {
+    "QOK->QOK": {
+      "currier_a": 2.433,
+      "currier_b": 1.046,
+      "diff": 1.386,
+      "null_mean": 0.492,
+      "null_ci": [
+        0.001,
+        1.121
+      ],
+      "p_empirical": 0.0013,
+      "n_null": 794,
+      "clears_null": true
+    },
+    "CHEDY->QOK": {
+      "currier_a": 1.568,
+      "currier_b": 2.469,
+      "diff": -0.901,
+      "null_mean": -0.226,
+      "null_ci": [
+        -1.317,
+        1.763
+      ],
+      "p_empirical": 0.2338,
+      "n_null": 957,
+      "clears_null": false
+    },
+    "AIIN->QOK": {
+      "currier_a": 1.047,
+      "currier_b": 0.593,
+      "diff": 0.454,
+      "null_mean": -0.074,
+      "null_ci": [
+        -0.593,
+        0.278
+      ],
+      "p_empirical": 0.1319,
+      "n_null": 1000,
+      "clears_null": false
+    },
+    "OT->OT": {
+      "currier_a": 1.654,
+      "currier_b": 2.241,
+      "diff": -0.587,
+      "null_mean": -0.403,
+      "null_ci": [
+        -1.737,
+        1.274
+      ],
+      "p_empirical": 0.4975,
+      "n_null": 1000,
+      "clears_null": false
+    }
+  },
+  "verdict": "2 of 4 cells clear a null that section and quire partitions both failed. Transition structure differs by Currier language beyond what arbitrary positional splits produce. This is the only surviving structural partition in the manuscript."
+}

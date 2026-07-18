@@ -1,0 +1,70 @@
+{
+  "description": "Applies the contiguous-partition null from script 18 to the one section effect that survived bootstrap in script 17.",
+  "design": "Currier B only. Two disjoint contiguous page blocks matching the real biological and recipes_Q20 page counts, drawn repeatedly. CHEDY->QOK included as a negative control.",
+  "seed": 42,
+  "n_permutations": 1500,
+  "observed": {
+    "AIIN->QOK": {
+      "biological": 0.162,
+      "recipes": 0.497,
+      "diff": -0.335
+    },
+    "CHEDY->QOK": {
+      "biological": 2.038,
+      "recipes": 2.214,
+      "diff": -0.176
+    }
+  },
+  "tests": {
+    "AIIN->QOK": {
+      "difference": {
+        "observed": -0.335,
+        "null_mean": -0.015,
+        "null_ci": [
+          -0.362,
+          0.412
+        ],
+        "p_empirical": 0.1366,
+        "n_null": 1500,
+        "clears_null": false
+      },
+      "biological_value": {
+        "observed": 0.162,
+        "null_mean": 0.326,
+        "null_ci": [
+          0.144,
+          0.678
+        ],
+        "p_empirical": 0.4264,
+        "n_null": 1500,
+        "clears_null": false
+      }
+    },
+    "CHEDY->QOK": {
+      "difference": {
+        "observed": -0.176,
+        "null_mean": -0.031,
+        "null_ci": [
+          -0.447,
+          0.495
+        ],
+        "p_empirical": 0.3671,
+        "n_null": 1500,
+        "clears_null": false
+      },
+      "biological_value": {
+        "observed": 2.038,
+        "null_mean": 2.196,
+        "null_ci": [
+          2.034,
+          2.586
+        ],
+        "p_empirical": 0.1259,
+        "n_null": 1500,
+        "clears_null": false
+      }
+    }
+  },
+  "negative_control_behaved": true,
+  "verdict": "SECTION EFFECT DOES NOT SURVIVE. The AIIN\u2192QOK difference is within the range produced by arbitrary contiguous page blocks. The bootstrap CI in script 17 answered a narrower question and should not be read as establishing a section effect. Retire the claim alongside the quire result."
+}

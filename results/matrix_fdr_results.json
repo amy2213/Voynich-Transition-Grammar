@@ -1,0 +1,446 @@
+{
+  "description": "Multiple-comparisons correction across the full transition matrix and the suffix-agreement pair set. Addresses the fact that headline cells were selected as the most extreme of 36 without correction across the family they were drawn from.",
+  "alpha": 0.05,
+  "family_a_transition_matrix": {
+    "n_tests": 36,
+    "bh_critical_value": 0.036111111111111115,
+    "n_surviving_bh_fdr": 26,
+    "n_surviving_holm_fwer": 20,
+    "headline_cells": {
+      "CHEDY->QOK": {
+        "source": "CHEDY",
+        "dest": "QOK",
+        "obs": 615,
+        "expected": 231.31,
+        "ratio": 2.659,
+        "p_raw": 2.043e-169,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      "AIIN->QOK": {
+        "source": "AIIN",
+        "dest": "QOK",
+        "obs": 127,
+        "expected": 286.31,
+        "ratio": 0.444,
+        "p_raw": 1.298e-25,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      }
+    },
+    "cells": [
+      {
+        "source": "QOK",
+        "dest": "QOK",
+        "obs": 371,
+        "expected": 241.59,
+        "ratio": 1.536,
+        "p_raw": 5.527e-20,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "QOK",
+        "dest": "OK",
+        "obs": 209,
+        "expected": 163.46,
+        "ratio": 1.279,
+        "p_raw": 0.0001303,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "QOK",
+        "dest": "OT",
+        "obs": 161,
+        "expected": 152.81,
+        "ratio": 1.054,
+        "p_raw": 0.5,
+        "survives_bh_fdr": false,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "QOK",
+        "dest": "CHEDY",
+        "obs": 333,
+        "expected": 229.4,
+        "ratio": 1.452,
+        "p_raw": 6.708e-14,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "QOK",
+        "dest": "AIIN",
+        "obs": 199,
+        "expected": 286.99,
+        "ratio": 0.693,
+        "p_raw": 8.682e-09,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "QOK",
+        "dest": "OTHER",
+        "obs": 1358,
+        "expected": 1556.75,
+        "ratio": 0.872,
+        "p_raw": 1.334e-16,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "OK",
+        "dest": "QOK",
+        "obs": 167,
+        "expected": 151.05,
+        "ratio": 1.106,
+        "p_raw": 0.1737,
+        "survives_bh_fdr": false,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "OK",
+        "dest": "OK",
+        "obs": 157,
+        "expected": 102.2,
+        "ratio": 1.536,
+        "p_raw": 1.062e-08,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "OK",
+        "dest": "OT",
+        "obs": 115,
+        "expected": 95.54,
+        "ratio": 1.204,
+        "p_raw": 0.03926,
+        "survives_bh_fdr": false,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "OK",
+        "dest": "CHEDY",
+        "obs": 155,
+        "expected": 143.43,
+        "ratio": 1.081,
+        "p_raw": 0.3183,
+        "survives_bh_fdr": false,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "OK",
+        "dest": "AIIN",
+        "obs": 148,
+        "expected": 179.44,
+        "ratio": 0.825,
+        "p_raw": 0.01161,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "OK",
+        "dest": "OTHER",
+        "obs": 903,
+        "expected": 973.34,
+        "ratio": 0.928,
+        "p_raw": 0.0003021,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "OT",
+        "dest": "QOK",
+        "obs": 112,
+        "expected": 138.2,
+        "ratio": 0.81,
+        "p_raw": 0.01831,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "OT",
+        "dest": "OK",
+        "obs": 103,
+        "expected": 93.5,
+        "ratio": 1.102,
+        "p_raw": 0.323,
+        "survives_bh_fdr": false,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "OT",
+        "dest": "OT",
+        "obs": 169,
+        "expected": 87.41,
+        "ratio": 1.933,
+        "p_raw": 3.824e-20,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "OT",
+        "dest": "CHEDY",
+        "obs": 125,
+        "expected": 131.22,
+        "ratio": 0.953,
+        "p_raw": 0.5907,
+        "survives_bh_fdr": false,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "OT",
+        "dest": "AIIN",
+        "obs": 140,
+        "expected": 164.17,
+        "ratio": 0.853,
+        "p_raw": 0.04412,
+        "survives_bh_fdr": false,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "OT",
+        "dest": "OTHER",
+        "obs": 856,
+        "expected": 890.5,
+        "ratio": 0.961,
+        "p_raw": 0.0666,
+        "survives_bh_fdr": false,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "CHEDY",
+        "dest": "QOK",
+        "obs": 615,
+        "expected": 231.31,
+        "ratio": 2.659,
+        "p_raw": 2.043e-169,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "CHEDY",
+        "dest": "OK",
+        "obs": 128,
+        "expected": 156.5,
+        "ratio": 0.818,
+        "p_raw": 0.01529,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "CHEDY",
+        "dest": "OT",
+        "obs": 120,
+        "expected": 146.3,
+        "ratio": 0.82,
+        "p_raw": 0.02109,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "CHEDY",
+        "dest": "CHEDY",
+        "obs": 246,
+        "expected": 219.63,
+        "ratio": 1.12,
+        "p_raw": 0.05525,
+        "survives_bh_fdr": false,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "CHEDY",
+        "dest": "AIIN",
+        "obs": 214,
+        "expected": 274.77,
+        "ratio": 0.779,
+        "p_raw": 5.288e-05,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "CHEDY",
+        "dest": "OTHER",
+        "obs": 1196,
+        "expected": 1490.48,
+        "ratio": 0.802,
+        "p_raw": 6.965e-36,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "AIIN",
+        "dest": "QOK",
+        "obs": 127,
+        "expected": 286.31,
+        "ratio": 0.444,
+        "p_raw": 1.298e-25,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "AIIN",
+        "dest": "OK",
+        "obs": 266,
+        "expected": 193.72,
+        "ratio": 1.373,
+        "p_raw": 1.54e-08,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "AIIN",
+        "dest": "OT",
+        "obs": 244,
+        "expected": 181.09,
+        "ratio": 1.347,
+        "p_raw": 3.855e-07,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "AIIN",
+        "dest": "CHEDY",
+        "obs": 275,
+        "expected": 271.86,
+        "ratio": 1.012,
+        "p_raw": 0.8588,
+        "survives_bh_fdr": false,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "AIIN",
+        "dest": "AIIN",
+        "obs": 302,
+        "expected": 340.11,
+        "ratio": 0.888,
+        "p_raw": 0.02172,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "AIIN",
+        "dest": "OTHER",
+        "obs": 1904,
+        "expected": 1844.91,
+        "ratio": 1.032,
+        "p_raw": 0.02335,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": false
+      },
+      {
+        "source": "OTHER",
+        "dest": "QOK",
+        "obs": 1125,
+        "expected": 1468.55,
+        "ratio": 0.766,
+        "p_raw": 5.478e-48,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "OTHER",
+        "dest": "OK",
+        "obs": 840,
+        "expected": 993.62,
+        "ratio": 0.845,
+        "p_raw": 7.746e-15,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "OTHER",
+        "dest": "OT",
+        "obs": 783,
+        "expected": 928.86,
+        "ratio": 0.843,
+        "p_raw": 2.656e-14,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "OTHER",
+        "dest": "CHEDY",
+        "obs": 1256,
+        "expected": 1394.45,
+        "ratio": 0.901,
+        "p_raw": 2.086e-09,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "OTHER",
+        "dest": "AIIN",
+        "obs": 1987,
+        "expected": 1744.52,
+        "ratio": 1.139,
+        "p_raw": 1.904e-21,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "source": "OTHER",
+        "dest": "OTHER",
+        "obs": 10002,
+        "expected": 9463.01,
+        "ratio": 1.057,
+        "p_raw": 4.448e-41,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      }
+    ]
+  },
+  "family_b_suffix_agreement": {
+    "n_tests": 5,
+    "n_surviving_bh_fdr": 5,
+    "n_surviving_holm_fwer": 5,
+    "pairs": [
+      {
+        "pair": "CHEDY\u2192QOK",
+        "z": 3.7,
+        "agreement_ratio": null,
+        "n_pairs": 615,
+        "p_raw": 0.0002156,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "pair": "QOK\u2192QOK",
+        "z": 5.1,
+        "agreement_ratio": null,
+        "n_pairs": 371,
+        "p_raw": 3.397e-07,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "pair": "OK\u2192OT",
+        "z": 4.3,
+        "agreement_ratio": null,
+        "n_pairs": 115,
+        "p_raw": 1.708e-05,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "pair": "OK\u2192OK",
+        "z": 4.9,
+        "agreement_ratio": null,
+        "n_pairs": 157,
+        "p_raw": 9.584e-07,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      },
+      {
+        "pair": "OT\u2192OT",
+        "z": 2.5,
+        "agreement_ratio": null,
+        "n_pairs": 169,
+        "p_raw": 0.01242,
+        "survives_bh_fdr": true,
+        "survives_holm_fwer": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "description": "Genre- and period-adjacent comparators, measured with the identical symmetric affix-detection procedure used in scripts 10 and 12.",
+  "limitation": "These are register-ADJACENT, not register-MATCHED. The genuinely genre-matched corpus is the medieval herbal and pharmacological tradition \u2014 Trotula, Circa instans, Macer Floridus, Herbarium of Pseudo-Apuleius, Bald's Leechbook \u2014 none of which is available as freely fetchable plaintext. This script narrows the register confound; it does not close it. Sourcing those texts by hand remains outstanding.",
+  "systems": {
+    "VOYNICH": {
+      "prefix_sc": 1.256,
+      "suffix_sc": 1.475,
+      "ratio": 0.852,
+      "bucket": "SYMM-HIGH",
+      "n_tokens": 31608,
+      "n_types": 7255,
+      "ttr": 0.23,
+      "hapax_pct": 71.4,
+      "detected_prefixes": [
+        "ch",
+        "qo",
+        "sh",
+        "ok",
+        "da"
+      ],
+      "detected_suffixes": [
+        "dy",
+        "in",
+        "ey",
+        "ol",
+        "ar"
+      ],
+      "register": "15c herbal/pharmaceutical codex"
+    },
+    "Pliny, Naturalis Historia": {
+      "prefix_sc": 0.628,
+      "suffix_sc": 1.367,
+      "ratio": 0.459,
+      "bucket": "SUFFIX-DOM",
+      "n_tokens": 67914,
+      "n_types": 21885,
+      "ttr": 0.322,
+      "hapax_pct": 68.8,
+      "detected_prefixes": [
+        "in",
+        "qu",
+        "et",
+        "co",
+        "si"
+      ],
+      "detected_suffixes": [
+        "um",
+        "is",
+        "us",
+        "ae",
+        "et"
+      ],
+      "register": "Naturalist/herbal register, 1c CE Latin"
+    },
+    "Medieval Latin prose": {
+      "prefix_sc": 0.621,
+      "suffix_sc": 1.324,
+      "ratio": 0.469,
+      "bucket": "SUFFIX-DOM",
+      "n_tokens": 81499,
+      "n_types": 19174,
+      "ttr": 0.235,
+      "hapax_pct": 61.5,
+      "detected_prefixes": [
+        "in",
+        "qu",
+        "et",
+        "re",
+        "co"
+      ],
+      "detected_suffixes": [
+        "um",
+        "us",
+        "is",
+        "et",
+        "am"
+      ],
+      "register": "Chronicle/epistolary/didactic, 8-14c Latin"
+    },
+    "Middle English (Chaucer)": {
+      "prefix_sc": 0.463,
+      "suffix_sc": 0.573,
+      "ratio": 0.808,
+      "bucket": "SYMM-LOW",
+      "n_tokens": 217642,
+      "n_types": 15053,
+      "ttr": 0.069,
+      "hapax_pct": 48.7,
+      "detected_prefixes": [
+        "th",
+        "an",
+        "he",
+        "hi",
+        "of"
+      ],
+      "detected_suffixes": [
+        "he",
+        "nd",
+        "at",
+        "is",
+        "th"
+      ],
+      "register": "Middle English, 14c verse"
+    },
+    "KJV English": {
+      "prefix_sc": 0.354,
+      "suffix_sc": 0.221,
+      "ratio": 1.599,
+      "bucket": "SYMM-LOW",
+      "n_tokens": 400000,
+      "n_types": 8988,
+      "ttr": 0.022,
+      "hapax_pct": 34.0,
+      "detected_prefixes": [
+        "th",
+        "an",
+        "of",
+        "hi",
+        "he"
+      ],
+      "detected_suffixes": [
+        "he",
+        "nd",
+        "of",
+        "to",
+        "ed"
+      ],
+      "register": "Early Modern English, 17c"
+    }
+  },
+  "non_voynich_symmhigh": []
+}
