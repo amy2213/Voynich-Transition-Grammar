@@ -44,6 +44,12 @@ from _canonical import (  # noqa: E402
     classify_with_policy,
     transitions,
     sample_two_disjoint_contiguous_blocks,
+    SequenceUnit,
+    assign_affix_sequences,
+    bootstrap_groups_to_target,
+    discover_affixes,
+    sample_units_to_target,
+    self_clustering_details,
 )
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -199,49 +205,50 @@ class TestSelfClustering(unittest.TestCase):
 
 class TestPrefixSuffixEstimatorRecord(unittest.TestCase):
     """
-    Locks the latest generated, pre-Phase-2 estimator record. These tests do
-    not establish comparative uniqueness; boundary and matched-size repairs
-    remain open and are recorded in the claim ledger.
+    Locks the Version 2 estimator's method and generated evidence. These tests
+    do not establish comparative uniqueness or language identity.
     """
 
     @classmethod
     def setUpClass(cls):
-        cls.data = _load("prefix_suffix_analysis_generated.json")
+        cls.data = _load("prefix_suffix_v2.json")
 
-    def test_voynich_is_symmetric_high(self):
-        """
-        July regenerated estimator: prefix 1.256, suffix 1.475, ratio 0.852.
-        """
-        v = self.data["systems"]["VOYNICH"]
-        self.assertEqual(v["bucket"], "SYMM-HIGH",
-            msg=f"Voynich bucket drift: expected SYMM-HIGH, got {v['bucket']}")
-        self.assertAlmostEqual(v["ratio"], 0.852, delta=0.01)
-        self.assertAlmostEqual(v["prefix_sc"], 1.256, delta=0.01)
-        self.assertAlmostEqual(v["suffix_sc"], 1.475, delta=0.01)
+    def test_estimator_is_matched_and_boundary_aware(self):
+        method = self.data["method"]
+        self.assertEqual(method["target_tokens"], 31608)
+        self.assertEqual(method["adjacency"], "within natural sequence units only")
+        self.assertIn("without replacement", method["comparator_resampling"])
+        self.assertIn("page-block", method["voynich_resampling"])
 
-    def test_voynich_is_unique_symm_high(self):
-        """
-        Descriptive check under the July estimator only. This is not a formal
-        uniqueness test and must not be cited as one.
-        """
-        symm_high = [
-            name for name, data in self.data["systems"].items()
-            if data.get("bucket") == "SYMM-HIGH"
-        ]
-        self.assertEqual(
-            symm_high, ["VOYNICH"],
-            msg=f"July-estimator bucket membership changed: {symm_high}."
-        )
+    def test_other_is_a_reported_sensitivity(self):
+        summary = self.data["systems"]["VOYNICH"]["summary"]
+        self.assertIn("primary_excludes_other", summary)
+        self.assertIn("sensitivity_includes_other", summary)
+
+    def test_provenance_is_complete(self):
+        provenance = self.data["provenance"]
+        self.assertEqual(self.data["estimator_version"], "2.0.0")
+        self.assertIn("--replicates", provenance["command"])
+        self.assertTrue(provenance["input_sha256"])
+        self.assertEqual(set(provenance["code_sha256"]), {
+            "scripts/10_prefix_suffix_analysis.py",
+            "scripts/_canonical.py",
+            "docs/v2/prefix_suffix_estimator_spec.md",
+        })
+        self.assertEqual(len(provenance["replicate_seeds"]["VOYNICH"]),
+                         self.data["method"]["replicates"])
 
 class TestResultsFilesExist(unittest.TestCase):
     """Smoke-test outputs explicitly tracked during the consolidation sprint."""
 
     EXPECTED_FILES = [
         "core_analysis_results.json",
-        "prefix_suffix_analysis_generated.json",
+        "prefix_suffix_v2.json",
+        "prefix_suffix_v2.csv",
+        "prefix_suffix_v2.md",
+        "prefix_suffix_v2.svg",
         "classifier_overlap_report.json",
         "multifeature_permutation_results.json",
-        "symmhigh_sensitivity_results.json",
         "section_effect_null_results.json",
         "language_effect_null_results.json",
     ]
@@ -382,6 +389,54 @@ class TestCanonicalAmbiguityPolicies(unittest.TestCase):
         self.assertTrue(set(first).isdisjoint(second))
 
 
+class TestBoundaryAwareAffixUtilities(unittest.TestCase):
+    def test_class_assignment_retains_sequence_boundaries(self):
+        sequences = [("alpha", "alps"), ("alpha", "alps")]
+        assigned = assign_affix_sequences(sequences, ["al"], "prefix")
+        self.assertEqual(assigned, [("al", "al"), ("al", "al")])
+        details = self_clustering_details(assigned, min_n=0)
+        self.assertEqual(details["transition_n"], 2)
+
+    def test_matched_sampler_does_not_join_units(self):
+        class FixedRng:
+            @staticmethod
+            def permutation(n):
+                return list(range(n))
+
+            @staticmethod
+            def integers(low, high=None):
+                return low
+
+        units = [
+            SequenceUnit("s1", ("a", "b"), "sentence"),
+            SequenceUnit("s2", ("c", "d"), "sentence"),
+        ]
+        sample = sample_units_to_target(units, 3, FixedRng())
+        self.assertEqual([unit.tokens for unit in sample], [("a", "b"), ("c",)])
+        self.assertEqual(sum(max(0, len(unit.tokens) - 1) for unit in sample), 1)
+
+    def test_page_bootstrap_keeps_lines_separate(self):
+        class FixedRng:
+            @staticmethod
+            def integers(low, high=None):
+                return low
+
+        units = [
+            SequenceUnit("l1", ("a", "b"), "line", page="p1"),
+            SequenceUnit("l2", ("c", "d"), "line", page="p1"),
+        ]
+        sample = bootstrap_groups_to_target(units, "page", 3, FixedRng())
+        self.assertEqual([unit.tokens for unit in sample], [("a", "b"), ("c",)])
+
+    def test_affix_discovery_is_deterministic(self):
+        sequences = [("abx", "aby", "cdx", "cdy")] * 20
+        first = discover_affixes(sequences, "prefix", min_coverage=0.1,
+                                 max_coverage=0.6)
+        second = discover_affixes(sequences, "prefix", min_coverage=0.1,
+                                  max_coverage=0.6)
+        self.assertEqual(first, second)
+
+
 class TestGeneratedRepairArtifacts(unittest.TestCase):
     def test_overlap_arithmetic_is_exact_and_consistent(self):
         data = _load("classifier_overlap_report.json")
@@ -403,9 +458,10 @@ class TestGeneratedRepairArtifacts(unittest.TestCase):
         self.assertAlmostEqual(min(corrected), 1.53, places=2)
         self.assertAlmostEqual(max(corrected), 4.27, places=2)
 
-    def test_sensitivity_grid_is_present(self):
-        data = _load("symmhigh_sensitivity_results.json")
-        self.assertEqual(len(data["cells"]), 80)
+    def test_v2_threshold_sensitivity_grid_is_present(self):
+        data = _load("prefix_suffix_v2.json")
+        cells = data["systems"]["VOYNICH"]["summary"]["threshold_sensitivity"]
+        self.assertEqual(len(cells), 27)
 
     def test_seam_fixed_nulls_report_multiplicity(self):
         section = _load("section_effect_null_results.json")

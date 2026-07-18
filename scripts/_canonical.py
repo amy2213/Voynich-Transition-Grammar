@@ -132,6 +132,7 @@ class SequenceUnit:
     section: str = ""
     hand: str = ""
     currier: str = ""
+    document: str = ""
 
 
 # ─── Family predicates ───────────────────────────────────────────────────────
@@ -423,6 +424,207 @@ def self_clustering_sequences(sequences, min_n=10, include_other=False,
             if expected > 1:
                 ratios.append(same[label] / expected)
     return sum(ratios) / len(ratios) if ratios else None
+
+
+# ─── Symmetric affix estimator ──────────────────────────────────────────────
+def discover_affixes(sequences, side, n_families=5, min_len=2, max_len=3,
+                     min_coverage=0.02, max_coverage=0.20,
+                     candidate_pool=80):
+    """Discover affix families identically on separate token sequences.
+
+    Discovery itself does not use adjacency, but accepting sequences here
+    makes the boundary-preserving representation the common interface for all
+    systems. Ties are resolved lexically so results do not depend on Counter
+    insertion order.
+    """
+    if side not in ("prefix", "suffix"):
+        raise ValueError("side must be 'prefix' or 'suffix'")
+    tokens = [token for sequence in sequences for token in sequence]
+    if not tokens:
+        return []
+    counts = Counter()
+    for token in tokens:
+        for length in range(min_len, min(max_len, len(token)) + 1):
+            affix = token[:length] if side == "prefix" else token[-length:]
+            counts[affix] += 1
+    candidates = sorted(counts, key=lambda value: (-counts[value], value))
+    selected = []
+    for affix in candidates[:candidate_pool]:
+        coverage = counts[affix] / len(tokens)
+        if not min_coverage <= coverage <= max_coverage:
+            continue
+        if any(affix.startswith(old) or old.startswith(affix)
+               for old in selected):
+            continue
+        selected.append(affix)
+        if len(selected) == n_families:
+            break
+    return selected
+
+
+def assign_affix_sequences(sequences, affixes, side):
+    """Assign tokens while retaining every input sequence boundary."""
+    if side not in ("prefix", "suffix"):
+        raise ValueError("side must be 'prefix' or 'suffix'")
+    assigned = []
+    for sequence in sequences:
+        labels = []
+        for token in sequence:
+            label = "OTHER"
+            for affix in affixes:
+                matched = (token.startswith(affix) if side == "prefix"
+                           else token.endswith(affix))
+                if matched:
+                    label = affix
+                    break
+            labels.append(label)
+        assigned.append(tuple(labels))
+    return assigned
+
+
+def self_clustering_details(sequences, min_n=10, include_other=False):
+    """Return the boundary-aware score and its exact class-level evidence."""
+    same, src, dst = Counter(), Counter(), Counter()
+    total = 0
+    for classes in sequences:
+        for source, destination in zip(classes, classes[1:]):
+            src[source] += 1
+            dst[destination] += 1
+            same[source] += int(source == destination)
+            total += 1
+    details = {}
+    ratios = []
+    for label in sorted(set(src) | set(dst)):
+        expected = src[label] * dst[label] / total if total else 0.0
+        supported = (src[label] > min_n and dst[label] > min_n
+                     and expected > 1
+                     and (include_other or label != "OTHER"))
+        ratio = same[label] / expected if expected else None
+        details[label] = {
+            "observed": same[label],
+            "expected": expected,
+            "source_n": src[label],
+            "destination_n": dst[label],
+            "ratio": ratio,
+            "included_in_mean": supported,
+        }
+        if supported:
+            ratios.append(ratio)
+    return {
+        "score": sum(ratios) / len(ratios) if ratios else None,
+        "transition_n": total,
+        "included_class_n": len(ratios),
+        "classes": details,
+    }
+
+
+def affix_clustering_scores(sequences, include_other=False, **discovery):
+    """Discover and score prefix and suffix partitions symmetrically."""
+    discovery = dict(discovery)
+    min_n = discovery.pop("min_n", 10)
+    output = {}
+    for side in ("prefix", "suffix"):
+        affixes = discover_affixes(sequences, side, **discovery)
+        classes = assign_affix_sequences(sequences, affixes, side)
+        output[side] = {
+            "affixes": affixes,
+            **self_clustering_details(
+                classes,
+                min_n=min_n,
+                include_other=include_other,
+            ),
+        }
+    prefix = output["prefix"]["score"]
+    suffix = output["suffix"]["score"]
+    output["ratio"] = prefix / suffix if prefix is not None and suffix else None
+    output["minimum"] = min(prefix, suffix) if None not in (prefix, suffix) else None
+    return output
+
+
+def _fragment_unit(unit, token_n, fragment_index=0):
+    """Return a leading contiguous fragment as an independent sequence."""
+    return SequenceUnit(
+        unit_id=f"{unit.unit_id}:fragment-{fragment_index}",
+        tokens=tuple(unit.tokens[:token_n]),
+        boundary_type=f"{unit.boundary_type}_fragment",
+        page=unit.page,
+        section=unit.section,
+        hand=unit.hand,
+        currier=unit.currier,
+        document=unit.document,
+    )
+
+
+def sample_units_to_target(units, target_tokens, rng):
+    """Sample natural units without replacement to an exact token target."""
+    available = sum(len(unit.tokens) for unit in units)
+    if available < target_tokens:
+        raise ValueError(
+            f"corpus has {available} tokens, below target {target_tokens}")
+    order = rng.permutation(len(units))
+    selected = []
+    remaining = target_tokens
+    for position in order:
+        unit = units[int(position)]
+        if len(unit.tokens) <= remaining:
+            selected.append(unit)
+            remaining -= len(unit.tokens)
+        else:
+            start = int(rng.integers(0, len(unit.tokens) - remaining + 1))
+            fragment = SequenceUnit(
+                unit_id=f"{unit.unit_id}:fragment-{start}",
+                tokens=tuple(unit.tokens[start:start + remaining]),
+                boundary_type=f"{unit.boundary_type}_fragment",
+                page=unit.page,
+                section=unit.section,
+                hand=unit.hand,
+                currier=unit.currier,
+                document=unit.document,
+            )
+            selected.append(fragment)
+            remaining = 0
+        if remaining == 0:
+            break
+    return selected
+
+
+def bootstrap_groups_to_target(units, group_attribute, target_tokens, rng):
+    """Block-bootstrap groups while preserving all nested sequence units."""
+    groups = defaultdict(list)
+    for unit in units:
+        key = getattr(unit, group_attribute)
+        if not key:
+            raise ValueError(f"unit {unit.unit_id} lacks {group_attribute}")
+        groups[key].append(unit)
+    keys = sorted(groups)
+    if not keys:
+        raise ValueError("no resampling groups")
+    selected = []
+    remaining = target_tokens
+    draw = 0
+    while remaining:
+        key = keys[int(rng.integers(0, len(keys)))]
+        for unit in groups[key]:
+            copy = SequenceUnit(
+                unit_id=f"draw-{draw}:{unit.unit_id}",
+                tokens=unit.tokens,
+                boundary_type=unit.boundary_type,
+                page=unit.page,
+                section=unit.section,
+                hand=unit.hand,
+                currier=unit.currier,
+                document=unit.document,
+            )
+            if len(copy.tokens) <= remaining:
+                selected.append(copy)
+                remaining -= len(copy.tokens)
+            else:
+                selected.append(_fragment_unit(copy, remaining, draw))
+                remaining = 0
+            if not remaining:
+                break
+        draw += 1
+    return selected
 
 
 # ─── Diagnostics ─────────────────────────────────────────────────────────────
