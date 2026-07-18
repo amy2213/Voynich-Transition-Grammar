@@ -44,6 +44,16 @@ File-level hashes are recorded in `manifest.json` and `SHA256SUMS`.
   current authority.
 - No Version 2 DOI is asserted before Zenodo ingestion.
 
+## Canonical repository run
+
+`python run_all.py` completed all five stages. Dataset validation, core
+within-line analysis, classifier-overlap generation, the 200-replicate
+prefix/suffix estimator, and the full test report each passed with fresh
+outputs. Pytest and direct execution each collected and passed 37 tests with
+zero failures; pytest also recorded zero errors, skips, and warnings. The
+machine-readable evidence is in `results/run_manifest.json` and
+`results/test_report.json`.
+
 ## Scientific interpretation
 
 Build, hash, and regression checks demonstrate internal consistency and
