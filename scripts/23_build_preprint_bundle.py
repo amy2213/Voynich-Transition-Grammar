@@ -32,7 +32,7 @@ README_TEXT = """Version 2 preprint source bundle
 Paper: Boundary-Aware Token-Structure Analysis of the Voynich Manuscript:
 A Reproducible Reassessment
 Author: Amy Laird
-Candidate: {version}
+Version: {version}
 
 Compile with:
     latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
@@ -107,7 +107,7 @@ def write_evidence(built_pdf: Path | None) -> None:
     build_log_text = build_log.read_text(encoding="utf-8", errors="replace") if build_log else ""
     manifest = {
         "schema_version": "1.0",
-        "release_candidate": VERSION,
+        "release_version": VERSION,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "source_directory": str(SOURCE_ROOT.relative_to(ROOT)),
         "source_sha256": source_hashes,

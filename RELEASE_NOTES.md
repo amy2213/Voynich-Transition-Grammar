@@ -1,88 +1,74 @@
-# v1.0 — Transition Grammar with Bidirectional Self-Clustering Analysis
+# Version 2.0.0
 
-First public release of the Voynich Manuscript transition grammar analysis.
+Release date: 2026-07-18
 
-## Highlights
+## Scientific scope
 
-Statistical analysis of sequential word-family constraints in the Voynich
-Manuscript (Beinecke MS 408), with three strongest findings:
+Version 2 reports reproducible corpus measurements of Voynich Manuscript token
+structure. It does not claim decipherment, translation, semantic
+identification, proof of natural or encoded language, or exclusion of
+constructed, hybrid, stenographic, cipher, or other historical mechanisms.
 
-1. **Two distributed transition rules** — CHEDY→QOK attraction at 2.63x above
-   chance, AIIN→QOK repulsion at 0.50x. Both hold across all sections, scribal
-   hands, line lengths, and random split-halves. Distributed across 77% of
-   individual CHEDY tokens and 369 unique token pairs — a class-level
-   grammatical constraint, not fixed phrases.
+## Canonical results
 
-2. **AIIN density invariance** — The AIIN family appears at exactly 15.0% in
-   both Currier A and Currier B pages (KS p = 0.742). Consistent with a
-   function-word role, though the unusually high type count (842 unique forms)
-   complicates that interpretation.
+- Under the canonical prefix-first classifier and strictly within Voynich
+  lines, CHEDY→QOK occurs 615 times at 2.659 times its independence
+  expectation and AIIN→QOK occurs 127 times at 0.444 times expectation.
+- Raw `aiin`/`ain` substring density has similar observed Currier A/B means,
+  without an equivalence test. Canonical AIIN-family density differs between
+  the groups.
+- The boundary-preserving prefix/suffix estimator repeatedly matches eligible
+  comparators to exactly 31,608 tokens and applies identical affix discovery
+  to Voynich and comparator samples.
+- Across 200 replicates, Voynich has median prefix self-clustering 1.333,
+  suffix self-clustering 1.458, ratio 0.918, and minimum-side score 1.333.
+- Including `OTHER` changes the medians to 1.292, 1.363, 0.951, and 1.291.
+- Voynich exceeds each of 14 eligible frozen comparators on the continuous
+  minimum-side score under this estimator. This finite-set result does not
+  establish natural-language uniqueness.
+- Ottoman Turkish is ineligible at 16,890 preserved tokens and is not padded.
 
-3. **Bidirectional self-clustering symmetry** — Voynich clusters equally at
-   word beginnings (1.52x) and endings (1.54x), ratio 0.99. Every tested
-   natural language with positive clustering is suffix-dominant. No tested
-   system shares Voynich's balanced profile.
+Generated results under `results/` are canonical and override prose if a
+conflict is found.
 
-## What this release is not
+## Changes from Version 1
 
-- Not a decipherment. No word meanings are assigned.
-- Not a language identification. Structural comparison ≠ language ID.
-- Not a proof the manuscript is artificial. Symmetry is unusual but not
-  exclusive to constructed systems.
+- Natural line, page, sentence, document, sample, bootstrap-block, and
+  removed-token boundaries are preserved.
+- Strict ambiguity exclusion breaks adjacency at each removed position.
+- Voynich uses page-block resampling while retaining separate lines.
+- Comparators use repeated sequence-unit sampling without replacement.
+- Affix discovery is symmetrical across Voynich and comparators.
+- `OTHER` is excluded from the primary mean and included as sensitivity.
+- Monte Carlo estimates are corrected and multiplicity adjustment follows the
+  declared hypothesis family.
+- Current scripts share canonical parsing, classification, boundary,
+  transition, sampling, seed, and statistical utilities.
+- Historical results, papers, and retractions remain in labeled archives.
 
-## What's included
+## Retired claims
 
-- **5 analysis scripts** (`scripts/`): fetch, validate, core analysis,
-  cross-linguistic comparison, stress tests
-- **6 canonical result files** (`results/`): transition rules, cross-linguistic
-  comparison, stress tests, corpus-size sensitivity, prefix/suffix analysis,
-  validation report
-- **Frozen datasets** (~228 MB): Voynich parquet + 9 Leipzig comparators +
-  2 Gutenberg literary texts + 3 pending + 1 Ottoman Turkish treebank,
-  all with SHA-256 checksums
-- **Research paper** (`docs/paper.pdf`, built from `docs/main.tex`)
-- **Durable findings document** (`docs/durable_findings.md`) documenting 10
-  numbered findings, caveats, retired claims, and the "minimum viable
-  explanation" checklist any Voynich theory must satisfy
-- **Release documentation** (`docs/release_documentation.md`) with a claim
-  ledger distinguishing supported, retired, and untested claims
-- **Interactive dashboard** (`dashboard/voynich_dashboard.html`)
+The earlier 1.52/1.54/0.99 prefix/suffix result, natural-language uniqueness,
+canonical AIIN invariance, five-to-ninefold feature compounding, all-five
+cascade survival, independent non-EVA validation, and one-system seven-
+criterion adversarial claim are not Version 2 findings.
 
-## Quick start
+## Reproduction
 
 ```bash
-pip install datasets scipy numpy pandas pyarrow
-python scripts/00_validate_datasets.py   # Verify bundled data checksums
-python scripts/01_core_analysis.py       # Core findings
-python scripts/02_cross_linguistic.py    # Comparison across 11+1 systems
-python scripts/03_stress_tests.py        # Robustness checks
+python -m pip install -r requirements.txt
+python -m pip install pytest
+python run_all.py
+python scripts/23_build_preprint_bundle.py --build
 ```
 
-## Live dashboard
+The canonical pipeline regenerates current analytical outputs and runs the
+full suite through pytest and direct Python execution. The bundle command
+creates and independently compiles the final preprint sources under
+`release/v2.0.0/`.
 
-https://amy2213.github.io/Voynich-Transition-Grammar/
+## Archival identifiers
 
-## How to cite
-
-See `CITATION.cff` for citation metadata. GitHub will render a "Cite this
-repository" button on the repo page.
-
-## Known limitations
-
-All explicitly documented in `README.md § Limitations` and
-`docs/release_documentation.md § 5`:
-
-- EVA-transcription-dependent family definitions (FSG/Currier not tested)
-- Modern comparison corpora (Leipzig Wikipedia), not medieval texts
-- Self-clustering values method-sensitive (range 0.93x–1.45x)
-- Ottoman Turkish tested with small UD corpus (16,890 words); larger
-  historical corpus needed
-- No semantic or decipherment analysis
-
-## Suggested first issues for contributors
-
-1. Cross-transcription validation — define equivalent token families under
-   FSG/Currier alphabets and test whether findings hold
-2. Ottoman Turkish with a larger historical corpus
-3. Constructed language and cipher controls (Enochian, Cardan grille,
-   polyalphabetic substitution)
+The Version 2 release DOI will be assigned by Zenodo after the corresponding
+GitHub release is ingested. Version 1 Zenodo identifiers do not identify this
+release.

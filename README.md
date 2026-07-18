@@ -2,9 +2,8 @@
 
 Version 2 audit consolidation branch.
 
-Current candidate: `2.0.0-rc1`. This is a review candidate, not a final
-release. See `RELEASE_NOTES_v2.0.0-rc1.md` and
-`docs/v2/release_candidate_checklist.md`.
+Current release: `2.0.0`. See `RELEASE_NOTES.md` and
+`docs/v2/release_finalization_checklist.md`.
 
 This repository analyzes token structure in Voynich Manuscript transcriptions
 with reproducible corpus methods. It does not claim decipherment, translation,
