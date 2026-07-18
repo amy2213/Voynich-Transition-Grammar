@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "pipeline": "v2_phase1_canonical",
+  "generated_at_utc": "2026-07-18T16:34:05.703440+00:00",
+  "code_revision": "5e7f4ce45ccea2918bfb45b7e57de7d788e8ac24",
+  "python": "3.12.13",
+  "input_hashes": {
+    "voynich_parquet": "24c7bf7d0a999455825e75fefe5993faf8c3b7b9415923ff6b27c51eb297d759",
+    "dataset_manifest": "0a0ab2f73a21109f941e989bbb931219eb4d0af7c33c49c05135e7f42a10b986"
+  },
+  "steps": [
+    {
+      "id": "validate_datasets",
+      "command": "python scripts/00_validate_datasets.py",
+      "exit_code": 0,
+      "elapsed_seconds": 0.291,
+      "status": "passed"
+    },
+    {
+      "id": "core_within_line",
+      "command": "python scripts/01_core_analysis.py",
+      "exit_code": 0,
+      "elapsed_seconds": 66.094,
+      "status": "passed",
+      "output": "results/core_analysis_results.json",
+      "output_fresh": true,
+      "output_sha256": "2310aa30cfe65d996a54a4367b4a9f56e64f02e5839e896b754f14eb52aa48d5"
+    },
+    {
+      "id": "classifier_overlap",
+      "command": "python scripts/21_ambiguity_audit.py",
+      "exit_code": 0,
+      "elapsed_seconds": 0.524,
+      "status": "passed",
+      "output": "results/classifier_overlap_report.json",
+      "output_fresh": true,
+      "output_sha256": "a5df667a0f1e71ce01cc690e00bba1919b90862cbefc14a4670136553e3f28e4"
+    },
+    {
+      "id": "full_test_report",
+      "command": "python scripts/22_generate_test_report.py",
+      "exit_code": 0,
+      "elapsed_seconds": 0.834,
+      "status": "passed",
+      "output": "results/test_report.json",
+      "output_fresh": true,
+      "output_sha256": "5e30e123156a95f493f47d6712edcf6af83f770e3d7427321547aff9d85a1ab6"
+    }
+  ],
+  "complete": true
+}
