@@ -28,7 +28,7 @@ jobs:
       - name: Compile every Python source
         run: python -m compileall -q scripts tests run_all.py
 
-      - name: Run complete Phase 1 canonical pipeline and full suite
+      - name: Run complete Version 2 canonical pipeline and full suite
         run: python run_all.py
 
       - name: Upload machine-readable run evidence
@@ -42,4 +42,8 @@ jobs:
             results/test_report.junit.xml
             results/classifier_overlap_report.json
             results/core_analysis_results.json
+            results/prefix_suffix_v2.json
+            results/prefix_suffix_v2.csv
+            results/prefix_suffix_v2.md
+            results/prefix_suffix_v2.svg
           retention-days: 30

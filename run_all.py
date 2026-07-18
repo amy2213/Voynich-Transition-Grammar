@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Run the current Version 2 canonical pipeline.
-
-The prefix/suffix comparison and other July exploratory analyses are excluded
-until their open methodological blockers are repaired. See the claim ledger.
-"""
+"""Run the current Version 2 canonical pipeline."""
 
 import argparse
 import hashlib
@@ -32,6 +28,11 @@ CANONICAL_PIPELINE = [
         "id": "classifier_overlap",
         "command": ["scripts/21_ambiguity_audit.py"],
         "output": "results/classifier_overlap_report.json",
+    },
+    {
+        "id": "prefix_suffix_v2",
+        "command": ["scripts/10_prefix_suffix_analysis.py"],
+        "output": "results/prefix_suffix_v2.json",
     },
     {
         "id": "full_test_report",
@@ -98,7 +99,7 @@ def main():
     ]
     manifest = {
         "schema_version": "1.0",
-        "pipeline": "v2_phase1_canonical",
+        "pipeline": "v2_phase2_canonical",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "code_revision": git_revision(),
         "python": sys.version.split()[0],

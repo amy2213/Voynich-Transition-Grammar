@@ -15,9 +15,9 @@ seams. Explicitly named boundary analyses may calculate cross-boundary pairs.
 | `07_cascade_uncertainty.py` | Consumes counts derived upstream; overlapping triples clustered by line/type | Inference unit unresolved | Provisional |
 | `08_per_scribe_analysis.py` | Extends token lists across all lines for each hand | Crosses lines/pages | Provisional |
 | `09_constructed_control.py` | Generates lines but several measurements flatten them | Mixed | Historical control |
-| `10_prefix_suffix_analysis.py` | Flattens all natural units; block bootstrap creates junctions | Confirmed blocker | Phase 2 target |
+| `10_prefix_suffix_analysis.py` | Shared immutable units; Voynich page-block bootstrap retains lines; comparator sampling retains sentences/documents; final fragments remain separate | Repaired and tested | Canonical Version 2 estimator |
 | `11_multifeature_permutation.py` | Collects adjacent pairs within each line | Boundary-preserving pairs; cluster inference unresolved | Exploratory |
-| `12_symmhigh_sensitivity.py` | Uses the same flattened estimator as script 10 | Confirmed blocker | Provisional |
+| `archive/audit-2026-07/12_symmhigh_sensitivity.py` | Uses the old flattened estimator | Preserved historical blocker | Archived; superseded by script 10 generated threshold grid |
 | `13_matrix_fdr.py` | Counts within lines | Boundary-preserving counts; independent-transition p-values invalid | Provisional |
 | `14_adversarial_control.py` | Generates lines, then measures `flat(lines)` | Crosses generated line boundaries | Provisional control |
 | `15_boundary_validation.py` | Iterates within each Voynich line | Boundary-preserving | Synthetic sensitivity only |
@@ -30,4 +30,3 @@ seams. Explicitly named boundary analyses may calculate cross-boundary pairs.
 
 The shared strict-exclusion policy also breaks a sequence at each removed
 ambiguous token. It never joins the token’s former neighbours.
-

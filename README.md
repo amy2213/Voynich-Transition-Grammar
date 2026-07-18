@@ -23,13 +23,34 @@ constructed, hybrid, stenographic, cipher, or historical mechanisms.
   B, but equivalence was not tested. Canonical AIIN-family density differs:
   13.58% in A versus 10.77% in B.
 
-### Provisional findings
+### Version 2 prefix/suffix comparison
 
-The July symmetric affix-discovery estimator produces Voynich prefix
-self-clustering 1.256, suffix self-clustering 1.475, and ratio 0.852. That
-output is provisional because the estimator still flattens natural boundaries,
-uses unmatched comparator sizes and first-N slices, and includes `OTHER` in the
-mean. Phase 2 will rebuild it. It is not part of the canonical pipeline.
+The Version 2 estimator preserves lines and sentences, resamples Voynich by
+page blocks, repeatedly samples comparator sequence units without replacement
+to exactly 31,608 tokens, and applies identical automatic discovery to both
+sides of every system. Its primary mean excludes `OTHER`; inclusion is
+reported as a sensitivity condition.
+
+Across 200 replicates, Voynich has median prefix self-clustering 1.333 (95%
+replicate interval 1.222–1.461), suffix self-clustering 1.458 (1.389–1.555),
+and ratio 0.918. The median minimum of the two side scores is 1.333. With
+`OTHER` included, the corresponding medians are 1.292, 1.363, and 0.951.
+
+Voynich exceeds each of 14 eligible comparators on the continuous minimum-side
+score in these sampled distributions; all two-sided corrected replicate sign
+tests are `p = 0.00995` and remain `0.00995` after Benjamini-Hochberg correction
+because all raw values tie. Ottoman Turkish is ineligible at 16,890 preserved
+tokens, and is not padded or replaced. These results apply only to this frozen
+corpus set and estimator. They do not establish natural-language uniqueness,
+language identity, or exclusion of untested mechanisms. Threshold buckets are
+secondary; Voynich's `SYMM-HIGH` frequency ranges from 0.89 to 1.00 across the
+declared 27-cell threshold grid.
+
+Generated evidence is in `results/prefix_suffix_v2.json`, `.csv`, `.md`, and
+`.svg`. The estimator specification is
+`docs/v2/prefix_suffix_estimator_spec.md`.
+
+### Other provisional findings
 
 Other provisional or exploratory results include multi-feature permutation,
 cascade, per-scribe, cross-transcription, matrix-wide, section, quire, Currier,
@@ -71,7 +92,7 @@ The exact classifier audit contains:
 
 See `results/classifier_overlap_report.json`.
 
-## Reproduce the Phase 1 canonical pipeline
+## Reproduce the canonical pipeline
 
 ```bash
 python -m pip install -r requirements.txt
@@ -79,9 +100,10 @@ python -m pip install pytest
 python run_all.py
 ```
 
-The command validates frozen data, regenerates the core analysis and ambiguity
-report, runs the complete suite under both pytest and direct Python execution,
-requires fresh outputs, and writes `results/run_manifest.json`.
+The command validates frozen data, regenerates the core analysis, ambiguity
+report, and 200-replicate Version 2 prefix/suffix comparison, runs the complete
+suite under both pytest and direct Python execution, requires fresh outputs,
+and writes `results/run_manifest.json`.
 
 Current test evidence is machine-readable in:
 
@@ -103,6 +125,6 @@ for transparency and are not current authority.
 
 ## Paper status
 
-`docs/main.tex` and the rendered paper are intentionally unchanged during
-Phase 1. The claim ledger identifies every known conflict. Manuscript revision
-begins only after this consolidation sprint is reviewed and approved.
+`docs/main.tex` and the rendered paper remain intentionally unchanged. The
+claim ledger identifies every known conflict. Manuscript revision is a
+separate, later sprint.
