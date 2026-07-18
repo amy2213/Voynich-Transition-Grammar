@@ -1,227 +1,131 @@
 #!/usr/bin/env python3
-"""
-run_all.py — One-command reproduction of the full Voynich analysis pipeline.
+"""Run the current Version 2 canonical pipeline.
 
-Runs (in order):
-  1. scripts/00_validate_datasets.py   — verify bundled data checksums
-  2. scripts/01_core_analysis.py       — transition rules, AIIN invariance, SC
-  3. scripts/02_cross_linguistic.py    — cross-linguistic comparison
-  4. scripts/03_stress_tests.py        — robustness checks
-  5. scripts/04_extended_analysis.py   — findings 1.4–1.10
-  6. scripts/06_paradigm_null.py       — trigram-null test (retired Finding 1.8)
-  7. scripts/07_cascade_uncertainty.py  — Wilson CIs + BH-FDR on cascade chains
-  8. scripts/08_per_scribe_analysis.py  — per-hand decomposition
-  9. scripts/09_constructed_control.py  — synthetic constructed-system control
-
-Script 05_cross_transcription.py is intentionally NOT part of the default
-pipeline. It consumes the LSI interlinear file LSI_ivtff_0d.txt (Landini &
-Zandbergen 1998, voynich.nu beta data), which is sourced separately from
-the AncientLanguages/Voynich Hugging Face dataset that the default pipeline
-depends on. The LSI file is bundled at data/raw/voynich/LSI_ivtff_0d.txt
-(provenance in data/manifests/source_notes.md) and a precomputed output is
-committed at results/cross_transcription_results.json. To regenerate it
-manually:
-
-    python scripts/05_cross_transcription.py
-
-Results are written to results/ as JSON files. 33 regression tests in
-tests/test_canonical_values.py verify canonical values on every commit.
-
-Usage:
-  python run_all.py                  # run everything in order, fail fast
-  python run_all.py --skip-validate  # skip the initial dataset validation
-  python run_all.py --tests          # after pipeline, run canonical-value tests
-  python run_all.py --dry-run        # print what would run, don't execute
-
-Exit codes:
-  0 — all steps succeeded
-  1 — a step failed (stderr and the failed script's output are shown)
-  2 — invalid arguments or missing dependencies
+The prefix/suffix comparison and other July exploratory analyses are excluded
+until their open methodological blockers are repaired. See the claim ledger.
 """
 
 import argparse
-import os
+import hashlib
+import json
 import subprocess
 import sys
 import time
+from datetime import datetime, timezone
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent
-SCRIPTS_DIR = PROJECT_ROOT / "scripts"
-RESULTS_DIR = PROJECT_ROOT / "results"
-TESTS_DIR = PROJECT_ROOT / "tests"
+ROOT = Path(__file__).resolve().parent
+RESULTS = ROOT / "results"
 
-PIPELINE = [
-    ("Validate frozen datasets", SCRIPTS_DIR / "00_validate_datasets.py", None),
-    ("Core analysis",            SCRIPTS_DIR / "01_core_analysis.py",    RESULTS_DIR / "core_analysis_results.json"),
-    ("Cross-linguistic",         SCRIPTS_DIR / "02_cross_linguistic.py", RESULTS_DIR / "cross_linguistic_results.json"),
-    ("Stress tests",             SCRIPTS_DIR / "03_stress_tests.py",     RESULTS_DIR / "stress_test_results.json"),
-    ("Extended analysis",        SCRIPTS_DIR / "04_extended_analysis.py", RESULTS_DIR / "extended_analysis_results.json"),
-    ("Paradigm null model",      SCRIPTS_DIR / "06_paradigm_null.py",    RESULTS_DIR / "paradigm_null_results.json"),
-    ("Cascade uncertainty/FDR",  SCRIPTS_DIR / "07_cascade_uncertainty.py", RESULTS_DIR / "cascade_uncertainty_results.json"),
-    ("Per-scribe decomposition", SCRIPTS_DIR / "08_per_scribe_analysis.py", RESULTS_DIR / "per_scribe_results.json"),
-    ("Constructed-system control", SCRIPTS_DIR / "09_constructed_control.py", RESULTS_DIR / "constructed_control_results.json"),
+CANONICAL_PIPELINE = [
+    {
+        "id": "validate_datasets",
+        "command": ["scripts/00_validate_datasets.py"],
+        "output": None,
+    },
+    {
+        "id": "core_within_line",
+        "command": ["scripts/01_core_analysis.py"],
+        "output": "results/core_analysis_results.json",
+    },
+    {
+        "id": "classifier_overlap",
+        "command": ["scripts/21_ambiguity_audit.py"],
+        "output": "results/classifier_overlap_report.json",
+    },
+    {
+        "id": "full_test_report",
+        "command": ["scripts/22_generate_test_report.py"],
+        "output": "results/test_report.json",
+    },
 ]
 
-# Optional: cross-transcription analysis (requires LSI_ivtff_0d.txt)
-# Not included in default pipeline because it requires a separate data file.
-# Run manually: python scripts/05_cross_transcription.py
 
-BANNER = "=" * 72
-
-
-def log(msg: str) -> None:
-    """Print with flush so output appears in real time under CI."""
-    print(msg, flush=True)
+def sha256(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
-def check_python_deps() -> bool:
-    """Verify required packages import. Returns True if all present."""
-    missing = []
-    for pkg in ("numpy", "pandas", "scipy", "pyarrow"):
-        try:
-            __import__(pkg)
-        except ImportError:
-            missing.append(pkg)
-    if missing:
-        log(f"ERROR: missing Python packages: {', '.join(missing)}")
-        log("Install with: pip install -r requirements.txt")
-        return False
-    return True
-
-
-def run_step(label: str, script: Path, expected_output: Path, dry_run: bool) -> bool:
-    """Run one pipeline step. Returns True on success."""
-    log("")
-    log(BANNER)
-    log(f"STEP: {label}")
-    log(f"  script: {script.relative_to(PROJECT_ROOT)}")
-    if expected_output:
-        log(f"  output: {expected_output.relative_to(PROJECT_ROOT)}")
-    log(BANNER)
-
-    if not script.exists():
-        log(f"ERROR: script not found: {script}")
-        return False
-
-    if dry_run:
-        log("(dry-run: skipping execution)")
-        return True
-
-    start = time.time()
-    # Run in project root so relative paths in scripts work
+def git_revision():
     result = subprocess.run(
-        [sys.executable, str(script)],
-        cwd=str(PROJECT_ROOT),
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True,
+        stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
     )
-    elapsed = time.time() - start
-
-    if result.returncode != 0:
-        log(f"FAILED after {elapsed:.1f}s (exit code {result.returncode})")
-        return False
-
-    log(f"OK ({elapsed:.1f}s)")
-
-    # Sanity check: did the expected output file get written?
-    if expected_output and not expected_output.exists():
-        log(f"WARNING: expected output not found: {expected_output}")
-        log("  Script reported success but produced no output file.")
-        return False
-
-    return True
+    return result.stdout.strip() if result.returncode == 0 else None
 
 
-def run_tests() -> bool:
-    """Run the canonical-value tests after the pipeline completes."""
-    log("")
-    log(BANNER)
-    log("STEP: Canonical value tests")
-    log(BANNER)
+def run_step(step, dry_run=False):
+    command = [sys.executable, *step["command"]]
+    output = ROOT / step["output"] if step["output"] else None
+    started_ns = time.time_ns()
+    started = time.monotonic()
+    if dry_run:
+        return {
+            "id": step["id"], "command": " ".join(["python", *step["command"]]),
+            "status": "dry_run", "exit_code": None,
+        }
+    result = subprocess.run(command, cwd=ROOT)
+    record = {
+        "id": step["id"],
+        "command": " ".join(["python", *step["command"]]),
+        "exit_code": result.returncode,
+        "elapsed_seconds": round(time.monotonic() - started, 3),
+        "status": "passed" if result.returncode == 0 else "failed",
+    }
+    if output:
+        fresh = output.exists() and output.stat().st_mtime_ns >= started_ns
+        record["output"] = str(output.relative_to(ROOT))
+        record["output_fresh"] = fresh
+        if fresh:
+            record["output_sha256"] = sha256(output)
+        else:
+            record["status"] = "failed"
+    return record
 
-    test_file = TESTS_DIR / "test_canonical_values.py"
-    if not test_file.exists():
-        log(f"ERROR: test file not found: {test_file}")
-        return False
 
-    # Prefer pytest if available; fall back to running as a script
-    try:
-        import pytest  # noqa: F401
-        cmd = [sys.executable, "-m", "pytest", str(test_file), "-v"]
-    except ImportError:
-        cmd = [sys.executable, str(test_file)]
-
-    result = subprocess.run(cmd, cwd=str(PROJECT_ROOT))
-    if result.returncode != 0:
-        log(f"TESTS FAILED (exit code {result.returncode})")
-        return False
-
-    log("TESTS PASSED")
-    return True
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Reproduce the full Voynich analysis pipeline.",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog=__doc__,
-    )
-    parser.add_argument("--skip-validate", action="store_true",
-                        help="Skip the initial dataset validation step")
-    parser.add_argument("--tests", action="store_true",
-                        help="After pipeline, run tests/test_canonical_values.py")
-    parser.add_argument("--dry-run", action="store_true",
-                        help="Print what would run without executing")
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--skip-validate", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
 
-    log(BANNER)
-    log("VOYNICH TRANSITION GRAMMAR — FULL PIPELINE")
-    log(BANNER)
-    log(f"Project root: {PROJECT_ROOT}")
-    log(f"Python:       {sys.version.split()[0]}")
-    log(f"Executable:   {sys.executable}")
-
-    if not args.dry_run and not check_python_deps():
-        return 2
-
-    RESULTS_DIR.mkdir(exist_ok=True)
-
-    overall_start = time.time()
-    steps_to_run = PIPELINE
-    if args.skip_validate:
-        steps_to_run = [s for s in PIPELINE if "validate" not in s[0].lower()]
-
-    for label, script, expected in steps_to_run:
-        if not run_step(label, script, expected, args.dry_run):
-            log("")
-            log(BANNER)
-            log("PIPELINE FAILED")
-            log(BANNER)
-            return 1
-
-    if args.tests and not args.dry_run:
-        if not run_tests():
-            log("")
-            log(BANNER)
-            log("PIPELINE OK but TESTS FAILED")
-            log(BANNER)
-            return 1
-
-    total = time.time() - overall_start
-    log("")
-    log(BANNER)
-    log(f"PIPELINE COMPLETE in {total:.1f}s")
-    log(BANNER)
-    log("")
-    log("Results written to:")
-    for f in sorted(RESULTS_DIR.glob("*.json")):
-        size_kb = f.stat().st_size / 1024
-        log(f"  {f.relative_to(PROJECT_ROOT)}  ({size_kb:.1f} KB)")
-    txt = RESULTS_DIR / "validation_report.txt"
-    if txt.exists():
-        size_kb = txt.stat().st_size / 1024
-        log(f"  {txt.relative_to(PROJECT_ROOT)}  ({size_kb:.1f} KB)")
-    return 0
+    steps = [
+        step for step in CANONICAL_PIPELINE
+        if not (args.skip_validate and step["id"] == "validate_datasets")
+    ]
+    manifest = {
+        "schema_version": "1.0",
+        "pipeline": "v2_phase1_canonical",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "code_revision": git_revision(),
+        "python": sys.version.split()[0],
+        "input_hashes": {
+            "voynich_parquet": sha256(
+                ROOT / "data/raw/voynich/AncientLanguages_Voynich_snapshot/train.parquet"
+            ),
+            "dataset_manifest": sha256(ROOT / "data/manifests/dataset_manifest.json"),
+        },
+        "steps": [],
+    }
+    for step in steps:
+        print(f"\n[{step['id']}] python {' '.join(step['command'])}", flush=True)
+        record = run_step(step, args.dry_run)
+        manifest["steps"].append(record)
+        if record["status"] == "failed":
+            break
+    manifest["complete"] = bool(manifest["steps"]) and all(
+        step["status"] in ("passed", "dry_run") for step in manifest["steps"]
+    ) and len(manifest["steps"]) == len(steps)
+    if not args.dry_run:
+        RESULTS.mkdir(exist_ok=True)
+        (RESULTS / "run_manifest.json").write_text(
+            json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
+        )
+    return 0 if manifest["complete"] else 1
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())

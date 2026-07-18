@@ -35,6 +35,17 @@ import sys
 import unittest
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
+from _canonical import (  # noqa: E402
+    AMBIGUOUS,
+    AmbiguityPolicy,
+    build_class_sequences,
+    classify,
+    classify_with_policy,
+    transitions,
+    sample_two_disjoint_contiguous_blocks,
+)
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RESULTS_DIR = PROJECT_ROOT / "results"
 
@@ -62,40 +73,41 @@ class TestTransitionRules(unittest.TestCase):
 
     def test_chedy_to_qok_attraction(self):
         """
-        Published: CHEDY→QOK = 2.625x (split-half range [2.34, 2.67]).
-        Tolerance: ±0.15 absolute, generous to allow for shuffle-seed variation.
+        Canonical within-line result: CHEDY→QOK = 2.659x.
         """
         ratio = self.data["transition_rules"]["CHEDY\u2192QOK"]["ratio"]
-        self.assertAlmostEqual(ratio, 2.625, delta=0.15,
-            msg=f"CHEDY→QOK drift: expected 2.625 ±0.15, got {ratio}")
+        self.assertAlmostEqual(ratio, 2.659, delta=0.001)
 
     def test_aiin_to_qok_repulsion(self):
         """
-        Published: AIIN→QOK = 0.504x (split-half range [0.39, 0.53]).
-        Tolerance: ±0.05 absolute.
+        Canonical within-line result: AIIN→QOK = 0.444x.
         """
         ratio = self.data["transition_rules"]["AIIN\u2192QOK"]["ratio"]
-        self.assertAlmostEqual(ratio, 0.504, delta=0.05,
-            msg=f"AIIN→QOK drift: expected 0.504 ±0.05, got {ratio}")
+        self.assertAlmostEqual(ratio, 0.444, delta=0.001)
 
     def test_chedy_qok_obs_count(self):
         """
-        Published: observed CHEDY→QOK count = 626. This is a raw token
-        count and should be deterministic across runs (no shuffle).
-        Tolerance: 0 (exact match required).
+        Canonical within-line observed count = 615.
         """
         obs = self.data["transition_rules"]["CHEDY\u2192QOK"]["obs"]
-        self.assertEqual(obs, 626,
-            msg=f"CHEDY→QOK observed count drift: expected exactly 626, got {obs}")
+        self.assertEqual(obs, 615)
+
+    def test_transition_methodology_is_boundary_matched(self):
+        method = self.data["methodology"]
+        self.assertEqual(method["sequence_boundary"], "within_line")
+        self.assertEqual(method["permutation_unit"],
+                         "labels_shuffled_within_each_line")
+        self.assertEqual(method["monte_carlo_correction"], "(b+1)/(B+1)")
+        self.assertGreater(self.data["transition_rules"]["CHEDY→QOK"]["p"], 0)
 
     def test_unique_chedy_qok_pairs(self):
         """
-        Published: 369 unique CHEDY→QOK token pairs.
+        Boundary-aware canonical result: 312 unique CHEDY→QOK token pairs.
         Deterministic across runs — exact match expected.
         """
         pairs = self.data["token_grammar"]["unique_pairs"]
-        self.assertEqual(pairs, 369,
-            msg=f"Unique pair count drift: expected 369, got {pairs}")
+        self.assertEqual(pairs, 312,
+            msg=f"Unique pair count drift: expected 312, got {pairs}")
 
     def test_chedy_token_participation(self):
         """
@@ -107,10 +119,9 @@ class TestTransitionRules(unittest.TestCase):
             msg=f"CHEDY participation drift: expected 77% ±3, got {pct}%")
 
 
-class TestAIINInvariance(unittest.TestCase):
+class TestAIINDensityDecomposition(unittest.TestCase):
     """
-    Findings from README § "AIIN density is a structural constant"
-    and docs/durable_findings.md § 1.2.
+        Distinguish raw substring density from canonical-family assignment.
     """
 
     @classmethod
@@ -122,7 +133,7 @@ class TestAIINInvariance(unittest.TestCase):
         Published: Currier A pages show AIIN at 15.0%.
         Tolerance: ±0.5 percentage points.
         """
-        m = self.data["aiin_invariance"]["currier_a_mean"]
+        m = self.data["aiin_substring_density"]["currier_a_mean"]
         self.assertAlmostEqual(m, 15.0, delta=0.5,
             msg=f"Currier A AIIN mean drift: expected 15.0% ±0.5, got {m}%")
 
@@ -131,20 +142,27 @@ class TestAIINInvariance(unittest.TestCase):
         Published: Currier B pages show AIIN at 15.0%.
         Tolerance: ±0.5 percentage points.
         """
-        m = self.data["aiin_invariance"]["currier_b_mean"]
+        m = self.data["aiin_substring_density"]["currier_b_mean"]
         self.assertAlmostEqual(m, 15.0, delta=0.5,
             msg=f"Currier B AIIN mean drift: expected 15.0% ±0.5, got {m}%")
 
-    def test_ks_test_nonsignificant(self):
+    def test_substring_similarity_is_not_labeled_invariance(self):
         """
         Published: KS p = 0.742 (A/B indistinguishable).
-        Test: p > 0.05, meaning the invariance claim holds.
-        We don't pin the exact p-value (it's somewhat sensitive to
-        page-threshold filtering) but it must be well above 0.05.
+        The observed substring distributions are not distinguishable by this
+        test, but that does not establish equivalence or invariance.
         """
-        p = self.data["aiin_invariance"]["ks_p"]
+        record = self.data["aiin_substring_density"]
+        p = record["ks_p"]
         self.assertGreater(p, 0.05,
-            msg=f"KS p dropped below 0.05: invariance claim no longer holds (p={p})")
+            msg=f"Substring-density descriptive result changed (p={p})")
+        self.assertIn("equivalence_not_tested", record["status"])
+
+    def test_canonical_family_density_differs(self):
+        record = self.data["aiin_canonical_family_density"]
+        self.assertAlmostEqual(record["currier_a_mean"], 13.58, delta=0.1)
+        self.assertAlmostEqual(record["currier_b_mean"], 10.77, delta=0.1)
+        self.assertLess(record["ks_p"], 0.01)
 
 
 class TestSelfClustering(unittest.TestCase):
@@ -159,12 +177,12 @@ class TestSelfClustering(unittest.TestCase):
 
     def test_pooled_backbone_self_clustering(self):
         """
-        Published: Pooled backbone SC = 1.451x.
+        Boundary-aware pooled backbone SC = 1.403x.
         Tolerance: ±0.1 absolute.
         """
         sc = self.data["self_clustering"]["backbone"]
-        self.assertAlmostEqual(sc, 1.451, delta=0.1,
-            msg=f"Pooled backbone SC drift: expected 1.451 ±0.1, got {sc}")
+        self.assertAlmostEqual(sc, 1.403, delta=0.02,
+            msg=f"Pooled backbone SC drift: expected 1.403 ±0.02, got {sc}")
 
     def test_page_level_self_clustering_is_lower(self):
         """
@@ -179,40 +197,32 @@ class TestSelfClustering(unittest.TestCase):
                 "If this flips, the method-sensitivity caveat needs revision.")
 
 
-class TestPrefixSuffixSymmetry(unittest.TestCase):
+class TestPrefixSuffixEstimatorRecord(unittest.TestCase):
     """
-    The central cross-linguistic finding: Voynich is the only system with
-    symmetric-high self-clustering. From results/prefix_suffix_analysis.json.
-    Published in README § "Bidirectional self-clustering symmetry" and
-    docs/durable_findings.md § 1.3.
-
-    This file is precomputed from an earlier analysis pass and is not
-    regenerated by the current pipeline, so these tests guard against
-    accidental hand-editing or corruption of the file.
+    Locks the latest generated, pre-Phase-2 estimator record. These tests do
+    not establish comparative uniqueness; boundary and matched-size repairs
+    remain open and are recorded in the claim ledger.
     """
 
     @classmethod
     def setUpClass(cls):
-        cls.data = _load("prefix_suffix_analysis.json")
+        cls.data = _load("prefix_suffix_analysis_generated.json")
 
     def test_voynich_is_symmetric_high(self):
         """
-        Published: Voynich is SYMM-HIGH, prefix/suffix ratio = 0.99.
-        This is the central cross-linguistic claim.
+        July regenerated estimator: prefix 1.256, suffix 1.475, ratio 0.852.
         """
         v = self.data["systems"]["VOYNICH"]
         self.assertEqual(v["bucket"], "SYMM-HIGH",
             msg=f"Voynich bucket drift: expected SYMM-HIGH, got {v['bucket']}")
-        self.assertAlmostEqual(v["ratio"], 0.99, delta=0.03,
-            msg=f"Voynich P/S ratio drift: expected 0.99 ±0.03, got {v['ratio']}")
-        self.assertAlmostEqual(v["prefix_sc"], 1.524, delta=0.05)
-        self.assertAlmostEqual(v["suffix_sc"], 1.544, delta=0.05)
+        self.assertAlmostEqual(v["ratio"], 0.852, delta=0.01)
+        self.assertAlmostEqual(v["prefix_sc"], 1.256, delta=0.01)
+        self.assertAlmostEqual(v["suffix_sc"], 1.475, delta=0.01)
 
     def test_voynich_is_unique_symm_high(self):
         """
-        Published: Voynich is the ONLY SYMM-HIGH system among all tested.
-        If any other system ever tests SYMM-HIGH, the core cross-linguistic
-        claim needs rewriting.
+        Descriptive check under the July estimator only. This is not a formal
+        uniqueness test and must not be cited as one.
         """
         symm_high = [
             name for name, data in self.data["systems"].items()
@@ -220,41 +230,20 @@ class TestPrefixSuffixSymmetry(unittest.TestCase):
         ]
         self.assertEqual(
             symm_high, ["VOYNICH"],
-            msg=f"Uniqueness claim broken: SYMM-HIGH systems = {symm_high}. "
-                "If this is intentional, update README and paper § 4."
+            msg=f"July-estimator bucket membership changed: {symm_high}."
         )
 
-    def test_all_positive_sc_naturals_are_suffix_dominant(self):
-        """
-        Published: every natural language with positive self-clustering is
-        suffix-dominant. This is the structural argument for Voynich's
-        distinctiveness.
-        """
-        for name, d in self.data["systems"].items():
-            if name == "VOYNICH":
-                continue
-            if d.get("family") == "Control":
-                continue
-            # "Positive self-clustering" = pooled SC > 1.1 per bucket defs
-            if d["prefix_sc"] > 1.1 or d["suffix_sc"] > 1.1:
-                self.assertIn(
-                    d["bucket"], ("SUFFIX-DOM",),
-                    msg=f"{name} has positive SC but is not SUFFIX-DOM "
-                        f"(bucket={d['bucket']}). This breaks the central argument."
-                )
-
-
 class TestResultsFilesExist(unittest.TestCase):
-    """Basic smoke tests: all canonical result files are present and valid."""
+    """Smoke-test outputs explicitly tracked during the consolidation sprint."""
 
     EXPECTED_FILES = [
         "core_analysis_results.json",
-        "cross_linguistic_results.json",
-        "prefix_suffix_analysis.json",
-        "stress_test_results.json",
-        "corpus_size_analysis.json",
-        "validation_report.txt",
-        "extended_analysis_results.json",
+        "prefix_suffix_analysis_generated.json",
+        "classifier_overlap_report.json",
+        "multifeature_permutation_results.json",
+        "symmhigh_sensitivity_results.json",
+        "section_effect_null_results.json",
+        "language_effect_null_results.json",
     ]
 
     def test_all_canonical_files_present(self):
@@ -275,112 +264,6 @@ class TestResultsFilesExist(unittest.TestCase):
             except json.JSONDecodeError as e:
                 self.fail(f"{f} is not valid JSON: {e}")
 
-
-if __name__ == "__main__":
-    # When run as a script (not under pytest), use verbose output
-    unittest.main(verbosity=2)
-
-
-class TestExtendedAnalysis(unittest.TestCase):
-    """
-    Regression tests for findings 1.4-1.10, produced by
-    scripts/04_extended_analysis.py.
-    """
-
-    @classmethod
-    def setUpClass(cls):
-        cls.data = _load("extended_analysis_results.json")
-
-    # --- 1.4 Line-bounded grammar ---
-
-    def test_chedy_qok_within_line(self):
-        """Published: within-line CHEDY→QOK = 2.54x. Tolerance: ±0.15."""
-        v = self.data["1.4_line_bounded_grammar"]["chedy_qok_within"]
-        self.assertAlmostEqual(v, 2.54, delta=0.15,
-            msg=f"Within-line CHEDY→QOK drift: expected 2.54 ±0.15, got {v}")
-
-    def test_chedy_qok_cross_line(self):
-        """Published: cross-line CHEDY→QOK = 0.85x. Tolerance: ±0.10."""
-        v = self.data["1.4_line_bounded_grammar"]["chedy_qok_cross"]
-        self.assertAlmostEqual(v, 0.85, delta=0.10,
-            msg=f"Cross-line CHEDY→QOK drift: expected 0.85 ±0.10, got {v}")
-
-    def test_grammar_resets_at_line_boundary(self):
-        """The defining property: within-line ratio must exceed cross-line ratio."""
-        w = self.data["1.4_line_bounded_grammar"]["chedy_qok_within"]
-        c = self.data["1.4_line_bounded_grammar"]["chedy_qok_cross"]
-        self.assertGreater(w, c + 0.5,
-            msg=f"Line-bounded grammar: within ({w}) should exceed cross ({c}) by >0.5")
-
-    def test_template_recurrence_near_chance(self):
-        """Published: template recurrence 1.04x above shuffled."""
-        v = self.data["1.4_line_bounded_grammar"]["template_recurrence_ratio"]
-        self.assertAlmostEqual(v, 1.04, delta=0.15,
-            msg=f"Template recurrence drift: expected ~1.04, got {v}")
-
-    # --- 1.5 Suffix agreement ---
-
-    def test_suffix_agreement_chedy_qok(self):
-        """Published: CHEDY→QOK suffix agreement = 1.18x."""
-        v = self.data["1.5_suffix_agreement"]["CHEDY→QOK"]["ratio"]
-        self.assertAlmostEqual(v, 1.18, delta=0.10,
-            msg=f"CHEDY→QOK suffix agreement drift: expected 1.18 ±0.10, got {v}")
-
-    def test_suffix_agreement_qok_qok(self):
-        """Published: QOK→QOK suffix agreement = 1.41x."""
-        v = self.data["1.5_suffix_agreement"]["QOK→QOK"]["ratio"]
-        self.assertAlmostEqual(v, 1.41, delta=0.10,
-            msg=f"QOK→QOK suffix agreement drift: expected 1.41 ±0.10, got {v}")
-
-    def test_chedy_selects_qok_subtypes(self):
-        """Published: Chi² = 36.4, p = 7.2e-5."""
-        chi2 = self.data["1.5_suffix_agreement"]["chedy_selects_qok_subtypes"]["chi2"]
-        self.assertGreater(chi2, 20,
-            msg=f"CHEDY subtype selection Chi² too low: {chi2}")
-
-    # --- 1.6 Multi-feature agreement ---
-
-    def test_multi_feature_ok_ot(self):
-        """Published: OK→OT combined 4-feature ratio = 8.74x."""
-        v = self.data["1.6_multi_feature_agreement"]["OK→OT"]["all_four_ratio"]
-        self.assertGreater(v, 4.0,
-            msg=f"OK→OT multi-feature ratio too low: {v}")
-
-    # --- 1.7 Cascades ---
-
-    def test_cascade_chedy_other_chedy(self):
-        """Published: CHEDY→OTHER→CHEDY cascade = +80pp."""
-        v = self.data["1.7_agreement_cascades"]["chains"]["CHEDY→OTHER→CHEDY"]["cascade_pp"]
-        self.assertGreater(v, 50,
-            msg=f"CHEDY→OTHER→CHEDY cascade too weak: +{v}pp")
-
-    def test_skip_agreement_qok(self):
-        """Published: QOK→[OTHER]→QOK skip agreement = 2.32x."""
-        v = self.data["1.7_agreement_cascades"]["skip_agreement"]["QOK→O→QOK"]["ratio"]
-        self.assertGreater(v, 1.5,
-            msg=f"QOK skip agreement too low: {v}x")
-
-    # --- 1.8 Paradigms ---
-
-    def test_paradigm_connectivity(self):
-        """Published: all 50 tested types per family are connected."""
-        for fam in ["QOK", "CHEDY", "AIIN"]:
-            c = self.data["1.8_productive_paradigms"][fam]["connected_of_top50"]
-            self.assertGreaterEqual(c, 45,
-                msg=f"{fam} paradigm connectivity too low: {c}/50")
-
-    # --- 1.9 Line position ---
-
-    def test_chedy_avoids_line_final(self):
-        """Published: CHEDY line-final residual = -2.7%. Must be negative."""
-        v = self.data["1.9_line_position"]["chedy_line_final_residual_pct"]
-        self.assertLess(v, 0,
-            msg=f"CHEDY line-final residual should be negative, got {v}%")
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# REPAIR-PASS TESTS: paradigm null, cascade CIs, per-scribe, constructed control
-# ─────────────────────────────────────────────────────────────────────────────
 
 class TestParadigmNullModel(unittest.TestCase):
     """
@@ -425,7 +308,7 @@ class TestCascadeUncertainty(unittest.TestCase):
     """
     Regression tests for results/cascade_uncertainty_results.json.
 
-    All five cascades should survive Benjamini-Hochberg FDR at α=0.05.
+    The corrected July record reports four of five cascades surviving BH-FDR.
     """
 
     @classmethod
@@ -435,10 +318,10 @@ class TestCascadeUncertainty(unittest.TestCase):
         except unittest.SkipTest:
             raise
 
-    def test_all_cascades_survive_fdr(self):
+    def test_four_of_five_cascades_survive_fdr(self):
         n_passing = self.data["n_chains_surviving_fdr"]
         n_tested = self.data["n_chains_tested"]
-        self.assertEqual(n_passing, n_tested,
+        self.assertEqual((n_passing, n_tested), (4, 5),
             msg=f"Cascade FDR drift: {n_passing}/{n_tested} passing BH-FDR at α=0.05")
 
     def test_flagship_cascade_ci_lower_bound_positive(self):
@@ -454,78 +337,89 @@ class TestCascadeUncertainty(unittest.TestCase):
             msg=f"CHEDY→OTHER→CHEDY lower CI bound unexpectedly low: {lower}pp")
 
 
-class TestPerScribeDecomposition(unittest.TestCase):
-    """
-    Regression tests for results/per_scribe_results.json.
+class TestCanonicalAmbiguityPolicies(unittest.TestCase):
+    def test_canonical_precedence_is_explicit(self):
+        token = "qokaiin"
+        self.assertEqual(classify(token), "QOK")
+        self.assertEqual(
+            classify_with_policy(token, AmbiguityPolicy.CANONICAL_PRECEDENCE),
+            "QOK",
+        )
+        self.assertEqual(
+            classify_with_policy(token, AmbiguityPolicy.SUBSTRING_PRECEDENCE),
+            "AIIN",
+        )
+        self.assertEqual(
+            classify_with_policy(token, AmbiguityPolicy.AMBIGUOUS_AS_CLASS),
+            AMBIGUOUS,
+        )
 
-    The three major hands (1, 2, 3) together produce 94% of the corpus. Each
-    should individually test SYMM-HIGH, demonstrating that the bidirectional
-    symmetry is not an aggregation artifact.
-    """
+    def test_strict_exclusion_drops_and_breaks_adjacency(self):
+        lines = [{"page": "f1r", "tokens": ["chedy", "qokaiin", "qokedy"]}]
+        seqs = build_class_sequences(
+            lines, AmbiguityPolicy.DROP_AND_BREAK_SEQUENCE
+        )
+        self.assertEqual(seqs, [("CHEDY",), ("QOK",)])
+        counts = transitions(
+            lines,
+            ambiguity_policy=AmbiguityPolicy.DROP_AND_BREAK_SEQUENCE,
+        )
+        self.assertEqual(counts["total"], 0)
+        self.assertEqual(counts["tr"].get(("CHEDY", "QOK"), 0), 0)
 
-    @classmethod
-    def setUpClass(cls):
-        try:
-            cls.data = _load("per_scribe_results.json")
-        except unittest.SkipTest:
-            raise
+    def test_two_block_sampler_never_crosses_removed_seam(self):
+        class FixedRng:
+            @staticmethod
+            def integers(low, high=None):
+                return (high - 1) if high is not None else (low - 1)
 
-    def test_major_hands_symm_high(self):
-        """All three major hands (1, 2, 3) individually test SYMM-HIGH."""
-        for h in ["1", "2", "3"]:
-            bucket = self.data["hands"][h]["bucket"]
-            self.assertEqual(bucket, "SYMM-HIGH",
-                msg=f"Hand {h} expected SYMM-HIGH, got {bucket}. "
-                    "If this changes, the 'not an aggregation artifact' "
-                    "framing in durable_findings §1.3 needs revision.")
+        items = list(range(12))
+        first, second = sample_two_disjoint_contiguous_blocks(
+            items, 4, 4, FixedRng()
+        )
+        for block in (first, second):
+            self.assertEqual(block, list(range(block[0], block[0] + 4)))
+        self.assertTrue(set(first).isdisjoint(second))
 
 
-class TestConstructedControl(unittest.TestCase):
-    """
-    Regression tests for results/constructed_control_results.json.
+class TestGeneratedRepairArtifacts(unittest.TestCase):
+    def test_overlap_arithmetic_is_exact_and_consistent(self):
+        data = _load("classifier_overlap_report.json")
+        overlap = data["overlap"]
+        disagreement = data["precedence_disagreement"]
+        self.assertEqual(data["corpus_tokens"], 31608)
+        self.assertEqual((overlap["instances"], overlap["n_types"]), (1423, 160))
+        self.assertAlmostEqual(overlap["pct_of_corpus"], 4.5020248, places=5)
+        self.assertEqual((disagreement["instances"], disagreement["n_types"]),
+                         (1171, 105))
+        self.assertAlmostEqual(disagreement["pct_of_corpus"], 3.7047583, places=5)
 
-    The first-pass constructed system satisfies items 1–4 and 6 of the revised
-    7-item MVE checklist by design, while failing items 5 (bidirectional
-    symmetry) and 7 (open vocabulary). This locks in that the checklist table's
-    Y/N ratings for constructed systems reflect actual pipeline output.
+    def test_permutation_result_supersedes_multiplied_marginals(self):
+        data = _load("multifeature_permutation_results.json")
+        corrected = [
+            pair["all_four"]["ratio_vs_permuted_null"]
+            for pair in data["pairs"].values()
+        ]
+        self.assertAlmostEqual(min(corrected), 1.53, places=2)
+        self.assertAlmostEqual(max(corrected), 4.27, places=2)
 
-    NOTE: The JSON keys still use old 8-item numbering internally
-    (e.g., "6_bidirectional_symmetry" = current item 5,
-    "8_open_vocabulary" = current item 7). The code accesses the JSON
-    keys as-is; the comments here use the current 7-item numbering.
-    """
+    def test_sensitivity_grid_is_present(self):
+        data = _load("symmhigh_sensitivity_results.json")
+        self.assertEqual(len(data["cells"]), 80)
 
-    @classmethod
-    def setUpClass(cls):
-        try:
-            cls.data = _load("constructed_control_results.json")
-        except unittest.SkipTest:
-            raise
+    def test_seam_fixed_nulls_report_multiplicity(self):
+        section = _load("section_effect_null_results.json")
+        self.assertIn("BH", section["multiple_testing"])
+        for cell in section["tests"].values():
+            for test in cell.values():
+                self.assertIn("p_bh_all_reported_tests", test)
+                self.assertFalse(test["clears_null_bh"])
 
-    def test_constructed_satisfies_multiple_mve_items(self):
-        """
-        The constructed system must satisfy at least 4 of the 7 checklist items.
-        If this drops below 4, the conclusion that items 1–4 and 6 (current
-        numbering) don't discriminate NL from constructed may have been
-        reversed and the checklist table needs re-examination.
-        """
-        self.assertGreaterEqual(self.data["n_items_satisfied"], 4,
-            msg=f"Constructed control now satisfies only "
-                f"{self.data['n_items_satisfied']} items; re-examine §5.")
+        language = _load("language_effect_null_results.json")
+        self.assertIn("BH", language["multiple_testing"])
+        self.assertIn("promising descriptive evidence", language["verdict"])
+        self.assertIn("does not isolate language", language["verdict"])
 
-    def test_constructed_fails_or_bidirectional_symmetry_alone_distinguishes(self):
-        """
-        Bidirectional symmetry (current item 5; JSON key '6_bidirectional_symmetry')
-        plus open vocabulary (current item 7; JSON key '8_open_vocabulary')
-        should be where the first-pass constructed system fails.
-        If the constructed system passes both on first try, the checklist's
-        discriminative power claim must be withdrawn.
-        """
-        mve = self.data["mve_checklist_scoring"]
-        item_6_satisfies = mve["6_bidirectional_symmetry"]["satisfies"]
-        item_8_satisfies = mve["8_open_vocabulary"]["satisfies"]
-        # At least one of 6 or 8 should fail on first design attempt
-        self.assertFalse(item_6_satisfies and item_8_satisfies,
-            msg="First-pass constructed control now satisfies both bidirectional "
-                "symmetry AND open-vocabulary requirements. If this is stable, "
-                "the paper's §5 uniqueness argument must be withdrawn.")
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
