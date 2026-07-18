@@ -463,6 +463,13 @@ def main():
             "test": "two-sided corrected replicate sign test",
         })
     bh_adjust(comparisons)
+    # Replicate-level metrics are deterministically recoverable from the
+    # recorded seeds and code. Keep their summaries and threshold counts in
+    # the canonical artifact without committing tens of thousands of lines of
+    # redundant intermediate values.
+    for record in systems.values():
+        if record["status"] == "eligible":
+            record["summary"].pop("replicates", None)
 
     output_path = ROOT / args.out
     output_path.parent.mkdir(parents=True, exist_ok=True)
