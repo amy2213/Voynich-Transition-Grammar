@@ -98,6 +98,8 @@ Run directly for a diagnostic report:
 
 import os
 import re
+from dataclasses import dataclass
+from enum import Enum
 from collections import Counter, defaultdict
 
 import pandas as pd
@@ -108,6 +110,28 @@ PARQUET_PATH = os.path.join(PROJECT_ROOT, "data", "raw", "voynich",
 
 FAMILY_NAMES = ["QOK", "OK", "OT", "CHEDY", "AIIN", "OTHER"]
 AMBIGUOUS = "AMBIGUOUS"
+
+
+class AmbiguityPolicy(str, Enum):
+    """Explicit policies for tokens matching more than one family."""
+
+    CANONICAL_PRECEDENCE = "canonical_precedence"
+    SUBSTRING_PRECEDENCE = "substring_precedence"
+    AMBIGUOUS_AS_CLASS = "ambiguous_as_class"
+    DROP_AND_BREAK_SEQUENCE = "drop_and_break_sequence"
+
+
+@dataclass(frozen=True)
+class SequenceUnit:
+    """One natural sequence unit that must never be joined implicitly."""
+
+    unit_id: str
+    tokens: tuple
+    boundary_type: str = "line"
+    page: str = ""
+    section: str = ""
+    hand: str = ""
+    currier: str = ""
 
 
 # ─── Family predicates ───────────────────────────────────────────────────────
@@ -204,6 +228,19 @@ def classify_all(tokens, order=None, strict=False):
     return [classify(t, order=order, strict=strict) for t in tokens]
 
 
+def classify_with_policy(tok, policy=AmbiguityPolicy.CANONICAL_PRECEDENCE):
+    """Classify under a named, auditable ambiguity policy."""
+    policy = AmbiguityPolicy(policy)
+    if policy == AmbiguityPolicy.CANONICAL_PRECEDENCE:
+        return classify(tok, order=ORDER_PREFIX_FIRST)
+    if policy == AmbiguityPolicy.SUBSTRING_PRECEDENCE:
+        return classify(tok, order=ORDER_SUBSTRING_FIRST)
+    if policy in (AmbiguityPolicy.AMBIGUOUS_AS_CLASS,
+                  AmbiguityPolicy.DROP_AND_BREAK_SEQUENCE):
+        return classify(tok, order=ORDER_PREFIX_FIRST, strict=True)
+    raise ValueError(f"Unsupported ambiguity policy: {policy}")
+
+
 # ─── Corpus loading ──────────────────────────────────────────────────────────
 def get_section(page):
     m = re.match(r"f(\d+)", page or "")
@@ -252,8 +289,50 @@ def flat_tokens(lines):
     return [t for l in lines for t in l["tokens"]]
 
 
+def sequence_units(lines, boundary_type="line"):
+    """Convert corpus records into immutable natural-boundary units."""
+    units = []
+    for i, line in enumerate(lines):
+        units.append(SequenceUnit(
+            unit_id=f"{line.get('page', '?')}:{i}",
+            tokens=tuple(line["tokens"]),
+            boundary_type=boundary_type,
+            page=str(line.get("page", "")),
+            section=str(line.get("section", "")),
+            hand=str(line.get("hand", "")),
+            currier=str(line.get("currier", "")),
+        ))
+    return units
+
+
+def build_class_sequences(lines, policy=AmbiguityPolicy.CANONICAL_PRECEDENCE):
+    """Build class sequences without manufacturing any adjacency.
+
+    Each input line remains separate. Under ``drop_and_break_sequence``, an
+    ambiguous token is removed and splits its line into two independent
+    segments. Its neighbours never become adjacent.
+    """
+    policy = AmbiguityPolicy(policy)
+    out = []
+    for unit in sequence_units(lines):
+        segments = [[]]
+        for tok in unit.tokens:
+            label = classify_with_policy(tok, policy)
+            if (policy == AmbiguityPolicy.DROP_AND_BREAK_SEQUENCE
+                    and label == AMBIGUOUS):
+                if segments[-1]:
+                    out.append(tuple(segments[-1]))
+                segments = [[]]
+                continue
+            segments[-1].append(label)
+        if segments[-1]:
+            out.append(tuple(segments[-1]))
+    return out
+
+
 # ─── Transitions ─────────────────────────────────────────────────────────────
-def transitions(lines, within_line=True, order=None, strict=False):
+def transitions(lines, within_line=True, order=None, strict=False,
+                ambiguity_policy=None):
     """Class transition counts.
 
     within_line=True  -- transitions computed inside lines only. CORRECT.
@@ -268,7 +347,12 @@ def transitions(lines, within_line=True, order=None, strict=False):
     src, dst = Counter(), Counter()
     total = 0
 
-    if within_line:
+    if ambiguity_policy is not None and (order is not None or strict):
+        raise ValueError("Use ambiguity_policy or legacy order/strict, not both")
+
+    if within_line and ambiguity_policy is not None:
+        seqs = build_class_sequences(lines, ambiguity_policy)
+    elif within_line:
         seqs = [classify_all(l["tokens"], order, strict) for l in lines]
     else:
         seqs = [classify_all(flat_tokens(lines), order, strict)]
@@ -313,6 +397,34 @@ def self_clustering(classes, min_n=10):
     return sum(ratios) / len(ratios) if ratios else None
 
 
+def self_clustering_sequences(sequences, min_n=10, include_other=False,
+                              included_classes=None):
+    """Boundary-aware mean self-clustering over separate class sequences."""
+    same, src, dst = Counter(), Counter(), Counter()
+    total = 0
+    for classes in sequences:
+        for a, b in zip(classes, classes[1:]):
+            src[a] += 1
+            dst[b] += 1
+            same[a] += int(a == b)
+            total += 1
+    if not total:
+        return None
+    candidates = set(src) | set(dst)
+    if included_classes is not None:
+        candidates &= set(included_classes)
+    if not include_other:
+        candidates.discard("OTHER")
+    candidates.discard(AMBIGUOUS)
+    ratios = []
+    for label in sorted(candidates):
+        if src[label] > min_n and dst[label] > min_n:
+            expected = src[label] * dst[label] / total
+            if expected > 1:
+                ratios.append(same[label] / expected)
+    return sum(ratios) / len(ratios) if ratios else None
+
+
 # ─── Diagnostics ─────────────────────────────────────────────────────────────
 def overlap_report(tokens):
     combos = Counter()
@@ -326,9 +438,48 @@ def overlap_report(tokens):
         "instances": sum(combos.values()),
         "pct_of_corpus": 100 * sum(combos.values()) / len(tokens) if tokens else 0,
         "n_types": len(types),
-        "combinations": combos,
+        "combinations": {" + ".join(k): v for k, v in sorted(combos.items())},
         "top_types": types.most_common(10),
+        "types": dict(sorted(types.items())),
     }
+
+
+def classifier_disagreement_report(tokens):
+    """Exact disagreement counts for the two historical precedence orders."""
+    differing = Counter()
+    for tok in tokens:
+        a = classify(tok, order=ORDER_PREFIX_FIRST)
+        b = classify(tok, order=ORDER_SUBSTRING_FIRST)
+        if a != b:
+            differing[tok] += 1
+    n = sum(differing.values())
+    return {
+        "instances": n,
+        "pct_of_corpus": 100 * n / len(tokens) if tokens else 0,
+        "n_types": len(differing),
+        "types": dict(sorted(differing.items())),
+    }
+
+
+def sample_two_disjoint_contiguous_blocks(items, n1, n2, rng):
+    """Sample two disjoint blocks, both contiguous in the original ordering.
+
+    The historical implementation removed block one and sampled block two
+    from the concatenated remainder. That allowed block two to cross the
+    removal seam. Enumerating valid start pairs makes that impossible.
+    """
+    if n1 <= 0 or n2 <= 0 or len(items) < n1 + n2:
+        return None, None
+    starts = []
+    for i in range(len(items) - n1 + 1):
+        a = set(range(i, i + n1))
+        for j in range(len(items) - n2 + 1):
+            if a.isdisjoint(range(j, j + n2)):
+                starts.append((i, j))
+    if not starts:
+        return None, None
+    i, j = starts[int(rng.integers(0, len(starts)))]
+    return items[i:i + n1], items[j:j + n2]
 
 
 def _main():
@@ -343,8 +494,9 @@ def _main():
     ov = overlap_report(toks)
     print(f"\nMulti-family tokens: {ov['instances']} instances "
           f"({ov['pct_of_corpus']:.2f}% of corpus), {ov['n_types']} types")
-    for combo, n in ov["combinations"].most_common():
-        print(f"  {' + '.join(combo):<22} {n}")
+    for combo, n in sorted(ov["combinations"].items(),
+                           key=lambda item: (-item[1], item[0])):
+        print(f"  {combo:<22} {n}")
 
     print("\nHeadline statistics under each policy:")
     print(f"{'policy':<34}{'CHEDY→QOK':>12}{'AIIN→QOK':>12}")
@@ -360,7 +512,8 @@ def _main():
         _, _, aq = transition_ratio(t, "AIIN", "QOK")
         print(f"{label:<34}{cq:>11.3f}x{aq:>11.3f}x")
 
-    t = transitions(lines, within_line=True, strict=True)
+    t = transitions(lines, within_line=True,
+                    ambiguity_policy=AmbiguityPolicy.DROP_AND_BREAK_SEQUENCE)
     _, _, cq = transition_ratio(t, "CHEDY", "QOK")
     print(f"{'strict (ambiguous excluded)':<34}{cq:>11.3f}x")
 
