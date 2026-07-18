@@ -41,6 +41,7 @@ GitHub release, minting a DOI, or submitting to a preprint service.
 
 ## External actions requiring separate approval
 
+- [ ] Validate `CITATION.cff` with a dedicated CFF 1.2 schema validator.
 - [ ] Review author name, affiliation, email, ORCID, title, and abstract.
 - [ ] Decide whether `2.0.0-rc1` should become final `2.0.0`.
 - [ ] Merge the audited branch to `main`.
