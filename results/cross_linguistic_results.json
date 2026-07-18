@@ -2,26 +2,35 @@
   "VOYNICH": {
     "label": "VOYNICH",
     "total_words": 31608,
-    "func_density": 15.0,
-    "func_cv": 0.504,
-    "chi2_per_cell": 30.5,
-    "mean_asymmetry": 0.202,
-    "max_attraction": 2.5,
-    "max_repulsion": 0.48,
-    "mean_self_cluster": 1.445,
-    "mean_carry_through": 1.74
+    "func_density": 11.3,
+    "func_cv": 0.552,
+    "chi2_per_cell": 39.1,
+    "mean_asymmetry": 0.25,
+    "max_attraction": 2.62,
+    "max_repulsion": 0.5,
+    "mean_self_cluster": 1.384,
+    "mean_carry_through": 1.7,
+    "func_policy": "canonical",
+    "alt_policy": {
+      "policy": "aiin_first",
+      "mean_self_cluster": 1.445,
+      "func_density": 15.0,
+      "max_attraction": 2.5,
+      "max_repulsion": 0.48,
+      "mean_carry_through": 1.74
+    }
   },
   "GIBBERISH": {
     "label": "GIBBERISH (shuffled)",
     "total_words": 31608,
-    "func_density": 15.0,
-    "func_cv": 0.34,
-    "chi2_per_cell": 0.7,
-    "mean_asymmetry": 0.054,
-    "max_attraction": 1.15,
-    "max_repulsion": 0.85,
-    "mean_self_cluster": 1.03,
-    "mean_carry_through": 0.9
+    "func_density": 11.3,
+    "func_cv": 0.397,
+    "chi2_per_cell": 0.9,
+    "mean_asymmetry": 0.058,
+    "max_attraction": 1.18,
+    "max_repulsion": 0.86,
+    "mean_self_cluster": 1.002,
+    "mean_carry_through": 1.01
   },
   "Middle English (Chaucer)": {
     "label": "Middle English (Chaucer)",

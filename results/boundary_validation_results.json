@@ -1,0 +1,155 @@
+{
+  "description": "Character-boundary robustness. Varies EVA segmentation rather than word boundaries, which the cross-transcription test (script 05) holds fixed because all its transcriptions are Stolfi-mapped into EVA.",
+  "schemes": {
+    "eva_standard": "EVA digraphs ch, sh, cth, ckh, cph, cfh, ee, ii as single units",
+    "atomic": "every EVA letter its own unit; no digraphs",
+    "maximal": "eva_standard plus aiin, ain, air, dy, ol, or, al, ar as single units",
+    "gallows_split": "composite gallows decomposed; other digraphs retained",
+    "currier_like": "visually similar EVA characters collapsed (o/a, k/t, p/f, d/l/r)",
+    "straddle_A": "adversarial: kai/tai/kee/ked as ligatures, straddling qok|aiin and ot|aiin",
+    "straddle_B": "adversarial: oka/ota/qok/che as ligatures, absorbing family-initial material",
+    "straddle_C": "adversarial: okai/otai/qokai/edy as ligatures, maximal straddling",
+    "_note": "eva_standard, atomic, maximal and gallows_split return identical values because all five family patterns are expressible as whole-unit sequences under each. The straddle_* schemes are the load-bearing test."
+  },
+  "chedy_qok_range": [
+    2.324,
+    2.659
+  ],
+  "aiin_qok_range": [
+    0.437,
+    0.496
+  ],
+  "attraction_holds_all_schemes": true,
+  "repulsion_holds_all_schemes": true,
+  "verdict": "Both transition findings survive every segmentation scheme tested, including fully atomic (no digraphs) and Currier-like character collapse. They are not artifacts of EVA's character-boundary conventions.",
+  "results": {
+    "eva_standard": {
+      "chedy_qok_ratio": 2.659,
+      "chedy_qok_obs": 615,
+      "chedy_qok_expected": 231.3,
+      "aiin_qok_ratio": 0.444,
+      "aiin_qok_obs": 127,
+      "aiin_qok_expected": 286.3,
+      "family_counts": {
+        "OTHER": 18838,
+        "AIIN": 3584,
+        "OT": 1777,
+        "OK": 1917,
+        "CHEDY": 2693,
+        "QOK": 2799
+      }
+    },
+    "atomic": {
+      "chedy_qok_ratio": 2.659,
+      "chedy_qok_obs": 615,
+      "chedy_qok_expected": 231.3,
+      "aiin_qok_ratio": 0.444,
+      "aiin_qok_obs": 127,
+      "aiin_qok_expected": 286.3,
+      "family_counts": {
+        "OTHER": 18838,
+        "AIIN": 3584,
+        "OT": 1777,
+        "OK": 1917,
+        "CHEDY": 2693,
+        "QOK": 2799
+      }
+    },
+    "maximal": {
+      "chedy_qok_ratio": 2.659,
+      "chedy_qok_obs": 615,
+      "chedy_qok_expected": 231.3,
+      "aiin_qok_ratio": 0.444,
+      "aiin_qok_obs": 127,
+      "aiin_qok_expected": 286.3,
+      "family_counts": {
+        "OTHER": 18838,
+        "AIIN": 3584,
+        "OT": 1777,
+        "OK": 1917,
+        "CHEDY": 2693,
+        "QOK": 2799
+      }
+    },
+    "gallows_split": {
+      "chedy_qok_ratio": 2.659,
+      "chedy_qok_obs": 615,
+      "chedy_qok_expected": 231.3,
+      "aiin_qok_ratio": 0.444,
+      "aiin_qok_obs": 127,
+      "aiin_qok_expected": 286.3,
+      "family_counts": {
+        "OTHER": 18838,
+        "AIIN": 3584,
+        "OT": 1777,
+        "OK": 1917,
+        "CHEDY": 2693,
+        "QOK": 2799
+      }
+    },
+    "currier_like": {
+      "chedy_qok_ratio": 2.491,
+      "chedy_qok_obs": 767,
+      "chedy_qok_expected": 307.9,
+      "aiin_qok_ratio": 0.481,
+      "aiin_qok_obs": 188,
+      "aiin_qok_expected": 391.2,
+      "family_counts": {
+        "OTHER": 17812,
+        "OT": 1782,
+        "AIIN": 3623,
+        "OK": 1932,
+        "CHEDY": 2644,
+        "QOK": 3815
+      }
+    },
+    "straddle_A": {
+      "chedy_qok_ratio": 2.324,
+      "chedy_qok_obs": 237,
+      "chedy_qok_expected": 102.0,
+      "aiin_qok_ratio": 0.496,
+      "aiin_qok_obs": 50,
+      "aiin_qok_expected": 100.7,
+      "family_counts": {
+        "OTHER": 22233,
+        "AIIN": 2890,
+        "OT": 1533,
+        "OK": 1020,
+        "CHEDY": 2697,
+        "QOK": 1235
+      }
+    },
+    "straddle_B": {
+      "chedy_qok_ratio": 2.657,
+      "chedy_qok_obs": 616,
+      "chedy_qok_expected": 231.9,
+      "aiin_qok_ratio": 0.445,
+      "aiin_qok_obs": 121,
+      "aiin_qok_expected": 271.8,
+      "family_counts": {
+        "OTHER": 20319,
+        "AIIN": 3407,
+        "OT": 1178,
+        "CHEDY": 2702,
+        "OK": 1203,
+        "QOK": 2799
+      }
+    },
+    "straddle_C": {
+      "chedy_qok_ratio": 2.526,
+      "chedy_qok_obs": 470,
+      "chedy_qok_expected": 186.1,
+      "aiin_qok_ratio": 0.437,
+      "aiin_qok_obs": 95,
+      "aiin_qok_expected": 217.6,
+      "family_counts": {
+        "OTHER": 20187,
+        "AIIN": 3390,
+        "OT": 1533,
+        "OK": 1547,
+        "CHEDY": 2693,
+        "QOK": 2258
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "description": "Adversarial constructed control explicitly engineering MVE items 5 and 7, which durable_findings.md \u00a74 identifies as the only discriminating items.",
+  "method": "Tokens emitted as PREFIX+STEM+SUFFIX. Two independent Markov chains over adjacent tokens \u2014 one on prefix identity, one on suffix identity \u2014 with tunable self-transition probabilities, which set prefix SC and suffix SC directly (item 5). Large heavy-tailed stem inventory yields mostly-unique full tokens (item 7). No linguistic content of any kind.",
+  "seed": 42,
+  "config": {
+    "p_prefix_stay": 0.14,
+    "p_suffix_stay": 0.18,
+    "n_stems": 1500
+  },
+  "targets": {
+    "n_tokens": 31608,
+    "n_lines": 4197,
+    "hapax_pct": 71.4,
+    "ttr": 0.23,
+    "prefix_sc": 1.256,
+    "suffix_sc": 1.475,
+    "ps_ratio": 0.852
+  },
+  "generated": {
+    "prefix_sc": 1.721,
+    "suffix_sc": 1.942,
+    "ratio": 0.886,
+    "bucket": "SYMM-HIGH",
+    "n_tokens": 31676,
+    "n_types": 6308,
+    "ttr": 0.199,
+    "hapax_pct": 66.6,
+    "detected_prefixes": [
+      "ot",
+      "yk",
+      "sh",
+      "qo",
+      "da"
+    ],
+    "detected_suffixes": [
+      "ar",
+      "in",
+      "dy",
+      "al",
+      "ol"
+    ]
+  },
+  "item_5_bidirectional_symmhigh": true,
+  "item_7_open_vocabulary": true,
+  "verdict": "BOTH ITEMS SATISFIED. All 7 MVE checklist items are engineerable by a constructed system. The checklist does not discriminate encoded natural language from a sufficiently motivated constructed system."
+}

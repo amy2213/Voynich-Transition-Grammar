@@ -6,15 +6,15 @@
     "correction": "Benjamini-Hochberg FDR at \u03b1=0.05 across 5 chains."
   },
   "n_chains_tested": 5,
-  "n_chains_surviving_fdr": 5,
+  "n_chains_surviving_fdr": 4,
   "chains": [
     {
       "chain": "CHEDY\u2192OTHER\u2192CHEDY",
       "n_agree_trials": 13,
       "n_disagree_trials": 119,
-      "p_if_agree": 0.85,
-      "p_if_disagree": 0.04,
-      "cascade_pp_point_estimate": 81.0,
+      "p_if_agree": 0.846,
+      "p_if_disagree": 0.042,
+      "cascade_pp_point_estimate": 80.4,
       "ci95_p_if_agree": [
         0.578,
         0.957
@@ -27,101 +27,131 @@
         48.3,
         93.9
       ],
+      "cascade_pp_ci95_newcombe": [
+        53.1,
+        91.7
+      ],
+      "k_agree": 11,
+      "k_disagree": 5,
       "two_prop_z": 8.43,
-      "two_prop_p_one_tailed": 0.0,
+      "two_prop_p_two_tailed": 0.0,
       "survives_bh_fdr_alpha_0.05": true
     },
     {
       "chain": "QOK\u2192OTHER\u2192QOK",
-      "n_agree_trials": 26,
-      "n_disagree_trials": 61,
-      "p_if_agree": 0.62,
-      "p_if_disagree": 0.18,
-      "cascade_pp_point_estimate": 44.0,
+      "n_agree_trials": 31,
+      "n_disagree_trials": 124,
+      "p_if_agree": 0.516,
+      "p_if_disagree": 0.129,
+      "cascade_pp_point_estimate": 38.7,
       "ci95_p_if_agree": [
-        0.425,
-        0.776
+        0.348,
+        0.68
       ],
       "ci95_p_if_disagree": [
-        0.104,
-        0.295
+        0.081,
+        0.199
       ],
       "cascade_pp_ci95_conservative": [
-        13.1,
-        67.2
+        14.9,
+        59.9
       ],
-      "two_prop_z": 4.02,
-      "two_prop_p_one_tailed": 2.97e-05,
+      "cascade_pp_ci95_newcombe": [
+        20.5,
+        55.8
+      ],
+      "k_agree": 16,
+      "k_disagree": 16,
+      "two_prop_z": 4.76,
+      "two_prop_p_two_tailed": 1.91e-06,
       "survives_bh_fdr_alpha_0.05": true
     },
     {
       "chain": "QOK\u2192QOK\u2192QOK",
-      "n_agree_trials": 27,
-      "n_disagree_trials": 16,
-      "p_if_agree": 0.52,
-      "p_if_disagree": 0.19,
+      "n_agree_trials": 30,
+      "n_disagree_trials": 22,
+      "p_if_agree": 0.467,
+      "p_if_disagree": 0.136,
       "cascade_pp_point_estimate": 33.0,
       "ci95_p_if_agree": [
-        0.34,
-        0.693
+        0.302,
+        0.639
       ],
       "ci95_p_if_disagree": [
-        0.066,
-        0.43
+        0.047,
+        0.333
       ],
       "cascade_pp_ci95_conservative": [
-        -9.0,
-        62.7
+        -3.1,
+        59.1
       ],
-      "two_prop_z": 2.15,
-      "two_prop_p_one_tailed": 0.0159,
+      "cascade_pp_ci95_newcombe": [
+        7.4,
+        52.4
+      ],
+      "k_agree": 14,
+      "k_disagree": 3,
+      "two_prop_z": 2.51,
+      "two_prop_p_two_tailed": 0.0121,
       "survives_bh_fdr_alpha_0.05": true
     },
     {
       "chain": "CHEDY\u2192QOK\u2192CHEDY",
       "n_agree_trials": 26,
-      "n_disagree_trials": 45,
-      "p_if_agree": 0.69,
-      "p_if_disagree": 0.13,
-      "cascade_pp_point_estimate": 56.0,
+      "n_disagree_trials": 75,
+      "p_if_agree": 0.692,
+      "p_if_disagree": 0.08,
+      "cascade_pp_point_estimate": 61.2,
       "ci95_p_if_agree": [
         0.5,
         0.835
       ],
       "ci95_p_if_disagree": [
-        0.063,
-        0.262
+        0.037,
+        0.164
       ],
       "cascade_pp_ci95_conservative": [
-        23.8,
-        77.2
+        33.6,
+        79.8
       ],
-      "two_prop_z": 4.8,
-      "two_prop_p_one_tailed": 8.06e-07,
+      "cascade_pp_ci95_newcombe": [
+        40.3,
+        76.1
+      ],
+      "k_agree": 18,
+      "k_disagree": 6,
+      "two_prop_z": 6.32,
+      "two_prop_p_two_tailed": 2.6e-10,
       "survives_bh_fdr_alpha_0.05": true
     },
     {
       "chain": "OT\u2192OTHER\u2192OT",
-      "n_agree_trials": 18,
-      "n_disagree_trials": 37,
-      "p_if_agree": 0.33,
-      "p_if_disagree": 0.14,
-      "cascade_pp_point_estimate": 19.0,
+      "n_agree_trials": 19,
+      "n_disagree_trials": 51,
+      "p_if_agree": 0.316,
+      "p_if_disagree": 0.118,
+      "cascade_pp_point_estimate": 19.8,
       "ci95_p_if_agree": [
-        0.163,
-        0.563
+        0.154,
+        0.54
       ],
       "ci95_p_if_disagree": [
-        0.059,
-        0.28
+        0.055,
+        0.234
       ],
       "cascade_pp_ci95_conservative": [
-        -11.7,
-        50.3
+        -8.0,
+        48.5
       ],
-      "two_prop_z": 1.72,
-      "two_prop_p_one_tailed": 0.0423,
-      "survives_bh_fdr_alpha_0.05": true
+      "cascade_pp_ci95_newcombe": [
+        -0.1,
+        43.1
+      ],
+      "k_agree": 6,
+      "k_disagree": 6,
+      "two_prop_z": 1.96,
+      "two_prop_p_two_tailed": 0.0505,
+      "survives_bh_fdr_alpha_0.05": false
     }
   ]
 }

@@ -1,42 +1,36 @@
 cff-version: 1.2.0
-message: "If you use this software or its findings, please cite it as below."
-title: "Voynich Manuscript Token-Structure Analysis: Reproducible Corpus Methods and Cross-Linguistic Baselines"
+message: "If you use this software or its Version 2 findings, please cite the release and paper associated with the version you used."
+title: "Voynich Transition Grammar: Boundary-Aware Token-Structure Analysis"
 type: software
 authors:
   - family-names: "Laird"
     given-names: "Amy"
     orcid: "https://orcid.org/0009-0001-5479-0007"
+abstract: >-
+  Reproducible corpus-analysis code, frozen inputs, generated results, tests,
+  and audit records for boundary-aware token-structure analysis of the
+  Voynich Manuscript. The project makes no decipherment, translation,
+  language-identification, or natural-language-proof claim.
 repository-code: "https://github.com/amy2213/Voynich-Transition-Grammar"
-url: "https://amy2213.github.io/Voynich-Transition-Grammar/"
-doi: "10.5281/zenodo.19996904"
-version: "v1.0.1-preprint"
-date-released: "2026-05-03"
+url: "https://github.com/amy2213/Voynich-Transition-Grammar/tree/v2-audit-consolidation"
+version: "2.0.0-rc1"
+date-released: "2026-07-18"
 license: MIT
-identifiers:
-  - type: doi
-    value: "10.5281/zenodo.19996904"
-    description: "Zenodo archived release DOI for v1.0.1-preprint"
-  - type: doi
-    value: "10.5281/zenodo.19996905"
-    description: "Zenodo concept (latest-version) DOI"
 keywords:
   - voynich-manuscript
   - computational-linguistics
   - corpus-linguistics
   - statistical-text-analysis
   - digital-humanities
-  - historical-cryptography
-  - undeciphered-manuscripts
+  - reproducible-research
 
 preferred-citation:
   type: article
-  title: "Voynich Manuscript Token-Structure Analysis: Reproducible Corpus Methods and Cross-Linguistic Baselines"
+  title: "Boundary-Aware Token-Structure Analysis of the Voynich Manuscript: A Reproducible Reassessment"
   authors:
     - family-names: "Laird"
       given-names: "Amy"
       orcid: "https://orcid.org/0009-0001-5479-0007"
   year: 2026
-  month: 5
-  doi: "10.5281/zenodo.19996904"
-  notes: "Archived on Zenodo (release DOI 10.5281/zenodo.19996904; concept/latest-version DOI 10.5281/zenodo.19996905). OSF preprint and arXiv ID pending."
-  url: "https://amy2213.github.io/Voynich-Transition-Grammar/docs/voynich-token-structure-analysis-2026-05.pdf"
+  month: 7
+  url: "https://github.com/amy2213/Voynich-Transition-Grammar/blob/v2-audit-consolidation/docs/paper.pdf"

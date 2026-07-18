@@ -1,0 +1,132 @@
+{
+  "description": "Contiguous-block null applied to the Currier A/B contrast \u2014 the last structural partition untested against the control that section and quire failed.",
+  "caveat": "Currier A and B occupy largely distinct folio ranges, so the contiguous-block null may be weakly constraining here. Check whether ALL cells clear; if so the design is uninformative rather than the result strong. Page labels can also overlap and Currier label remains confounded with hand, position, section, and transcription practice.",
+  "multiple_testing": "BH across all pooled and restricted cell tests",
+  "seed": 42,
+  "n_permutations": 1500,
+  "pooled": {
+    "QOK->QOK": {
+      "currier_a": 2.349,
+      "currier_b": 1.274,
+      "diff": 1.074,
+      "null_mean": 0.008,
+      "null_ci": [
+        -0.719,
+        0.63
+      ],
+      "p_empirical": 0.0007,
+      "n_null": 1500,
+      "clears_null": true,
+      "p_bh_all_reported_cells": 0.0028,
+      "survives_bh_alpha_0.05": true
+    },
+    "CHEDY->QOK": {
+      "currier_a": 1.458,
+      "currier_b": 2.278,
+      "diff": -0.82,
+      "null_mean": 0.133,
+      "null_ci": [
+        -0.485,
+        0.363
+      ],
+      "p_empirical": 0.0007,
+      "n_null": 1500,
+      "clears_null": true,
+      "p_bh_all_reported_cells": 0.0028,
+      "survives_bh_alpha_0.05": true
+    },
+    "AIIN->QOK": {
+      "currier_a": 0.875,
+      "currier_b": 0.376,
+      "diff": 0.499,
+      "null_mean": -0.061,
+      "null_ci": [
+        -0.643,
+        0.522
+      ],
+      "p_empirical": 0.4724,
+      "n_null": 1500,
+      "clears_null": false,
+      "p_bh_all_reported_cells": 0.4724,
+      "survives_bh_alpha_0.05": false
+    },
+    "OT->OT": {
+      "currier_a": 1.663,
+      "currier_b": 1.937,
+      "diff": -0.274,
+      "null_mean": -0.215,
+      "null_ci": [
+        -0.399,
+        -0.065
+      ],
+      "p_empirical": 0.3358,
+      "n_null": 1500,
+      "clears_null": false,
+      "p_bh_all_reported_cells": 0.4338,
+      "survives_bh_alpha_0.05": false
+    }
+  },
+  "restricted_herbal_A": {
+    "QOK->QOK": {
+      "currier_a": 2.433,
+      "currier_b": 1.046,
+      "diff": 1.386,
+      "null_mean": 0.809,
+      "null_ci": [
+        0.543,
+        0.996
+      ],
+      "p_empirical": 0.0013,
+      "n_null": 768,
+      "clears_null": true,
+      "p_bh_all_reported_cells": 0.0035,
+      "survives_bh_alpha_0.05": true
+    },
+    "CHEDY->QOK": {
+      "currier_a": 1.568,
+      "currier_b": 2.469,
+      "diff": -0.901,
+      "null_mean": 0.499,
+      "null_ci": [
+        -0.36,
+        1.754
+      ],
+      "p_empirical": 0.3796,
+      "n_null": 1237,
+      "clears_null": false,
+      "p_bh_all_reported_cells": 0.4338,
+      "survives_bh_alpha_0.05": false
+    },
+    "AIIN->QOK": {
+      "currier_a": 1.047,
+      "currier_b": 0.593,
+      "diff": 0.454,
+      "null_mean": -0.139,
+      "null_ci": [
+        -0.51,
+        0.232
+      ],
+      "p_empirical": 0.3384,
+      "n_null": 1500,
+      "clears_null": false,
+      "p_bh_all_reported_cells": 0.4338,
+      "survives_bh_alpha_0.05": false
+    },
+    "OT->OT": {
+      "currier_a": 1.654,
+      "currier_b": 2.241,
+      "diff": -0.587,
+      "null_mean": 0.253,
+      "null_ci": [
+        -0.03,
+        0.949
+      ],
+      "p_empirical": 0.1759,
+      "n_null": 1500,
+      "clears_null": false,
+      "p_bh_all_reported_cells": 0.3518,
+      "survives_bh_alpha_0.05": false
+    }
+  },
+  "verdict": "2 of 4 pooled cells remain associated with Currier labels after BH correction across all pooled and restricted cell tests. This is promising descriptive evidence, but the design does not isolate language from scribal hand, transcription practice, folio position, or section mixture."
+}

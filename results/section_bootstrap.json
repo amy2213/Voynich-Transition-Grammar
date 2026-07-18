@@ -1,0 +1,156 @@
+{
+  "rows": [
+    {
+      "contrast": "SECTION",
+      "a": "herbal_A/B",
+      "b": "biological/B",
+      "cell": "CHEDY->QOK",
+      "mean_diff": 0.454,
+      "ci95": [
+        -0.159,
+        1.197
+      ],
+      "excludes_zero": false
+    },
+    {
+      "contrast": "SECTION",
+      "a": "herbal_A/B",
+      "b": "biological/B",
+      "cell": "AIIN->QOK",
+      "mean_diff": 0.422,
+      "ci95": [
+        0.082,
+        0.781
+      ],
+      "excludes_zero": true
+    },
+    {
+      "contrast": "SECTION",
+      "a": "herbal_A/B",
+      "b": "biological/B",
+      "cell": "QOK->QOK",
+      "mean_diff": 0.068,
+      "ci95": [
+        -0.541,
+        0.623
+      ],
+      "excludes_zero": false
+    },
+    {
+      "contrast": "SECTION",
+      "a": "herbal_A/B",
+      "b": "recipes_Q20/B",
+      "cell": "CHEDY->QOK",
+      "mean_diff": 0.271,
+      "ci95": [
+        -0.35,
+        0.884
+      ],
+      "excludes_zero": false
+    },
+    {
+      "contrast": "SECTION",
+      "a": "herbal_A/B",
+      "b": "recipes_Q20/B",
+      "cell": "AIIN->QOK",
+      "mean_diff": 0.092,
+      "ci95": [
+        -0.242,
+        0.453
+      ],
+      "excludes_zero": false
+    },
+    {
+      "contrast": "SECTION",
+      "a": "herbal_A/B",
+      "b": "recipes_Q20/B",
+      "cell": "QOK->QOK",
+      "mean_diff": -0.361,
+      "ci95": [
+        -0.909,
+        0.306
+      ],
+      "excludes_zero": false
+    },
+    {
+      "contrast": "SECTION",
+      "a": "biological/B",
+      "b": "recipes_Q20/B",
+      "cell": "CHEDY->QOK",
+      "mean_diff": -0.178,
+      "ci95": [
+        -0.463,
+        0.088
+      ],
+      "excludes_zero": false
+    },
+    {
+      "contrast": "SECTION",
+      "a": "biological/B",
+      "b": "recipes_Q20/B",
+      "cell": "AIIN->QOK",
+      "mean_diff": -0.337,
+      "ci95": [
+        -0.479,
+        -0.204
+      ],
+      "excludes_zero": true
+    },
+    {
+      "contrast": "SECTION",
+      "a": "biological/B",
+      "b": "recipes_Q20/B",
+      "cell": "QOK->QOK",
+      "mean_diff": -0.49,
+      "ci95": [
+        -0.708,
+        -0.302
+      ],
+      "excludes_zero": true
+    },
+    {
+      "contrast": "LANGUAGE",
+      "a": "herbal_A/A",
+      "b": "herbal_A/B",
+      "cell": "CHEDY->QOK",
+      "mean_diff": -0.934,
+      "ci95": [
+        -2.207,
+        0.31
+      ],
+      "excludes_zero": false
+    },
+    {
+      "contrast": "LANGUAGE",
+      "a": "herbal_A/A",
+      "b": "herbal_A/B",
+      "cell": "AIIN->QOK",
+      "mean_diff": 0.495,
+      "ci95": [
+        -0.054,
+        0.997
+      ],
+      "excludes_zero": false
+    },
+    {
+      "contrast": "LANGUAGE",
+      "a": "herbal_A/A",
+      "b": "herbal_A/B",
+      "cell": "QOK->QOK",
+      "mean_diff": 1.198,
+      "ci95": [
+        -0.013,
+        2.38
+      ],
+      "excludes_zero": false
+    }
+  ],
+  "section": [
+    3,
+    9
+  ],
+  "language": [
+    0,
+    3
+  ]
+}

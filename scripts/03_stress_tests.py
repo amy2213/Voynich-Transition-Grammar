@@ -36,13 +36,12 @@ def is_ot(tok): return tok.startswith("ot")
 def is_chedy(tok): return any(p in tok for p in ["chedy", "shedy", "chey", "shey"])
 def is_aiin(tok): return "aiin" in tok or "ain" in tok
 
-def classify(tok):
-    if is_aiin(tok): return "AIIN"
-    if is_qok(tok): return "QOK"
-    if is_ok(tok): return "OK"
-    if is_ot(tok): return "OT"
-    if is_chedy(tok): return "CHEDY"
-    return "OTHER"
+# MIGRATED: family classification now comes from the shared canonical
+# module. The local copy used a different priority order than
+# 01_core_analysis.py, which disagreed on 3.59% of tokens.
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from _canonical import classify  # noqa: E402,F401
 
 lines = []
 for _, row in zl.iterrows():
@@ -216,3 +215,4 @@ for sec in ["herbal_A", "biological", "recipes_Q20", "herbal_B"]:
 with open(os.path.join(PROJECT_ROOT, "results", "stress_test_results.json"), "w") as f:
     json.dump(results, f, indent=2)
 print(f"\nSaved to results/stress_test_results.json")
+
