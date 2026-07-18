@@ -477,5 +477,42 @@ class TestGeneratedRepairArtifacts(unittest.TestCase):
         self.assertIn("does not isolate language", language["verdict"])
 
 
+class TestCurrentPublicClaims(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.paper = (PROJECT_ROOT / "docs" / "main.tex").read_text(encoding="utf-8")
+        cls.readme = (PROJECT_ROOT / "README.md").read_text(encoding="utf-8")
+
+    def test_paper_uses_locked_v2_estimates(self):
+        for value in ("1.333", "1.458", "0.918", "0.00995"):
+            self.assertIn(value, self.paper)
+        self.assertIn("14 eligible comparators", self.paper)
+        self.assertIn("Ottoman Turkish", self.paper)
+        self.assertIn("ineligible", self.paper)
+
+    def test_paper_does_not_restate_retired_claims(self):
+        retired_positive_phrases = (
+            "Voynich is the only tested system",
+            "None of $16$ natural-language comparators",
+            "all five tested chains survive",
+            "is statistically invariant at $15.0\\%$",
+            "encoded structured language is the only tested class",
+            "resampling tokens with replacement",
+            "33 regression tests",
+        )
+        for phrase in retired_positive_phrases:
+            self.assertNotIn(phrase, self.paper)
+
+    def test_scope_limits_are_explicit(self):
+        combined = " ".join((self.paper + "\n" + self.readme).split())
+        for limitation in (
+            "do not establish natural-language uniqueness",
+            "does not claim decipherment",
+            "identify a language",
+            "untested mechanisms",
+        ):
+            self.assertIn(limitation, combined)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

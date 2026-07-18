@@ -1,6 +1,7 @@
 # Version 2 canonical source hierarchy
 
-Status: Phase 2 central-estimator rebuild. The paper has not been revised.
+Status: Phase 3 manuscript and public-claim alignment after the locked
+Phase 2 central-estimator rebuild.
 
 Authority is strictly ordered:
 
@@ -13,7 +14,8 @@ Authority is strictly ordered:
    `results/run_manifest.json`.
 5. The complete test suite and `results/test_report.json`.
 6. Current Version 2 documents under `docs/v2/` and the root `README.md`.
-7. `docs/main.tex`, which remains frozen as an audited but unrevised manuscript.
+7. `docs/main.tex` and generated `docs/paper.pdf`, aligned to the locked
+   Version 2 estimator after Phase 2 approval.
 8. Historical material under `docs/archive/` and `results/archive/`.
 
 Generated output overrides prose. Prose never overrides generated output.

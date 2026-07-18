@@ -118,6 +118,7 @@ Current test evidence is machine-readable in:
 - Boundary audit: `docs/v2/boundary_crossing_audit.md`
 - Canonical claim ledger: `docs/v2/canonical_claim_ledger.csv`
 - Audit input hashes: `docs/v2/input_manifest.md`
+- Manuscript alignment: `docs/v2/manuscript_alignment_report.md`
 
 The July closure documents and obsolete results remain available under
 `docs/archive/audit-2026-07/` and `results/archive/pre-v2/`. They are preserved
@@ -125,6 +126,12 @@ for transparency and are not current authority.
 
 ## Paper status
 
-`docs/main.tex` and the rendered paper remain intentionally unchanged. The
-claim ledger identifies every known conflict. Manuscript revision is a
-separate, later sprint.
+`docs/main.tex` and `docs/paper.pdf` are aligned to the locked Version 2
+outputs. The current paper reports the canonical within-line core analysis,
+AIIN decomposition, and boundary-aware matched prefix/suffix estimator. It
+does not promote provisional control, cross-transcription, section, cascade,
+or matrix-wide analyses into current claims.
+
+The superseded May paper, Word draft, release documents, and figures are
+preserved under `docs/archive/pre-v2-publication/` with an explicit warning
+that they contain retired values and methods.

@@ -14,7 +14,7 @@
 | Provisional outputs | Other `results/*.json` | July audit outputs pending method repair | Provisional |
 | Historical outputs | `results/archive/` | Obsolete/precomputed/method-mismatched artifacts | Archived |
 | Current governance | `docs/v2/`, root `README.md` | Status, issue ledger, architecture, claims | Canonical prose |
-| Manuscript | `docs/main.tex` | Audited paper awaiting later revision | Frozen, noncanonical claims |
+| Manuscript | `docs/main.tex`, `docs/paper.pdf` | Current paper aligned to canonical generated outputs | Current prose; generated evidence remains higher authority |
 | Historical record | `docs/archive/` | Prior papers, audits, retractions, closure documents | Preserved, noncanonical |
 
 ## Dependency flow
