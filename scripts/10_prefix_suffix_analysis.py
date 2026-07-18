@@ -17,7 +17,7 @@ import numpy as np
 
 from _canonical import (
     SequenceUnit,
-    affix_clustering_scores,
+    affix_clustering_sensitivity_scores,
     bootstrap_groups_to_target,
     load_corpus,
     sample_units_to_target,
@@ -183,8 +183,9 @@ def corpus_inventory():
 
 def compact_score(units):
     sequences = [unit.tokens for unit in units]
-    primary = affix_clustering_scores(sequences, include_other=False, **DISCOVERY)
-    sensitivity = affix_clustering_scores(sequences, include_other=True, **DISCOVERY)
+    estimates = affix_clustering_sensitivity_scores(sequences, **DISCOVERY)
+    primary = estimates["primary_excludes_other"]
+    sensitivity = estimates["sensitivity_includes_other"]
     return {
         "prefix_sc": primary["prefix"]["score"],
         "suffix_sc": primary["suffix"]["score"],

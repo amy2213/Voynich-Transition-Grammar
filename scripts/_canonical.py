@@ -541,6 +541,34 @@ def affix_clustering_scores(sequences, include_other=False, **discovery):
     return output
 
 
+def affix_clustering_sensitivity_scores(sequences, **discovery):
+    """Score primary and OTHER sensitivity partitions after one discovery."""
+    discovery = dict(discovery)
+    min_n = discovery.pop("min_n", 10)
+    primary, with_other = {}, {}
+    for side in ("prefix", "suffix"):
+        affixes = discover_affixes(sequences, side, **discovery)
+        classes = assign_affix_sequences(sequences, affixes, side)
+        primary[side] = {
+            "affixes": affixes,
+            **self_clustering_details(classes, min_n=min_n,
+                                      include_other=False),
+        }
+        with_other[side] = {
+            "affixes": affixes,
+            **self_clustering_details(classes, min_n=min_n,
+                                      include_other=True),
+        }
+    for output in (primary, with_other):
+        prefix = output["prefix"]["score"]
+        suffix = output["suffix"]["score"]
+        output["ratio"] = prefix / suffix if prefix is not None and suffix else None
+        output["minimum"] = (min(prefix, suffix)
+                             if None not in (prefix, suffix) else None)
+    return {"primary_excludes_other": primary,
+            "sensitivity_includes_other": with_other}
+
+
 def _fragment_unit(unit, token_n, fragment_index=0):
     """Return a leading contiguous fragment as an independent sequence."""
     return SequenceUnit(
