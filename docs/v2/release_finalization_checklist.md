@@ -13,6 +13,8 @@
   release bundle were advanced from `2.0.0-rc1` to `2.0.0`.
 - [x] Final preprint bundle compiled independently.
 - [x] Final bundle inventory, hashes, build log, and manifest were generated.
+- [x] Final Version 2 release evidence was preserved in the portfolio Drive
+  layer and independently rechecked after download.
 
 ## GitHub and Zenodo gates
 
@@ -38,5 +40,10 @@
   `93b598dff8fdae6f591b99e6e866225a0abc170a4fa32c2914e35bd502a74308`.
 - Release paper SHA-256:
   `7b5f6497dd400589a0efa84fc746780ff457f6850626a7339a2e48a9261568ed`.
+- Durable portfolio evidence archive:
+  `Voynich-v2.0.0-release-evidence.zip`, Drive file ID
+  `1XF6Vhd0Ybs7W_Ll-2F1YejKjYlRDuvZj`.
+- Durable evidence archive SHA-256:
+  `69734d2024b8cfad5b83dca7915a8d5ef7be507937900f10f220b707a6c6d558`.
 - No Version 2 Zenodo DOI is recorded until Zenodo ingestion is independently
   confirmed.
