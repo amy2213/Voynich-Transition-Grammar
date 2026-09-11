@@ -5,8 +5,8 @@ CURRENT VERSION: 2.0.0
 CURRENT BRANCH: main
 LAST VERIFIED SCIENTIFIC COMMIT: 039acf4873104d7c8b60a3a5ff946667a8e0193c
 FROZEN RELEASE TAG: v2.0.0 -> 039acf4873104d7c8b60a3a5ff946667a8e0193c
-CURRENT PHASE: Version 2 archival release, Zenodo/DOI gate
-AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with durable release evidence preserved in the portfolio Drive folder
+CURRENT PHASE: Version 2 archival release, final public integrity audit
+AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Zenodo Version 2 archival record and durable release evidence preserved in the portfolio Drive folder
 
 ## Working
 - Version 2 scientific/code baseline is finalized and frozen at `039acf4873104d7c8b60a3a5ff946667a8e0193c`.
@@ -17,21 +17,33 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with du
 - Release assets include the final arXiv source bundle, paper PDF, SHA256SUMS,
   `manifest.json`, and `VALIDATION.md`.
 - Published ZIP and paper digests match the locked release checksums.
+- Zenodo Version 2 is live as an open software record.
+- Version DOI: `10.5281/zenodo.22715079`.
+- Concept DOI: `10.5281/zenodo.19996904`.
+- Zenodo shows version `v2.0.0`, creator Amy Laird with ORCID indicator, MIT
+  license, and an external GitHub release relationship to
+  `amy2213/Voynich-Transition-Grammar` release `v2.0.0`.
 - Durable release evidence is preserved in Google Drive as
   `Voynich-v2.0.0-release-evidence.zip` (Drive file ID
   `1XF6Vhd0Ybs7W_Ll-2F1YejKjYlRDuvZj`).
 - The preserved evidence archive contains the source bundle, paper PDF,
   SHA256SUMS, manifest, validation record, release notes, and frozen tag target.
+- `CITATION.cff`, current release notes, README, and the public dashboard now
+  point to Version 2 archival identifiers and scope.
 - Version 1 preprint releases remain historical and must not be confused with Version 2.
 
 ## Known issues
-- Zenodo Version 2 ingestion and DOI metadata are not yet confirmed.
-- No Version 2 DOI may be asserted until the Zenodo record is live and verified.
-- Final public release integrity audit remains blocked until Zenodo metadata is available.
+- The frozen released paper says both test entry points passed 34 tests, while
+  the frozen machine-readable `results/test_report.json` records 37 pytest and
+  37 direct-execution tests passed. The machine-readable test report is
+  authoritative. This is a documentation-only discrepancy and does not alter
+  any scientific result, release tag, dataset, estimator, or artifact hash.
+- The original May 2026 public dashboard contained retired claims. The live
+  dashboard source on `main` has been replaced with a Version 2 authority page;
+  the old content remains recoverable through repository history.
 
 ## Blockers
-- Archival release cannot be called complete until Zenodo Version 2 ingestion,
-  DOI metadata verification, and the final public integrity audit are complete.
+- Only the final public release integrity audit remains before Maintenance.
 
 ## Last test and release results
 - Scientific baseline canonical pipeline: green on `039acf4873104d7c8b60a3a5ff946667a8e0193c`.
@@ -46,10 +58,11 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with du
 - Documentation/control commits after the frozen scientific tag are not fresh scientific QA passes and must not replace the verified scientific commit in provenance records.
 
 ## Next action
-Complete Linear DAT-39: confirm Zenodo ingestion of the exact GitHub `v2.0.0` release, record and verify the Version 2 DOI metadata, and add the assigned DOI in a follow-up metadata commit without rewriting the frozen release. Then complete DAT-40 final public release integrity audit.
+Complete Linear DAT-40: run the final public release integrity audit across GitHub, Zenodo, current public documentation, claim boundaries, and preserved artifacts. If no release-blocking discrepancy remains, move the project to Maintenance.
 
 ## Source-of-truth rules
 - Notion: portfolio state and release decisions
 - Linear: archival-release gates and executable work
 - GitHub: source, tests, CI, tags, releases
+- Zenodo: public archival identifiers and version family
 - Google Drive / ChatGPT Library: durable paper, bundle, hashes, and handoff artifacts
