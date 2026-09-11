@@ -1,6 +1,6 @@
 # Version 2.0.0
 
-Release date: 2026-07-18
+Release date: 2026-09-11
 
 ## Scientific scope
 
@@ -69,6 +69,20 @@ creates and independently compiles the final preprint sources under
 
 ## Archival identifiers
 
-The Version 2 release DOI will be assigned by Zenodo after the corresponding
-GitHub release is ingested. Version 1 Zenodo identifiers do not identify this
-release.
+- Version 2 DOI: `10.5281/zenodo.22715079`
+- Concept DOI for all versions: `10.5281/zenodo.19996904`
+- GitHub release: `https://github.com/amy2213/Voynich-Transition-Grammar/releases/tag/v2.0.0`
+- Frozen scientific commit: `039acf4873104d7c8b60a3a5ff946667a8e0193c`
+
+Zenodo identifies the v2.0.0 record as software, links it to the GitHub
+`v2.0.0` release, and records the MIT license. The archived software record is
+part of the same Zenodo version family as the historical Version 1 preprint.
+
+## Post-release documentation correction
+
+The released paper states that both test entry points collected and passed 34
+tests. The frozen machine-readable test report records 37 pytest tests passed
+and 37 direct-execution tests passed, with zero failures, errors, skips, or
+warnings. The machine-readable test report is authoritative for test count.
+This is a documentation-only discrepancy and does not alter any scientific
+result, dataset, estimator, or release hash.
