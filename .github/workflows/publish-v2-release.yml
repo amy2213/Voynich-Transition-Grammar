@@ -65,3 +65,24 @@ jobs:
             release/v2.0.0/SHA256SUMS \
             release/v2.0.0/manifest.json \
             release/v2.0.0/VALIDATION.md
+
+      - name: Stage frozen release evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p archival-evidence
+          cp release/v2.0.0/Voynich_Transition_Grammar_v2.0.0_arxiv.zip archival-evidence/
+          cp release/v2.0.0/paper.pdf archival-evidence/
+          cp release/v2.0.0/SHA256SUMS archival-evidence/
+          cp release/v2.0.0/manifest.json archival-evidence/
+          cp release/v2.0.0/VALIDATION.md archival-evidence/
+          cp RELEASE_NOTES.md archival-evidence/
+          printf '%s\n' 'v2.0.0 -> 039acf4873104d7c8b60a3a5ff946667a8e0193c' > archival-evidence/TAG_TARGET.txt
+
+      - name: Upload frozen release evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: Voynich-v2.0.0-release-evidence
+          path: archival-evidence/
+          if-no-files-found: error
+          retention-days: 90
