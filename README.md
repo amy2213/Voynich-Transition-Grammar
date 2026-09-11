@@ -122,9 +122,9 @@ Current test evidence is machine-readable in:
 - `results/test_report.junit.xml`
 
 The frozen test report records 37 pytest tests passed and 37 direct-execution
-tests passed, with zero failures. The released paper contains a documentation
--only typo stating 34 tests. The machine-readable report controls for test
-count; the discrepancy does not alter any scientific result.
+tests passed, with zero failures. The released paper contains a documentation-only
+typo stating 34 tests. The machine-readable report controls for test count;
+the discrepancy does not alter any scientific result.
 
 ## Governance and audit deliverables
 
