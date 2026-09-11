@@ -16,12 +16,27 @@
 
 ## GitHub and Zenodo gates
 
-- [ ] Merge the finalization PR to `main` after CI passes.
+- [x] Merge the finalization PR to `main` after CI passes.
+- [x] Create GitHub release tag `v2.0.0` from the reviewed scientific commit
+  `039acf4873104d7c8b60a3a5ff946667a8e0193c`.
+- [x] Attach the final source bundle, paper PDF, checksums, manifest, and
+  validation record to the GitHub release.
+- [x] Verify the published release assets against the locked release checksums.
 - [ ] Confirm the repository is enabled in the Zenodo GitHub integration.
-- [ ] Create GitHub release tag `v2.0.0` from the reviewed `main` commit.
-- [ ] Attach the final source bundle and paper PDF to the GitHub release.
 - [ ] Wait for Zenodo ingestion and record the version DOI and concept DOI.
 - [ ] Add the assigned DOI to current citation and release metadata in a
   follow-up commit without rewriting the tagged release.
 - [ ] Verify the Zenodo record title, creator, ORCID, version, license, files,
   related GitHub URL, and scientific scope before public handoff.
+- [ ] Run the final public release integrity audit after DOI metadata is live.
+
+## Current release evidence
+
+- GitHub release: `v2.0.0`, published 2026-09-11.
+- Frozen release tag target: `039acf4873104d7c8b60a3a5ff946667a8e0193c`.
+- Source bundle SHA-256:
+  `93b598dff8fdae6f591b99e6e866225a0abc170a4fa32c2914e35bd502a74308`.
+- Release paper SHA-256:
+  `7b5f6497dd400589a0efa84fc746780ff457f6850626a7339a2e48a9261568ed`.
+- No Version 2 Zenodo DOI is recorded until Zenodo ingestion is independently
+  confirmed.
