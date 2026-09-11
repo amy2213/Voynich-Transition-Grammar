@@ -1,0 +1,67 @@
+name: Publish Version 2.0.0 release
+
+on:
+  push:
+    paths:
+      - .github/release-v2-trigger
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify frozen release payload and target commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          RELEASE_COMMIT="039acf4873104d7c8b60a3a5ff946667a8e0193c"
+          git cat-file -e "${RELEASE_COMMIT}^{commit}"
+          sha256sum -c release/v2.0.0/SHA256SUMS
+
+          existing_tag="$(git ls-remote origin refs/tags/v2.0.0 | awk '{print $1}')"
+          if [ -n "${existing_tag}" ]; then
+            peeled_tag="$(git ls-remote origin 'refs/tags/v2.0.0^{}' | awk '{print $1}')"
+            tag_target="${peeled_tag:-${existing_tag}}"
+            if [ "${tag_target}" != "${RELEASE_COMMIT}" ]; then
+              echo "Existing v2.0.0 tag points to ${tag_target}, expected ${RELEASE_COMMIT}."
+              exit 1
+            fi
+          fi
+
+      - name: Create immutable release tag if needed
+        shell: bash
+        run: |
+          set -euo pipefail
+          RELEASE_COMMIT="039acf4873104d7c8b60a3a5ff946667a8e0193c"
+          if ! git ls-remote --exit-code origin refs/tags/v2.0.0 >/dev/null 2>&1; then
+            git tag v2.0.0 "${RELEASE_COMMIT}"
+            git push origin refs/tags/v2.0.0
+          fi
+
+      - name: Publish GitHub release and final assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view v2.0.0 >/dev/null 2>&1; then
+            echo "GitHub release v2.0.0 already exists; leaving it unchanged."
+            exit 0
+          fi
+
+          gh release create v2.0.0 \
+            --verify-tag \
+            --title "Voynich Transition Grammar v2.0.0" \
+            --notes-file RELEASE_NOTES.md \
+            release/v2.0.0/Voynich_Transition_Grammar_v2.0.0_arxiv.zip \
+            release/v2.0.0/paper.pdf \
+            release/v2.0.0/SHA256SUMS \
+            release/v2.0.0/manifest.json \
+            release/v2.0.0/VALIDATION.md
