@@ -13,8 +13,9 @@ abstract: >-
   language-identification, or natural-language-proof claim.
 repository-code: "https://github.com/amy2213/Voynich-Transition-Grammar"
 url: "https://github.com/amy2213/Voynich-Transition-Grammar"
+doi: "10.5281/zenodo.22715079"
 version: "2.0.0"
-date-released: "2026-07-18"
+date-released: "2026-09-11"
 license: MIT
 keywords:
   - voynich-manuscript
@@ -33,4 +34,4 @@ preferred-citation:
       orcid: "https://orcid.org/0009-0001-5479-0007"
   year: 2026
   month: 7
-  url: "https://github.com/amy2213/Voynich-Transition-Grammar/blob/main/docs/paper.pdf"
+  url: "https://github.com/amy2213/Voynich-Transition-Grammar/blob/v2.0.0/docs/paper.pdf"
