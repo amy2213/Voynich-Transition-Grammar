@@ -1,9 +1,14 @@
 # Voynich Transition Grammar
 
-Version 2 audit consolidation branch.
+Current scientific release: `2.0.0`.
 
-Current release: `2.0.0`. See `RELEASE_NOTES.md` and
-`docs/v2/release_finalization_checklist.md`.
+- GitHub release: `v2.0.0`
+- Version DOI: `10.5281/zenodo.22715079`
+- Concept DOI: `10.5281/zenodo.19996904`
+- Frozen scientific commit: `039acf4873104d7c8b60a3a5ff946667a8e0193c`
+- Public release date: 2026-09-11
+
+See `RELEASE_NOTES.md` and `docs/v2/release_finalization_checklist.md`.
 
 This repository analyzes token structure in Voynich Manuscript transcriptions
 with reproducible corpus methods. It does not claim decipherment, translation,
@@ -35,7 +40,7 @@ sides of every system. Its primary mean excludes `OTHER`; inclusion is
 reported as a sensitivity condition.
 
 Across 200 replicates, Voynich has median prefix self-clustering 1.333 (95%
-replicate interval 1.222–1.461), suffix self-clustering 1.458 (1.389–1.555),
+replicate interval 1.222-1.461), suffix self-clustering 1.458 (1.389-1.555),
 and ratio 0.918. The median minimum of the two side scores is 1.333. With
 `OTHER` included, the corresponding medians are 1.292, 1.363, and 0.951.
 
@@ -70,7 +75,10 @@ status is recorded in `docs/v2/canonical_claim_ledger.csv`.
 - One generated system satisfying all seven exact MVE criteria simultaneously.
 - The MVE checklist identifying encoded natural language.
 - Section or quire organization of transition structure.
-- A closed audit or publication-ready repository.
+- A closed audit or publication-ready repository before Version 2 finalization.
+
+The public dashboard has been replaced with a Version 2 authority page so the
+retired May 2026 claims are no longer presented as current findings.
 
 ## Canonical methods
 
@@ -113,6 +121,11 @@ Current test evidence is machine-readable in:
 - `results/test_report.json`
 - `results/test_report.junit.xml`
 
+The frozen test report records 37 pytest tests passed and 37 direct-execution
+tests passed, with zero failures. The released paper contains a documentation
+-only typo stating 34 tests. The machine-readable report controls for test
+count; the discrepancy does not alter any scientific result.
+
 ## Governance and audit deliverables
 
 - Source hierarchy: `docs/v2/source_hierarchy.md`
@@ -127,14 +140,13 @@ The July closure documents and obsolete results remain available under
 `docs/archive/audit-2026-07/` and `results/archive/pre-v2/`. They are preserved
 for transparency and are not current authority.
 
-## Paper status
+## Paper and archive status
 
-`docs/main.tex` and `docs/paper.pdf` are aligned to the locked Version 2
-outputs. The current paper reports the canonical within-line core analysis,
-AIIN decomposition, and boundary-aware matched prefix/suffix estimator. It
-does not promote provisional control, cross-transcription, section, cascade,
-or matrix-wide analyses into current claims.
+The frozen Version 2 paper is available in the `v2.0.0` GitHub release and at
+`docs/paper.pdf`. The Version 2 software record is archived by Zenodo at DOI
+`10.5281/zenodo.22715079`; the concept DOI for the version family is
+`10.5281/zenodo.19996904`.
 
-The superseded May paper, Word draft, release documents, and figures are
-preserved under `docs/archive/pre-v2-publication/` with an explicit warning
-that they contain retired values and methods.
+The superseded May paper, Word draft, release documents, figures, and earlier
+claims are preserved under archival paths or repository history. They do not
+override Version 2 generated outputs or the canonical claim ledger.
