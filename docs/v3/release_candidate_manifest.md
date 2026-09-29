@@ -31,6 +31,13 @@ The run passed:
 - frozen Version 2 canonical pipeline and complete test suite;
 - machine-readable evidence upload.
 
+Canonical evidence artifact:
+
+- name: `canonical-run-evidence`
+- artifact ID: `11055321097`
+- artifact SHA-256:
+  `5c5db28982eac41a67644bd7732f40e85a56f91dafb39103b6a38799a564ad8c`
+
 ### Dedicated Version 3 validation
 
 - Workflow: Version 3 scientific validation
@@ -122,5 +129,12 @@ interpretation is documented in:
 - `docs/v3/release_candidate_addendum.md`
 - `docs/v3/release_candidate_checklist.md`
 
-No Version 3 tag, release, DOI, or citation-version change is authorized by
-this manifest.
+Release-candidate packaging reuses the exact-head validation artifact rather
+than rerunning the scientific estimator solely to create an archive. The
+package includes the generated validation JSON and audit report, the Version 2
+post-release defect record, the Version 3 specification and interpretation,
+the reviewed addendum and checklist, this manifest, release notes, project
+state, and internal SHA-256 checksums.
+
+No Version 3 tag, release, DOI, dashboard-authority change, or citation-version
+change is authorized by this manifest.
