@@ -1,0 +1,40 @@
+name: Claude pre-freeze diagnostics
+
+on:
+  push:
+    branches: [review/claude-v3-pre-freeze]
+    paths:
+      - "scripts/26_claude_review_diagnostics.py"
+      - ".github/workflows/claude-pre-freeze-review.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out diagnostic branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest
+
+      - name: Compile diagnostic
+        run: python -m compileall -q scripts/26_claude_review_diagnostics.py
+
+      - name: Run external-review diagnostics
+        run: python scripts/26_claude_review_diagnostics.py
+
+      - name: Upload diagnostic evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-pre-freeze-diagnostics
+          path: results/claude_review_diagnostics.json
+          retention-days: 30
