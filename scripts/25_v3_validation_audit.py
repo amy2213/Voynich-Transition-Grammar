@@ -129,24 +129,31 @@ def main():
     ):
         failures.append("replicate-pairing guard changed")
 
-    main_profile = data["matched_analyses"]["main"]
+    line_profile = data["matched_analyses"]["line_deletion_stability"]
     all_profile = data["matched_analyses"]["all_system_small_target"]
+    page_profile = data["voynich_cluster_robustness"][
+        "page_block_bootstrap"
+    ]
 
-    expected_main = sorted(
+    expected_line = sorted(
         name for name in data["full_corpus"]
         if name != "Ottoman Turkish"
     )
-    if sorted(main_profile["systems"]) != expected_main:
+    if sorted(line_profile["systems"]) != expected_line:
         failures.append(
-            "main profile does not contain exactly all systems except "
-            "Ottoman Turkish"
+            "line-deletion profile does not contain exactly all systems "
+            "except Ottoman Turkish"
         )
 
     if sorted(all_profile["systems"]) != sorted(data["full_corpus"]):
         failures.append("all-system profile is missing or adding systems")
 
     failures.extend(
-        audit_profile("main", main_profile, expected_replicates)
+        audit_profile(
+            "line_deletion_stability",
+            line_profile,
+            expected_replicates,
+        )
     )
     failures.extend(
         audit_profile(
@@ -156,21 +163,62 @@ def main():
         )
     )
 
-    main_voynich = main_profile["systems"]["VOYNICH"]["summary"]
+    if page_profile["replicate_n"] != expected_replicates:
+        failures.append(
+            "Voynich page bootstrap replicate count does not match "
+            "declared validation count"
+        )
+    if page_profile.get("group_attribute") != "page":
+        failures.append("Voynich cluster robustness is not grouped by page")
+    page_summary = page_profile["summary"]
+    for metric in (
+        "prefix_order_ratio",
+        "suffix_order_ratio",
+        "minimum_order_ratio",
+    ):
+        if page_summary[metric]["replicate_n"] != expected_replicates:
+            failures.append(
+                f"Voynich page bootstrap {metric} has incomplete replicates"
+            )
+
+    if "comparator_boundary_policy" not in data["method"]:
+        failures.append("comparator boundary-safe tokenization policy missing")
+
+    for system, record in data["full_corpus"].items():
+        if system == "VOYNICH":
+            continue
+        diagnostics = record.get("tokenization_diagnostics")
+        if diagnostics is None:
+            failures.append(
+                f"{system}: tokenization diagnostics missing"
+            )
+
+    repeats = data.get("voynich_exact_repeat_robustness", {})
+    if repeats.get("observed_exact_adjacent_repeats") is None:
+        failures.append("Voynich exact-repeat robustness is missing")
+    repeat_score = repeats.get(
+        "score_after_breaking_at_exact_repeat_pairs", {}
+    )
+    if repeat_score.get("suffix_order_ratio") is None:
+        failures.append(
+            "Voynich exact-repeat suffix robustness score is missing"
+        )
+
+    line_voynich = line_profile["systems"]["VOYNICH"]["summary"]
     all_voynich = all_profile["systems"]["VOYNICH"]["summary"]
 
     comparator_names = [
-        name for name in main_profile["systems"]
+        name for name in line_profile["systems"]
         if name != "VOYNICH"
     ]
-    main_below_median = [
+    line_below_median = [
         name for name in comparator_names
-        if main_profile["systems"][name]["summary"]
+        if line_profile["systems"][name]["summary"]
         ["minimum_order_ratio"]["median"] < 1.0
     ]
-    main_below_interval = [
+    line_below_interval = [
         name for name in comparator_names
-        if main_profile["systems"][name]["summary"]
+        if line_profile["systems"][name]["summary"]
         ["minimum_order_ratio"]["ci95"][1] < 1.0
     ]
 
@@ -196,29 +244,43 @@ def main():
         "",
         "## Voynich neutral-value diagnostics",
         "",
-        "- Main matched prefix: "
-        + fmt_summary(main_voynich["prefix_order_ratio"])
-        + " (" + neutral_status(main_voynich["prefix_order_ratio"]) + ")",
-        "- Main matched suffix: "
-        + fmt_summary(main_voynich["suffix_order_ratio"])
-        + " (" + neutral_status(main_voynich["suffix_order_ratio"]) + ")",
-        "- Main matched minimum: "
-        + fmt_summary(main_voynich["minimum_order_ratio"])
-        + " (" + neutral_status(main_voynich["minimum_order_ratio"]) + ")",
+        "- Page-block prefix: "
+        + fmt_summary(page_summary["prefix_order_ratio"])
+        + " (" + neutral_status(page_summary["prefix_order_ratio"]) + ")",
+        "- Page-block suffix: "
+        + fmt_summary(page_summary["suffix_order_ratio"])
+        + " (" + neutral_status(page_summary["suffix_order_ratio"]) + ")",
+        "- Page-block minimum: "
+        + fmt_summary(page_summary["minimum_order_ratio"])
+        + " (" + neutral_status(page_summary["minimum_order_ratio"]) + ")",
+        "- Line-deletion prefix (stability only): "
+        + fmt_summary(line_voynich["prefix_order_ratio"]),
         "- All-system small-target minimum: "
         + fmt_summary(all_voynich["minimum_order_ratio"])
         + " (" + neutral_status(all_voynich["minimum_order_ratio"]) + ")",
         "",
-        "## Comparator pattern in the main matched sensitivity",
+        "## Comparator pattern in the line-deletion sensitivity",
         "",
         f"- Comparators with minimum-side median below 1.0: "
-        f"{len(main_below_median)}/{len(comparator_names)}.",
+        f"{len(line_below_median)}/{len(comparator_names)}.",
         f"- Comparators whose entire 95% minimum-side interval is below 1.0: "
-        f"{len(main_below_interval)}/{len(comparator_names)}.",
+        f"{len(line_below_interval)}/{len(comparator_names)}.",
+        "",
+        "## Exact-repeat robustness",
+        "",
+        f"- Observed exact adjacent repeats: "
+        f"{repeats['observed_exact_adjacent_repeats']}.",
+        f"- Expected exact adjacent repeats under within-unit shuffle: "
+        f"{repeats['expected_exact_adjacent_repeats_under_within_unit_shuffle']:.3f}.",
+        f"- Suffix ratio after breaking every exact adjacent repeat pair: "
+        f"{repeat_score['suffix_order_ratio']:.3f}.",
         "",
     ])
 
-    lines.extend(render_profile("Main matched sensitivity", main_profile))
+    lines.extend(render_profile(
+        "Line-deletion stability sensitivity",
+        line_profile,
+    ))
     lines.append("")
     lines.extend(render_profile(
         "All-system small-target sensitivity",
