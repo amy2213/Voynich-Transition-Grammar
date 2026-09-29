@@ -37,9 +37,9 @@ from _canonical import (
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
-ESTIMATOR_VERSION = "3.0.0-dev"
+ESTIMATOR_VERSION = "3.0.0"
 DEFAULT_SEED = 20260929
-DEFAULT_REPLICATES = 100
+DEFAULT_REPLICATES = 200
 MAIN_MATCH_FRACTION = 0.90
 ALL_SYSTEM_MATCH_FRACTION = 0.90
 UNDERSIZED_SYSTEM = "Ottoman Turkish"
@@ -472,10 +472,10 @@ def main():
     )
 
     payload = {
-        "schema_version": "3.1-dev",
+        "schema_version": "3.1",
         "estimator_version": ESTIMATOR_VERSION,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "status": "validation candidate; not a released scientific claim",
+        "status": "validated descriptive scientific result; finite-corpus scope",
         "scope_warning": (
             "This estimator measures affix-class ordering relative to an "
             "exact within-unit permutation expectation. It does not establish "
