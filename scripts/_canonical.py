@@ -555,6 +555,102 @@ def self_clustering_details(sequences, min_n=10, include_other=False):
     }
 
 
+def composition_controlled_self_clustering_details(
+        sequences, min_n=10, include_other=False):
+    """Self-transition ratios against an exact within-unit shuffle baseline.
+
+    For class c with k occurrences in a unit of length n, a uniformly random
+    permutation of that unit has expected adjacent c->c count
+
+        k * (k - 1) / n.
+
+    Summing that quantity over units conditions the baseline on each unit's
+    class composition and length. Between-unit vocabulary heterogeneity can no
+    longer inflate the expected-vs-observed contrast. No Monte Carlo shuffle
+    is required to obtain the null expectation.
+    """
+    observed_same = Counter()
+    total_counts = Counter()
+    source_counts = Counter()
+    destination_counts = Counter()
+    expected_shuffle = Counter()
+    transition_n = 0
+
+    for classes in sequences:
+        classes = tuple(classes)
+        n = len(classes)
+        if not n:
+            continue
+        counts = Counter(classes)
+        total_counts.update(counts)
+        if n >= 2:
+            transition_n += n - 1
+            source_counts.update(classes[:-1])
+            destination_counts.update(classes[1:])
+            for source, destination in zip(classes, classes[1:]):
+                observed_same[source] += int(source == destination)
+        for label, k in counts.items():
+            expected_shuffle[label] += k * (k - 1) / n
+
+    details = {}
+    ratios = []
+    candidates = set(total_counts)
+    if not include_other:
+        candidates.discard("OTHER")
+    candidates.discard(AMBIGUOUS)
+
+    for label in sorted(set(total_counts)):
+        expected = expected_shuffle[label]
+        supported = (
+            source_counts[label] > min_n
+            and destination_counts[label] > min_n
+            and expected > 1
+            and label in candidates
+        )
+        ratio = observed_same[label] / expected if expected else None
+        details[label] = {
+            "observed": observed_same[label],
+            "expected_within_unit_shuffle": expected,
+            "source_n": source_counts[label],
+            "destination_n": destination_counts[label],
+            "token_n": total_counts[label],
+            "ratio_observed_to_shuffle_expectation": ratio,
+            "included_in_mean": supported,
+        }
+        if supported:
+            ratios.append(ratio)
+
+    return {
+        "score": sum(ratios) / len(ratios) if ratios else None,
+        "transition_n": transition_n,
+        "included_class_n": len(ratios),
+        "classes": details,
+        "null": "exact expectation under independent permutation within each sequence unit",
+    }
+
+
+def composition_controlled_affix_scores(
+        sequences, include_other=False, **discovery):
+    """Discover affixes and score only the ordering contribution."""
+    discovery = dict(discovery)
+    min_n = discovery.pop("min_n", 10)
+    output = {}
+    for side in ("prefix", "suffix"):
+        affixes = discover_affixes(sequences, side, **discovery)
+        classes = assign_affix_sequences(sequences, affixes, side)
+        output[side] = {
+            "affixes": affixes,
+            **composition_controlled_self_clustering_details(
+                classes, min_n=min_n, include_other=include_other),
+        }
+    prefix = output["prefix"]["score"]
+    suffix = output["suffix"]["score"]
+    output["ratio"] = prefix / suffix if prefix is not None and suffix else None
+    output["minimum"] = min(prefix, suffix) if None not in (prefix, suffix) else None
+    output["maximum"] = max(prefix, suffix) if None not in (prefix, suffix) else None
+    return output
+
+
 def affix_order_effect_scores(sequences, rng, shuffles=100,
                               include_other=False, **discovery):
     """Measure order contribution relative to a within-unit shuffle null.
