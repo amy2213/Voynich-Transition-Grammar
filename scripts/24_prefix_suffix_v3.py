@@ -140,6 +140,7 @@ def tokenize_segments(text, pattern):
 def load_leipzig(label, folder, archive, pattern):
     path = RAW / "cross_linguistic" / folder / archive
     units = []
+    diagnostics = Counter()
     with tarfile.open(path, "r:gz") as bundle:
         member = next(item for item in bundle.getmembers()
                       if item.name.endswith("-sentences.txt"))
@@ -149,15 +150,17 @@ def load_leipzig(label, folder, archive, pattern):
         for index, raw_line in enumerate(handle):
             line = raw_line.decode("utf-8", errors="ignore").rstrip("\n")
             sentence = line.split("\t", 1)[1] if "\t" in line else line
-            tokens = tokenize(sentence, pattern)
-            if tokens:
-                units.append(SequenceUnit(
-                    unit_id=f"{folder}:{index}",
-                    tokens=tokens,
-                    boundary_type="sentence",
-                    document=archive,
-                ))
-    return units, [path]
+            segments, diag = tokenize_segments(sentence, pattern)
+            diagnostics.update(diag)
+            for segment_index, tokens in enumerate(segments):
+                if tokens:
+                    units.append(SequenceUnit(
+                        unit_id=f"{folder}:{index}:segment-{segment_index}",
+                        tokens=tokens,
+                        boundary_type="sentence_fragment",
+                        document=archive,
+                    ))
+    return units, [path], dict(diagnostics)
 
 
 def strip_gutenberg(text):
@@ -182,38 +185,50 @@ def load_gutenberg(folder, filename):
     path = RAW / "cross_linguistic" / folder / filename
     text = strip_gutenberg(path.read_text(encoding="utf-8", errors="ignore"))
     units = []
+    diagnostics = Counter()
     for index, sentence in enumerate(re.split(r"(?<=[.!?])\s+|\n\s*\n", text)):
-        tokens = tokenize(sentence, LATIN)
-        if tokens:
-            units.append(SequenceUnit(
-                unit_id=f"{folder}:{index}",
-                tokens=tokens,
-                boundary_type="sentence",
-                document=filename,
-            ))
-    return units, [path]
+        segments, diag = tokenize_segments(sentence, LATIN)
+        diagnostics.update(diag)
+        for segment_index, tokens in enumerate(segments):
+            if tokens:
+                units.append(SequenceUnit(
+                    unit_id=f"{folder}:{index}:segment-{segment_index}",
+                    tokens=tokens,
+                    boundary_type="sentence_fragment",
+                    document=filename,
+                ))
+    return units, [path], dict(diagnostics)
 
 
 def load_conllu(folder, filenames):
     paths = [RAW / "cross_linguistic" / folder / name for name in filenames]
     units = []
-    sentence = []
+    diagnostics = Counter()
     sentence_index = 0
+    segment_index = 0
+    current = []
+
+    def flush(document):
+        nonlocal current, segment_index
+        if current:
+            units.append(SequenceUnit(
+                unit_id=f"{document}:{sentence_index}:segment-{segment_index}",
+                tokens=tuple(current),
+                boundary_type="sentence_fragment",
+                document=document,
+            ))
+            current = []
+            segment_index += 1
+
     for path in paths:
         lines = path.read_text(
             encoding="utf-8", errors="ignore"
         ).splitlines() + [""]
         for line in lines:
             if not line.strip():
-                if sentence:
-                    units.append(SequenceUnit(
-                        unit_id=f"{path.stem}:{sentence_index}",
-                        tokens=tuple(sentence),
-                        boundary_type="sentence",
-                        document=path.name,
-                    ))
-                    sentence_index += 1
-                    sentence = []
+                flush(path.name)
+                sentence_index += 1
+                segment_index = 0
                 continue
             if line.startswith("#") or "\t" not in line:
                 continue
@@ -221,34 +236,44 @@ def load_conllu(folder, filenames):
             if fields[0].isdigit():
                 word = fields[1].lower()
                 if word.isalpha():
-                    sentence.append(word)
-    return units, paths
+                    current.append(word)
+                    diagnostics["retained_items"] += 1
+                else:
+                    diagnostics["break_items"] += 1
+                    diagnostics["mixed_content_items"] += 1
+                    flush(path.name)
+        flush(path.name)
+    return units, paths, dict(diagnostics)
 
 
 def corpus_inventory():
     corpora = {}
     for label, folder, archive, pattern, family in LEIPZIG:
-        units, paths = load_leipzig(label, folder, archive, pattern)
+        units, paths, diagnostics = load_leipzig(
+            label, folder, archive, pattern
+        )
         corpora[label] = {
             "family": family,
             "units": units,
             "paths": paths,
-            "source_type": "Leipzig sentence records",
+            "source_type": "Leipzig boundary-safe sentence fragments",
+            "tokenization_diagnostics": diagnostics,
         }
 
     for label, folder, filename in (
         ("Middle English", "middle_english", "chaucer_canterbury_tales_22120.txt"),
         ("KJV English", "kjv_english", "king_james_bible_10900.txt"),
     ):
-        units, paths = load_gutenberg(folder, filename)
+        units, paths, diagnostics = load_gutenberg(folder, filename)
         corpora[label] = {
             "family": "Indo-European",
             "units": units,
             "paths": paths,
-            "source_type": "Gutenberg sentence segments",
+            "source_type": "Gutenberg boundary-safe sentence fragments",
+            "tokenization_diagnostics": diagnostics,
         }
 
-    units, paths = load_conllu(
+    units, paths, diagnostics = load_conllu(
         "ottoman_turkish",
         ("ota_dudu_train.conllu", "ota_dudu_test.conllu"),
     )
@@ -256,7 +281,8 @@ def corpus_inventory():
         "family": "Turkic",
         "units": units,
         "paths": paths,
-        "source_type": "CoNLL-U sentences",
+        "source_type": "CoNLL-U boundary-safe sentence fragments",
+        "tokenization_diagnostics": diagnostics,
     }
     return corpora
 
