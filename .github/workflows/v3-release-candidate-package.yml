@@ -1,0 +1,87 @@
+name: Version 3 release-candidate package
+
+on:
+  push:
+    branches: [v3/release-candidate-final]
+    paths:
+      - "docs/v2/post_release_defect_2026-09-29.md"
+      - "docs/v3/**"
+      - "RELEASE_NOTES.md"
+      - "PROJECT_STATE.md"
+      - ".github/workflows/v3-release-candidate-package.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release-candidate branch
+        uses: actions/checkout@v4
+
+      - name: Download exact-head Version 3 validation evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: v3-validation-200-replicates
+          path: package/validation
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: amy2213/Voynich-Transition-Grammar
+          run-id: 36614286293
+
+      - name: Assemble reviewed release-candidate documents
+        run: |
+          mkdir -p package/docs/v2 package/docs/v3
+          cp docs/v2/post_release_defect_2026-09-29.md package/docs/v2/
+          cp docs/v3/prefix_suffix_order_estimator_spec.md package/docs/v3/
+          cp docs/v3/validation_interpretation.md package/docs/v3/
+          cp docs/v3/release_candidate_addendum.md package/docs/v3/
+          cp docs/v3/release_candidate_checklist.md package/docs/v3/
+          cp docs/v3/release_candidate_manifest.md package/docs/v3/
+          cp RELEASE_NOTES.md package/
+          cp PROJECT_STATE.md package/
+
+      - name: Write package manifest and checksums
+        run: |
+          cat > package/PACKAGE_MANIFEST.md <<'EOF'
+          # Voynich Transition Grammar Version 3 release-candidate evidence package
+
+          This package is release-candidate evidence only. It does not itself
+          create a Version 3 tag, GitHub release, DOI version, or citation update.
+
+          Scientific validation source:
+          - PR final head: b8833f6b8714232bae2ceeebffbd6ee070432863
+          - validation run ID: 36614286293
+          - validation artifact ID: 11054779129
+          - validation artifact SHA-256: 1b71a5a24d29452b588eb9de4fd48e05396f091d0968da13f523b775906d6720
+          - validation result: success
+          - mechanical audit: success
+
+          Repository integration:
+          - validation PR: #6
+          - merged main commit: 67a2eb1b3cb86b75e509de94db685eba607799e4
+
+          Canonical compatibility:
+          - canonical workflow run ID: 36614286343
+          - canonical result: success
+          - canonical evidence artifact SHA-256: 5c5db28982eac41a67644bd7732f40e85a56f91dafb39103b6a38799a564ad8c
+          EOF
+
+          find package -type f ! -name SHA256SUMS -print0 \
+            | sort -z \
+            | xargs -0 sha256sum > package/SHA256SUMS
+
+          zip -r Voynich-v3-release-candidate-evidence.zip package
+          sha256sum Voynich-v3-release-candidate-evidence.zip \
+            > Voynich-v3-release-candidate-evidence.zip.sha256
+
+      - name: Upload release-candidate evidence package
+        uses: actions/upload-artifact@v4
+        with:
+          name: v3-release-candidate-evidence-package
+          path: |
+            Voynich-v3-release-candidate-evidence.zip
+            Voynich-v3-release-candidate-evidence.zip.sha256
+          retention-days: 90

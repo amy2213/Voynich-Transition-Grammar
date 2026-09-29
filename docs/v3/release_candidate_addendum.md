@@ -1,6 +1,6 @@
 # Version 3 release-candidate addendum
 
-Status: draft release-candidate addendum  
+Status: reviewed release-candidate addendum  
 Date: 2026-09-29  
 Project: Voynich Transition Grammar
 
@@ -183,11 +183,13 @@ Interpretation record:
 
 - `docs/v3/validation_interpretation.md`
 
-The 200-replicate validation workflow and mechanical audit completed
-successfully. The uploaded validation artifact contains the JSON result and
-generated audit report. Artifact ZIP SHA-256:
+The exact-final-head 200-replicate validation workflow and mechanical audit completed successfully on run #7 (run ID `36614286293`, head `b8833f6b8714232bae2ceeebffbd6ee070432863`). The uploaded validation artifact contains the JSON result and generated audit report. Artifact ZIP SHA-256:
 
-`d1778bb989681aee45a08a6028f565b4b57948aa377a49e1117aad5fef725cae`
+`1b71a5a24d29452b588eb9de4fd48e05396f091d0968da13f523b775906d6720`
+
+The verified release-candidate evidence ZIP has SHA-256 `b6d496e05a8203bbddd1490f56de8ccacdd2e63d94e2d9763db6d8362a0b9875` and is durably preserved in the ChatGPT Library at `/Voynich Transition Grammar/Voynich-v3-release-candidate-evidence.zip`.
+
+Full final-head provenance is recorded in `docs/v3/release_candidate_manifest.md`.
 
 ## Release-candidate conclusion
 

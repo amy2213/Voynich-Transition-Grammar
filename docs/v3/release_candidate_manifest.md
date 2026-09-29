@@ -53,8 +53,18 @@ Validation artifact:
   - `prefix_suffix_v3_validation.json`
   - `prefix_suffix_v3_validation_audit.md`
 
-The generated audit reported PASS under the declared Version 3 validation
-rules.
+The generated audit reported PASS under the declared Version 3 validation rules.
+
+Final ordinary canonical evidence artifact:
+
+- name: `canonical-run-evidence`
+- artifact ID: `11055321097`
+- artifact ZIP SHA-256: `5c5db28982eac41a67644bd7732f40e85a56f91dafb39103b6a38799a564ad8c`
+
+Verified release-candidate evidence package:
+
+- inner evidence ZIP SHA-256: `b6d496e05a8203bbddd1490f56de8ccacdd2e63d94e2d9763db6d8362a0b9875`
+- durable Library path: `/Voynich Transition Grammar/Voynich-v3-release-candidate-evidence.zip`
 
 ## Validation profiles
 

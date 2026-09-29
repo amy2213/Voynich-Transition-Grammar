@@ -1,6 +1,6 @@
 # Version 3 release-candidate checklist
 
-Status: active  
+Status: release-candidate gates complete; public-release gates remain  
 Opened: 2026-09-29
 
 ## Scientific method
@@ -45,14 +45,13 @@ Opened: 2026-09-29
 
 - [x] Version 3 validation PR ordinary repository CI passes on final head.
 - [x] Version 3 validation workflow passes on final methodological head.
-- [ ] Generated validation JSON and audit report are included in the release
-      evidence package.
+- [x] Generated validation JSON and audit report are included in the verified release-candidate evidence package.
 - [x] Release-candidate provenance manifest records final commit and input
       hashes.
-- [ ] Addendum receives final scope/wording review.
+- [x] Addendum received final scope/wording review; finite-set and sample-size limits remain explicit.
 - [ ] Version number and citation metadata updated only when a Version 3 release
       is explicitly approved.
-- [ ] Release notes clearly distinguish frozen Version 2 from Version 3.
+- [x] Release notes clearly distinguish frozen Version 2 from the validated Version 3 release candidate.
 - [ ] Dashboard/current authority updated only after release approval.
 - [ ] Final Version 3 tag is created only after all prior gates are green.
 - [ ] Archival DOI/version record is created or updated only after the final tag

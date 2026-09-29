@@ -15,6 +15,11 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Ze
 - All 14 main comparators have their entire minimum-side 95% replicate interval below 1.0.
 - The all-system 14,380-token sensitivity gives Voynich minimum 1.019 [0.985, 1.060], so the smaller-sample interval crosses neutral and must remain part of the interpretation.
 - Version 3 reports no cross-system paired p-value; replicate indices have no linguistic pairing.
+- Version 3 validation PR #6 merged to `main` at `67a2eb1b3cb86b75e509de94db685eba607799e4` after exact-head validation and ordinary canonical CI both passed.
+- Final-head Version 3 validation artifact SHA-256: `1b71a5a24d29452b588eb9de4fd48e05396f091d0968da13f523b775906d6720`.
+- Final-head canonical evidence artifact SHA-256: `5c5db28982eac41a67644bd7732f40e85a56f91dafb39103b6a38799a564ad8c`.
+- Verified release-candidate evidence ZIP SHA-256: `b6d496e05a8203bbddd1490f56de8ccacdd2e63d94e2d9763db6d8362a0b9875`.
+- Durable release-candidate evidence is preserved in the ChatGPT Library at `/Voynich Transition Grammar/Voynich-v3-release-candidate-evidence.zip`.
 - Version 2 scientific/code baseline is finalized and frozen at `039acf4873104d7c8b60a3a5ff946667a8e0193c`.
 - Canonical pipeline passed at that scientific commit.
 - Finalization evidence records 37 pytest tests and 37 direct-execution tests passing.
@@ -46,7 +51,7 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Ze
 
 ## Blockers
 - None for Version 2 archival release.
-- Version 3 is not yet a frozen release. Remaining release gates are final PR CI, addendum/release-candidate packaging, provenance hashes, and an explicit Version 3 release decision.
+- Version 3 is not yet a frozen release. Validation, final-head CI, addendum review, provenance, and evidence packaging are complete. Remaining public-release gates are version/citation metadata, current-authority surfaces, final tag/release assets, and archival version publication.
 
 
 ## Final audit result
@@ -62,7 +67,7 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Ze
 - Documentation/control commits after the frozen scientific tag do not replace the verified scientific commit in provenance records.
 
 ## Next action
-Advance the validated Version 3 result through a release-candidate PR, finalize the bounded addendum and release checklist, rerun ordinary repository CI, and prepare Version 3 archival packaging without modifying the frozen `v2.0.0` tag or Version 2 scientific release assets.
+Finalize the public Version 3 release from the validated candidate without modifying the frozen `v2.0.0` tag or Version 2 release assets.
 
 ## Source-of-truth rules
 - Notion: portfolio state and release decisions
