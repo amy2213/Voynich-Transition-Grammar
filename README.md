@@ -93,7 +93,7 @@ That sample-size sensitivity is part of the result, not something to hide.
 
 Version 3 is a validated descriptive release candidate, not yet a frozen
 scientific release. The result is limited to the declared corpora,
-transcription, discovery rules, and estimator. It does not establish
+transcription, discovery rules, and estimator. These analyses do not establish
 natural-language uniqueness, identify a language, decipher the manuscript, or
 identify a generating mechanism. See
 `docs/v3/prefix_suffix_order_estimator_spec.md` and
