@@ -1,3 +1,58 @@
+# Version 3.0.0
+
+Release date: 2026-09-29
+
+## Scientific change
+
+Version 3.0.0 replaces the Version 2 prefix/suffix cross-corpus estimator after
+a post-release audit identified four material issues: a pooled-marginal
+composition confound, suffix-nesting logic applied with prefix semantics,
+one-character comparator-token asymmetry, and an invalid paired-sign-test
+framing across independently generated replicate schedules.
+
+The replacement estimator conditions expected self-transitions on each natural
+line or sentence using the exact random-order expectation `k(k-1)/n`,
+uses side-aware nesting, retains alphabetic one-character comparator words, and
+reports no cross-system replicate-index p-value.
+
+## Validated Version 3 result
+
+Across 200 matched replicates at 28,447 tokens:
+
+- Voynich prefix order ratio: 1.013 [1.005, 1.025]
+- Voynich suffix order ratio: 1.108 [1.099, 1.116]
+- Voynich minimum-side ratio: 1.013 [1.005, 1.025]
+- Voynich minimum-side ratio is at or above 1.0 in 199/200 replicates
+- all 14 tested large comparators have their entire minimum-side 95% replicate
+  interval below 1.0
+
+At the smaller 14,380-token all-system target including Ottoman Turkish,
+Voynich minimum-side ratio is 1.019 [0.985, 1.060], so the interval crosses the
+neutral value 1.0. That sensitivity is retained in the headline interpretation.
+
+These are finite-corpus replicate summaries under the declared estimator. They
+do not establish natural-language uniqueness, identify a language, decipher
+the manuscript, or identify a generating mechanism.
+
+## Retained independent findings
+
+The separate within-line shuffle analysis remains intact:
+
+- CHEDY→QOK: 615 observations, 2.659× pooled independence expectation
+- AIIN→QOK: 127 observations, 0.444× pooled independence expectation
+
+Their within-line shuffle design already fixes line composition while
+destroying order.
+
+## Release evidence
+
+Version 3.0.0 release assets contain the final 200-replicate JSON result,
+mechanical audit, addendum, interpretation, provenance, SHA-256 sums, and
+release validation record. The frozen Version 2 tag, paper, DOI record, and
+release assets are not rewritten.
+
+---
+
 # Version 2.0.0
 
 Release date: 2026-09-11
