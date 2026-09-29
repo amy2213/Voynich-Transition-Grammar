@@ -597,6 +597,8 @@ def composition_controlled_self_clustering_details(
 
     details = {}
     ratios = []
+    included_observed = 0.0
+    included_expected = 0.0
     candidates = set(total_counts)
     if not include_other:
         candidates.discard("OTHER")
@@ -622,9 +624,15 @@ def composition_controlled_self_clustering_details(
         }
         if supported:
             ratios.append(ratio)
+            included_observed += observed_same[label]
+            included_expected += expected
 
+    aggregate = (included_observed / included_expected
+                 if included_expected > 0 else None)
     return {
-        "score": sum(ratios) / len(ratios) if ratios else None,
+        "score": aggregate,
+        "unweighted_mean_class_ratio": (
+            sum(ratios) / len(ratios) if ratios else None),
         "transition_n": transition_n,
         "included_class_n": len(ratios),
         "classes": details,
