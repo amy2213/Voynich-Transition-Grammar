@@ -102,6 +102,8 @@ Independent diagnostics from the frozen release baseline show:
   full-corpus prefix ratio to **0.933** and suffix ratio to **1.053**;
 - an analytic fixed-endpoint diagnostic gives approximately **0.912** prefix
   and **1.048** suffix on the full corpus;
+- a 200-replicate fixed-endpoint page bootstrap gives **0.919 [0.884, 0.954]**
+  prefix and **1.048 [1.017, 1.086]** suffix;
 - Voynich prefix discovery remains stable at **1.013–1.025** across the
   released setting plus six reasonable discovery perturbations;
 - Arabic's weaker edge changes from **0.864** under the release thresholds to
