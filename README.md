@@ -1,14 +1,18 @@
 # Voynich Transition Grammar
 
-Current scientific release: `2.0.0`.
+Current scientific release: `3.0.0`.
 
-- GitHub release: `v2.0.0`
-- Version DOI: `10.5281/zenodo.22715079`
-- Concept DOI: `10.5281/zenodo.19996904`
-- Frozen scientific commit: `039acf4873104d7c8b60a3a5ff946667a8e0193c`
-- Public release date: 2026-09-11
+- GitHub release: `v3.0.0`
+- Zenodo concept DOI: `10.5281/zenodo.19996904`
+- Version-specific DOI: assigned after archival ingestion
+- Public release date: 2026-09-29
+- Version 3 method: `docs/v3/prefix_suffix_order_estimator_spec.md`
+- Version 3 interpretation: `docs/v3/validation_interpretation.md`
+- Version 3 correction/addendum: `docs/v3/release_candidate_addendum.md`
 
-See `RELEASE_NOTES.md` and `docs/v2/release_finalization_checklist.md`.
+Historical Version 2 remains frozen at tag `v2.0.0`, scientific commit
+`039acf4873104d7c8b60a3a5ff946667a8e0193c`, and DOI
+`10.5281/zenodo.22715079`.
 
 This repository analyzes token structure in Voynich Manuscript transcriptions
 with reproducible corpus methods. It does not claim decipherment, translation,
@@ -34,11 +38,10 @@ candidates such as `dy/edy` and `in/iin` to be selected even though the
 specification prohibited nested same-side families. The frozen `v2.0.0` tag
 and Zenodo artifact are not being rewritten.
 
-Version 3 development is isolated from the frozen release. The candidate
-estimator uses an exact within-unit permutation expectation, side-aware affix
-nesting, one-character comparator words, and the same without-replacement
-natural-unit sampling rule for every system. Cross-system replicate-index sign
-tests have been removed.
+Version 3 is the replacement current estimator. It uses an exact within-unit
+permutation expectation, side-aware affix nesting, one-character comparator
+words, and the same without-replacement natural-unit sampling rule for every
+system. Cross-system replicate-index sign tests have been removed.
 
 
 ### Retained descriptive results
@@ -72,7 +75,7 @@ inferential status.
 
 See `docs/v2/post_release_defect_2026-09-29.md` for the defect record.
 
-### Version 3 validated candidate
+### Version 3.0.0 current result
 
 `scripts/24_prefix_suffix_v3.py` implements the replacement analysis. For a
 class with `k` occurrences inside a sequence unit of length `n`, its exact
@@ -91,13 +94,13 @@ A smaller 14,380-token sensitivity including Ottoman Turkish gives a Voynich
 minimum-side interval of 0.985-1.060, which crosses the neutral value 1.0.
 That sample-size sensitivity is part of the result, not something to hide.
 
-Version 3 is a validated descriptive release candidate, not yet a frozen
-scientific release. The result is limited to the declared corpora,
-transcription, discovery rules, and estimator. These analyses do not establish
-natural-language uniqueness, identify a language, decipher the manuscript, or
-identify a generating mechanism. See
-`docs/v3/prefix_suffix_order_estimator_spec.md` and
-`docs/v3/validation_interpretation.md`.
+Version 3.0.0 is the current bounded scientific release. The result is limited
+to the declared corpora, transcription, discovery rules, and estimator. These
+analyses do not establish natural-language uniqueness, identify a language,
+decipher the manuscript, or identify a generating mechanism. See
+`docs/v3/prefix_suffix_order_estimator_spec.md`,
+`docs/v3/validation_interpretation.md`, and
+`docs/v3/release_candidate_manifest.md`.
 
 ### Other provisional findings
 
@@ -183,11 +186,13 @@ for transparency and are not current authority.
 
 ## Paper and archive status
 
-The frozen Version 2 paper is available in the `v2.0.0` GitHub release and at
-`docs/paper.pdf`. The Version 2 software record is archived by Zenodo at DOI
-`10.5281/zenodo.22715079`; the concept DOI for the version family is
-`10.5281/zenodo.19996904`.
+The frozen Version 2 paper remains available in the `v2.0.0` GitHub release
+and at `docs/paper.pdf`. Version 3 does not silently rewrite that paper. Its
+replacement prefix/suffix interpretation is released as code, machine-readable
+validation evidence, and the Version 3 addendum/interpretation documents.
 
-The superseded May paper, Word draft, release documents, figures, and earlier
-claims are preserved under archival paths or repository history. They do not
-override Version 2 generated outputs or the canonical claim ledger.
+Version 2 is archived at DOI `10.5281/zenodo.22715079`; the concept DOI for
+the version family is `10.5281/zenodo.19996904`. The superseded May paper,
+Word draft, release documents, figures, and earlier claims remain preserved
+under archival paths or repository history and do not override current
+Version 3 authority.
