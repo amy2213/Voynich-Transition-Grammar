@@ -523,6 +523,22 @@ class TestBoundaryAwareAffixUtilities(unittest.TestCase):
         self.assertEqual(segments, (("one", "two", "three"),))
         self.assertEqual(diagnostics["break_items"], 0)
 
+    def test_v3_exact_repeat_robustness_breaks_repeat_adjacency(self):
+        module = self._load_v3_module("prefix_suffix_v3_repeat_test")
+        units = [
+            SequenceUnit(
+                "line1",
+                ("abx", "abx", "aby", "aby", "abz"),
+                "line",
+                page="p1",
+            )
+        ] * 20
+        result = module.exact_repeat_robustness(units)
+        self.assertGreater(
+            result["observed_exact_adjacent_repeats"], 0)
+        self.assertIn(
+            "score_after_breaking_at_exact_repeat_pairs", result)
+
     def test_v3_validation_profiles_have_independent_seed_schedules(self):
         path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
         spec = importlib.util.spec_from_file_location("prefix_suffix_v3_seeds", path)
