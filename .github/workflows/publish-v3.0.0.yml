@@ -1,0 +1,222 @@
+name: Publish Version 3.0.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".release/v3.0.0-ready"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish-v3:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_VERSION: "3.0.0"
+      RELEASE_TAG: "v3.0.0"
+      V2_FROZEN_SHA: "039acf4873104d7c8b60a3a5ff946667a8e0193c"
+      GH_TOKEN: ${{ github.token }}
+
+    steps:
+      - name: Check out exact release commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify release marker and frozen Version 2 tag
+        run: |
+          test "$(cat VERSION)" = "$RELEASE_VERSION"
+          test -f .release/v3.0.0-ready
+          test "$(git rev-list -n 1 v2.0.0)" = "$V2_FROZEN_SHA"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install locked runtime inputs
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest
+
+      - name: Compile release sources
+        run: python -m compileall -q scripts tests run_all.py
+
+      - name: Run Version 3 release regression controls
+        run: >
+          python -m pytest -q tests/test_canonical_values.py
+          -k "CurrentPublicClaims or suffix_nesting or discovered_suffixes or composition_control or v3_ or CurrentVersionThreeMetadata"
+
+      - name: Run final 200-replicate Version 3 analysis
+        run: |
+          mkdir -p release/v3.0.0
+          python scripts/24_prefix_suffix_v3.py             --replicates 200             --seed 20260929             --out release/v3.0.0/prefix_suffix_v3_validation.json
+
+      - name: Audit final Version 3 analysis
+        run: |
+          python scripts/25_v3_validation_audit.py             --input release/v3.0.0/prefix_suffix_v3_validation.json             --out release/v3.0.0/prefix_suffix_v3_validation_audit.md
+
+      - name: Verify Version 3 numerical fingerprint
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p = Path("release/v3.0.0/prefix_suffix_v3_validation.json")
+          d = json.loads(p.read_text(encoding="utf-8"))
+
+          assert d["schema_version"] == "3.1"
+          assert d["estimator_version"] == "3.0.0"
+          assert d["status"] == "validated descriptive scientific result; finite-corpus scope"
+          assert d["method"]["matched_subsample_replicates"] == 200
+          assert d["method"]["cross_system_p_values"] == "none"
+
+          main = d["matched_analyses"]["main"]["systems"]
+          voy = main["VOYNICH"]["summary"]
+          assert round(voy["prefix_order_ratio"]["median"], 3) == 1.013
+          assert [round(x, 3) for x in voy["prefix_order_ratio"]["ci95"]] == [1.005, 1.025]
+          assert round(voy["suffix_order_ratio"]["median"], 3) == 1.108
+          assert [round(x, 3) for x in voy["suffix_order_ratio"]["ci95"]] == [1.099, 1.116]
+          assert round(voy["minimum_order_ratio"]["median"], 3) == 1.013
+          assert [round(x, 3) for x in voy["minimum_order_ratio"]["ci95"]] == [1.005, 1.025]
+          assert round(voy["minimum_order_ratio"]["fraction_at_or_above_neutral"], 3) == 0.995
+
+          comparators = [name for name in main if name != "VOYNICH"]
+          assert len(comparators) == 14
+          assert all(
+              main[name]["summary"]["minimum_order_ratio"]["ci95"][1] < 1.0
+              for name in comparators
+          )
+
+          small = d["matched_analyses"]["all_system_small_target"]["systems"]
+          sv = small["VOYNICH"]["summary"]["minimum_order_ratio"]
+          assert round(sv["median"], 3) == 1.019
+          assert [round(x, 3) for x in sv["ci95"]] == [0.985, 1.060]
+          assert sv["ci95"][0] < 1.0 < sv["ci95"][1]
+
+          small_comparators = [name for name in small if name != "VOYNICH"]
+          assert len(small_comparators) == 15
+          assert all(
+              small[name]["summary"]["minimum_order_ratio"]["ci95"][1] < 1.0
+              for name in small_comparators
+          )
+          print("Version 3.0.0 numerical fingerprint: PASS")
+          PY
+
+      - name: Run complete frozen Version 2 canonical pipeline and suite
+        run: python run_all.py
+
+      - name: Re-verify frozen Version 2 tag after tests
+        run: test "$(git rev-list -n 1 v2.0.0)" = "$V2_FROZEN_SHA"
+
+      - name: Assemble Version 3.0.0 release evidence
+        run: |
+          cp docs/v3/release_candidate_addendum.md release/v3.0.0/release_addendum.md
+          cp docs/v3/validation_interpretation.md release/v3.0.0/validation_interpretation.md
+          cp docs/v3/release_candidate_manifest.md release/v3.0.0/provenance_manifest.md
+          cp docs/v2/post_release_defect_2026-09-29.md release/v3.0.0/version2_defect_record.md
+          cp CITATION.cff release/v3.0.0/CITATION.cff
+          cp RELEASE_NOTES.md release/v3.0.0/RELEASE_NOTES.md
+
+          cat > release/v3.0.0/VALIDATION.md <<EOF
+          # Version 3.0.0 release validation
+
+          Release commit: ${GITHUB_SHA}
+          Workflow run: ${GITHUB_RUN_ID}
+          Release date: 2026-09-29
+
+          Exact-commit gates passed:
+          - source compilation
+          - Version 3 regression controls
+          - 200-replicate Version 3 analysis
+          - Version 3 mechanical audit
+          - Version 3 numerical fingerprint
+          - complete frozen Version 2 canonical pipeline and tests
+          - frozen v2.0.0 tag verification
+
+          Scientific scope:
+          Version 3.0.0 reports a finite-corpus structural contrast under the
+          declared transcription, corpora, discovery rules, sequence units, and
+          estimator. It does not establish natural-language uniqueness,
+          decipherment, language identity, semantics, syntax, or a generating
+          mechanism.
+          EOF
+
+          python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path("release/v3.0.0")
+          files = [
+              "prefix_suffix_v3_validation.json",
+              "prefix_suffix_v3_validation_audit.md",
+              "release_addendum.md",
+              "validation_interpretation.md",
+              "provenance_manifest.md",
+              "version2_defect_record.md",
+              "CITATION.cff",
+              "RELEASE_NOTES.md",
+              "VALIDATION.md",
+          ]
+          hashes = {}
+          for name in files:
+              p = root / name
+              hashes[name] = hashlib.sha256(p.read_bytes()).hexdigest()
+
+          manifest = {
+              "schema_version": "1.0",
+              "release_version": "3.0.0",
+              "release_tag": "v3.0.0",
+              "release_commit": os.environ["GITHUB_SHA"],
+              "validation_workflow_run_id": os.environ["GITHUB_RUN_ID"],
+              "v2_frozen_tag_sha": os.environ["V2_FROZEN_SHA"],
+              "zenodo_concept_doi": "10.5281/zenodo.19996904",
+              "files_sha256": hashes,
+          }
+          (root / "manifest.json").write_text(
+              json.dumps(manifest, indent=2) + "\n",
+              encoding="utf-8",
+          )
+          PY
+
+          find release/v3.0.0 -maxdepth 1 -type f ! -name SHA256SUMS -print0             | sort -z             | xargs -0 sha256sum > release/v3.0.0/SHA256SUMS
+
+          (
+            cd release/v3.0.0
+            zip -r Voynich_Transition_Grammar_v3.0.0_evidence.zip               prefix_suffix_v3_validation.json               prefix_suffix_v3_validation_audit.md               release_addendum.md               validation_interpretation.md               provenance_manifest.md               version2_defect_record.md               CITATION.cff               RELEASE_NOTES.md               VALIDATION.md               manifest.json               SHA256SUMS
+          )
+
+      - name: Upload durable workflow evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v3.0.0-release-evidence
+          path: release/v3.0.0/
+          retention-days: 90
+
+      - name: Create or verify GitHub Version 3.0.0 release
+        run: |
+          if git rev-parse "$RELEASE_TAG" >/dev/null 2>&1; then
+            tag_sha="$(git rev-list -n 1 "$RELEASE_TAG")"
+            test "$tag_sha" = "$GITHUB_SHA"
+          fi
+
+          assets=(
+            release/v3.0.0/Voynich_Transition_Grammar_v3.0.0_evidence.zip
+            release/v3.0.0/prefix_suffix_v3_validation.json
+            release/v3.0.0/prefix_suffix_v3_validation_audit.md
+            release/v3.0.0/release_addendum.md
+            release/v3.0.0/manifest.json
+            release/v3.0.0/SHA256SUMS
+            release/v3.0.0/VALIDATION.md
+          )
+
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "${assets[@]}" --clobber
+          else
+            gh release create "$RELEASE_TAG"               --target "$GITHUB_SHA"               --title "Voynich Transition Grammar v3.0.0"               --notes-file docs/v3/github_release_v3.0.0.md               "${assets[@]}"
+          fi
