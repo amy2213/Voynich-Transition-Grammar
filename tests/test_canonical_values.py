@@ -30,6 +30,7 @@ tolerance rationale.
 """
 
 import hashlib
+import importlib.util
 import json
 import os
 import sys
@@ -478,6 +479,16 @@ class TestBoundaryAwareAffixUtilities(unittest.TestCase):
         result = composition_controlled_self_clustering_details(
             sequences, min_n=0, include_other=True)
         self.assertAlmostEqual(result["score"], 0.0, places=12)
+
+    def test_v3_comparator_tokenizer_retains_one_character_words(self):
+        path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
+        spec = importlib.util.spec_from_file_location("prefix_suffix_v3", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(
+            module.tokenize("a b cd", r"[a-z]+"),
+            ("a", "b", "cd"),
+        )
 
 
 class TestGeneratedRepairArtifacts(unittest.TestCase):
