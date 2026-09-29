@@ -1,0 +1,51 @@
+name: Check public Zenodo Version 2 metadata
+
+on:
+  push:
+    branches: [review/v3.1-position-threshold-diagnostics]
+    paths:
+      - ".github/workflows/check-zenodo-v2.yml"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Read public Zenodo record
+        run: |
+          python - <<'PY'
+          import json
+          import re
+          import urllib.request
+          from html import unescape
+
+          with urllib.request.urlopen(
+              "https://zenodo.org/api/records/22715079", timeout=30
+          ) as response:
+              record = json.load(response)
+
+          metadata = record.get("metadata", {})
+          description = unescape(metadata.get("description", ""))
+          text = " ".join(re.sub(r"<[^>]+>", " ", description).split())
+
+          print("TITLE:", metadata.get("title"))
+          print("VERSION:", metadata.get("version"))
+          print("DOI:", metadata.get("doi"))
+          print("DESCRIPTION:", text)
+          print("RELATED:", json.dumps(
+              metadata.get("related_identifiers", []), indent=2
+          ))
+          lower = text.lower()
+          for term in (
+              "version 3",
+              "correction",
+              "reopened",
+              "superseded",
+              "defect",
+              "minimum-side",
+              "self-clustering",
+              "14 eligible",
+              "14 comparators",
+          ):
+              print(f"TERM {term!r}:", term in lower)
+          PY
