@@ -599,11 +599,11 @@ class TestCurrentPublicClaims(unittest.TestCase):
             self.assertIn(limitation, combined)
 
 
-class TestReleaseCandidate(unittest.TestCase):
+class TestFrozenVersion2Release(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.version = (PROJECT_ROOT / "VERSION").read_text(encoding="utf-8").strip()
-        cls.release_root = PROJECT_ROOT / "release" / f"v{cls.version}"
+        cls.version = "2.0.0"
+        cls.release_root = PROJECT_ROOT / "release" / "v2.0.0"
 
     @staticmethod
     def _sha256(path):
@@ -613,13 +613,11 @@ class TestReleaseCandidate(unittest.TestCase):
                 digest.update(chunk)
         return digest.hexdigest()
 
-    def test_version_and_citation_metadata_are_current(self):
-        citation = (PROJECT_ROOT / "CITATION.cff").read_text(encoding="utf-8")
-        self.assertEqual(self.version, "2.0.0")
-        self.assertIn('version: "2.0.0"', citation)
-        self.assertIn("Boundary-Aware Token-Structure Analysis", citation)
-        self.assertNotIn("v1.0.1-preprint", citation)
-        self.assertNotIn("voynich-token-structure-analysis-2026-05.pdf", citation)
+    def test_frozen_v2_release_is_still_present(self):
+        manifest = json.loads(
+            (self.release_root / "manifest.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(manifest["release_version"], "2.0.0")
 
     def test_arxiv_zip_is_minimal_and_self_contained(self):
         bundle = self.release_root / (
@@ -651,6 +649,24 @@ class TestReleaseCandidate(unittest.TestCase):
         self.assertEqual(manifest["build_log_warning_count"], 0)
         self.assertEqual(manifest["build_log_undefined_reference_count"], 0)
         self.assertEqual(manifest["build_log_overfull_count"], 0)
+
+
+class TestCurrentVersionThreeMetadata(unittest.TestCase):
+    def test_version_and_citation_metadata_are_current(self):
+        version = (PROJECT_ROOT / "VERSION").read_text(encoding="utf-8").strip()
+        citation = (PROJECT_ROOT / "CITATION.cff").read_text(encoding="utf-8")
+        self.assertEqual(version, "3.0.0")
+        self.assertIn('version: "3.0.0"', citation)
+        self.assertIn("Boundary-Aware Token-Structure Analysis", citation)
+        self.assertNotIn("10.5281/zenodo.22715079", citation)
+
+    def test_v3_estimator_metadata_is_frozen(self):
+        path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
+        spec = importlib.util.spec_from_file_location("prefix_suffix_v3_release", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(module.ESTIMATOR_VERSION, "3.0.0")
+        self.assertEqual(module.DEFAULT_REPLICATES, 200)
 
 
 if __name__ == "__main__":
