@@ -480,15 +480,64 @@ class TestBoundaryAwareAffixUtilities(unittest.TestCase):
             sequences, min_n=0, include_other=True)
         self.assertAlmostEqual(result["score"], 0.0, places=12)
 
-    def test_v3_comparator_tokenizer_retains_one_character_words(self):
+    def _load_v3_module(self, name="prefix_suffix_v3"):
         path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
-        spec = importlib.util.spec_from_file_location("prefix_suffix_v3", path)
+        spec = importlib.util.spec_from_file_location(name, path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        self.assertEqual(
-            module.tokenize("a b cd", r"[a-z]+"),
-            ("a", "b", "cd"),
-        )
+        return module
+
+    def test_v3_comparator_tokenizer_retains_one_character_words(self):
+        module = self._load_v3_module("prefix_suffix_v3_one_char")
+        segments, diagnostics = module.tokenize_segments(
+            "a b cd", r"[a-z]+")
+        self.assertEqual(segments, (("a", "b", "cd"),))
+        self.assertEqual(diagnostics["break_items"], 0)
+
+    def test_v3_numeric_gap_breaks_sequence(self):
+        module = self._load_v3_module("prefix_suffix_v3_numeric_gap")
+        segments, diagnostics = module.tokenize_segments(
+            "word 123 word", r"[a-z]+")
+        self.assertEqual(segments, (("word",), ("word",)))
+        self.assertEqual(diagnostics["break_items"], 1)
+
+    def test_v3_foreign_script_gap_breaks_sequence(self):
+        module = self._load_v3_module("prefix_suffix_v3_foreign_gap")
+        segments, diagnostics = module.tokenize_segments(
+            "word 漢字 word", r"[a-z]+")
+        self.assertEqual(segments, (("word",), ("word",)))
+        self.assertEqual(diagnostics["break_items"], 1)
+
+    def test_v3_split_orthographic_form_breaks_sequence(self):
+        module = self._load_v3_module("prefix_suffix_v3_split_form")
+        segments, diagnostics = module.tokenize_segments(
+            "prima l'arte dopo", r"[a-z]+")
+        self.assertEqual(segments, (("prima",), ("dopo",)))
+        self.assertEqual(diagnostics["split_items"], 1)
+        self.assertEqual(diagnostics["break_items"], 1)
+
+    def test_v3_punctuation_wrapped_token_does_not_break_sequence(self):
+        module = self._load_v3_module("prefix_suffix_v3_punctuation")
+        segments, diagnostics = module.tokenize_segments(
+            'one "two," three', r"[a-z]+")
+        self.assertEqual(segments, (("one", "two", "three"),))
+        self.assertEqual(diagnostics["break_items"], 0)
+
+    def test_v3_exact_repeat_robustness_breaks_repeat_adjacency(self):
+        module = self._load_v3_module("prefix_suffix_v3_repeat_test")
+        units = [
+            SequenceUnit(
+                "line1",
+                ("abx", "abx", "aby", "aby", "abz"),
+                "line",
+                page="p1",
+            )
+        ] * 20
+        result = module.exact_repeat_robustness(units)
+        self.assertGreater(
+            result["observed_exact_adjacent_repeats"], 0)
+        self.assertIn(
+            "score_after_breaking_at_exact_repeat_pairs", result)
 
     def test_v3_validation_profiles_have_independent_seed_schedules(self):
         path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
@@ -599,11 +648,114 @@ class TestCurrentPublicClaims(unittest.TestCase):
             self.assertIn(limitation, combined)
 
 
-class TestReleaseCandidate(unittest.TestCase):
+class TestCommittedVersionThreeEvidence(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.version = (PROJECT_ROOT / "VERSION").read_text(encoding="utf-8").strip()
-        cls.release_root = PROJECT_ROOT / "release" / f"v{cls.version}"
+        cls.json_path = (
+            PROJECT_ROOT / "results" / "prefix_suffix_v3_validation.json"
+        )
+        cls.audit_path = (
+            PROJECT_ROOT / "results" /
+            "prefix_suffix_v3_validation_audit.md"
+        )
+        cls.data = json.loads(cls.json_path.read_text(encoding="utf-8"))
+
+    def test_v3_committed_evidence_hashes_match_corrected_run(self):
+        self.assertEqual(
+            hashlib.sha256(self.json_path.read_bytes()).hexdigest(),
+            "ad89a8c3c1f887ba6b767069962f5f70226e4ef3b6949a86f58dc1b7ce28a2a3",
+        )
+        self.assertEqual(
+            hashlib.sha256(self.audit_path.read_bytes()).hexdigest(),
+            "07ad39d8a4fccbb75d4dfce1821c9df3993f11a6e5029851d9a296bda23a62f3",
+        )
+
+    def test_v3_committed_page_block_fingerprint(self):
+        page = self.data["voynich_cluster_robustness"][
+            "page_block_bootstrap"
+        ]["summary"]
+        self.assertEqual(
+            [round(x, 3) for x in page["prefix_order_ratio"]["ci95"]],
+            [0.978, 1.064],
+        )
+        self.assertEqual(
+            [round(x, 3) for x in page["suffix_order_ratio"]["ci95"]],
+            [1.074, 1.145],
+        )
+        self.assertAlmostEqual(
+            page["minimum_order_ratio"]["fraction_at_or_above_neutral"],
+            0.770,
+            places=3,
+        )
+        self.assertAlmostEqual(
+            page["suffix_order_ratio"]["fraction_at_or_above_neutral"],
+            1.0,
+            places=12,
+        )
+
+    def test_v3_committed_comparator_pattern_is_boundary_safe(self):
+        self.assertIn(
+            "break sequences",
+            self.data["method"]["comparator_boundary_policy"],
+        )
+        line = self.data["matched_analyses"][
+            "line_deletion_stability"
+        ]["systems"]
+        comparators = [name for name in line if name != "VOYNICH"]
+        self.assertEqual(len(comparators), 14)
+        self.assertTrue(all(
+            line[name]["summary"]["minimum_order_ratio"]["ci95"][1] < 1.0
+            for name in comparators
+        ))
+        full = self.data["full_corpus"]
+        full_comparators = [name for name in full if name != "VOYNICH"]
+        self.assertEqual(len(full_comparators), 15)
+        self.assertTrue(all(
+            full[name]["score"]["minimum_order_ratio"] < 1.0
+            for name in full_comparators
+        ))
+
+    def test_v3_committed_small_target_and_repeat_sensitivities(self):
+        small = self.data["matched_analyses"][
+            "all_system_small_target"
+        ]["systems"]
+        comps = [name for name in small if name != "VOYNICH"]
+        below = sum(
+            small[name]["summary"]["minimum_order_ratio"]["ci95"][1] < 1.0
+            for name in comps
+        )
+        self.assertEqual(below, 13)
+        self.assertGreater(
+            small["Arabic"]["summary"]["minimum_order_ratio"]["ci95"][1],
+            1.0,
+        )
+        self.assertGreater(
+            small["Georgian"]["summary"]["minimum_order_ratio"]["ci95"][1],
+            1.0,
+        )
+        repeat = self.data["voynich_exact_repeat_robustness"]
+        self.assertEqual(repeat["observed_exact_adjacent_repeats"], 249)
+        self.assertAlmostEqual(
+            repeat[
+                "expected_exact_adjacent_repeats_under_within_unit_shuffle"
+            ],
+            244.2737062040074,
+            places=9,
+        )
+        self.assertAlmostEqual(
+            repeat["score_after_breaking_at_exact_repeat_pairs"][
+                "suffix_order_ratio"
+            ],
+            1.0640569268847115,
+            places=12,
+        )
+
+
+class TestFrozenVersion2Release(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.version = "2.0.0"
+        cls.release_root = PROJECT_ROOT / "release" / "v2.0.0"
 
     @staticmethod
     def _sha256(path):
@@ -613,13 +765,11 @@ class TestReleaseCandidate(unittest.TestCase):
                 digest.update(chunk)
         return digest.hexdigest()
 
-    def test_version_and_citation_metadata_are_current(self):
-        citation = (PROJECT_ROOT / "CITATION.cff").read_text(encoding="utf-8")
-        self.assertEqual(self.version, "2.0.0")
-        self.assertIn('version: "2.0.0"', citation)
-        self.assertIn("Boundary-Aware Token-Structure Analysis", citation)
-        self.assertNotIn("v1.0.1-preprint", citation)
-        self.assertNotIn("voynich-token-structure-analysis-2026-05.pdf", citation)
+    def test_frozen_v2_release_is_still_present(self):
+        manifest = json.loads(
+            (self.release_root / "manifest.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(manifest["release_version"], "2.0.0")
 
     def test_arxiv_zip_is_minimal_and_self_contained(self):
         bundle = self.release_root / (
@@ -651,6 +801,24 @@ class TestReleaseCandidate(unittest.TestCase):
         self.assertEqual(manifest["build_log_warning_count"], 0)
         self.assertEqual(manifest["build_log_undefined_reference_count"], 0)
         self.assertEqual(manifest["build_log_overfull_count"], 0)
+
+
+class TestCurrentVersionThreeMetadata(unittest.TestCase):
+    def test_version_and_citation_metadata_are_current(self):
+        version = (PROJECT_ROOT / "VERSION").read_text(encoding="utf-8").strip()
+        citation = (PROJECT_ROOT / "CITATION.cff").read_text(encoding="utf-8")
+        self.assertEqual(version, "3.0.0")
+        self.assertIn('version: "3.0.0"', citation)
+        self.assertIn("Boundary-Aware Token-Structure Analysis", citation)
+        self.assertNotIn("10.5281/zenodo.22715079", citation)
+
+    def test_v3_estimator_metadata_is_frozen(self):
+        path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
+        spec = importlib.util.spec_from_file_location("prefix_suffix_v3_release", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(module.ESTIMATOR_VERSION, "3.0.0")
+        self.assertEqual(module.DEFAULT_REPLICATES, 200)
 
 
 if __name__ == "__main__":

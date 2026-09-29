@@ -1,204 +1,93 @@
 # Version 3 release-candidate addendum
 
-Status: reviewed release-candidate addendum  
-Date: 2026-09-29  
-Project: Voynich Transition Grammar
+Status: corrected pre-freeze addendum; final exact-head validation pending  
+Date: 2026-09-29
 
 ## Purpose
 
-This addendum documents the post-release correction to the Version 2
-prefix/suffix cross-corpus analysis and the validated Version 3 replacement
-estimator.
-
-The frozen Version 2 release remains unchanged for reproducibility. Its
-prefix/suffix claim was reopened because the self-clustering expectation used
-source and destination marginals pooled across natural sequence units. That
-baseline can confound within-unit order with between-unit compositional
-heterogeneity.
-
-Version 3 asks a narrower question: after fixing the affix-class composition of
-each line or sentence, does the observed order produce more or fewer
-self-transitions than random ordering inside that same unit?
+This addendum records the correction path from frozen Version 2 to the
+corrected Version 3.0.0 release candidate. Version 2 remains unchanged for
+historical reproducibility.
 
 ## Corrections relative to Version 2
 
-Version 3 makes four material repairs.
+Version 3 now incorporates six material safeguards:
 
-1. **Composition-conditioned null.** Expected self-transitions are computed
-   exactly within each natural unit rather than from pooled corpus marginals.
-2. **Suffix nesting.** Prefix nesting uses prefix logic and suffix nesting uses
-   suffix logic. Nested suffix candidates such as `dy/edy` and `in/iin` are
-   not simultaneously selected.
-3. **Comparator tokenization.** Alphabetic one-character comparator words are
-   retained rather than deleted.
-4. **Inference framing.** Independently generated replicate distributions are
-   not paired by index and no cross-system sign-test p-value is reported.
+1. exact within-unit composition-conditioned expectation `k(k-1)/n`;
+2. side-aware suffix nesting;
+3. one-character comparator-token retention;
+4. no arbitrary cross-system replicate-index sign test;
+5. boundary-safe comparator tokenization that breaks at excluded or split
+   lexical items instead of joining their neighbors;
+6. page-block Voynich robustness for the cluster-aware neutrality statement.
 
-For a class appearing `k` times in a natural unit containing `n` tokens,
-the exact expected adjacent self-transition count under a uniformly random
-within-unit permutation is:
+## Corrected validation result
 
-```
-k(k - 1) / n
-```
+Full-corpus Voynich:
 
-The primary side score aggregates observed self-transitions across supported
-classes and divides by the corresponding aggregate composition-conditioned
-expectation.
+- prefix 1.013;
+- suffix 1.108;
+- minimum 1.013.
 
-## Validation design
+Voynich page-block bootstrap, 200 replicates:
 
-Three views are reported.
+- prefix **1.020 [0.978, 1.064]**;
+- suffix **1.110 [1.074, 1.145]**;
+- minimum **1.020 [0.978, 1.064]**.
 
-### Full-corpus descriptive analysis
+The prefix/minimum interval crosses neutral. The suffix interval remains above
+neutral in all 200 page-block replicates.
 
-Each system is scored on its complete available corpus. These estimates are
-descriptive because corpus sizes differ.
+The 28,447-token sequence-unit deletion-stability analysis retains all 14
+large comparator minimum-side intervals below 1.0 after the seam correction.
+The old Voynich 199/200 line-deletion statement is retained only as stability
+information and is not headline uncertainty evidence.
 
-### Main matched sensitivity
+At the 14,380-token all-system target, Voynich minimum is
+1.019 [0.985, 1.060]. Arabic and Georgian comparator minimum-side intervals
+also cross neutral at this smaller target; 13/15 remain entirely below 1.0.
 
-- target: 28,447 tokens;
-- target rule: 90% of the canonical Voynich token count;
-- systems: Voynich plus 14 sufficiently large comparators;
-- Ottoman Turkish excluded because its preserved corpus is smaller than the
-  target;
-- 200 independent within-system matched subsamples per system.
+## Exact-repeat robustness
 
-### All-system small-target sensitivity
+Voynich contains 249 exact adjacent repeated-token pairs versus 244.274 expected
+under the within-line shuffle expectation. Breaking every such pair as a
+sequence boundary reduces the suffix ratio from 1.108 to 1.064.
 
-- target: 14,380 tokens;
-- target rule: 90% of the smallest available corpus;
-- systems: all 16 systems, including Ottoman Turkish;
-- 200 independent within-system matched subsamples per system.
-
-Natural lines or sentences remain separate. If the final sampled unit must be
-truncated to reach the exact target, the retained contiguous fragment remains a
-separate unit and creates no seam adjacency.
-
-## Validated results
-
-### Full corpus
-
-Voynich:
-
-- prefix order ratio: 1.013;
-- suffix order ratio: 1.108;
-- minimum-side ratio: 1.013.
-
-Every tested comparator has a full-corpus minimum-side ratio below 1.0.
-
-### Main matched analysis
-
-Voynich:
-
-- prefix: **1.013 [1.005, 1.025]**;
-- suffix: **1.108 [1.099, 1.116]**;
-- minimum: **1.013 [1.005, 1.025]**;
-- minimum at or above 1.0 in **199/200** replicates.
-
-Across the 14 large comparators:
-
-- 14/14 have minimum-side median below 1.0;
-- 14/14 have their entire 95% minimum-side replicate interval below 1.0.
-
-### All-system small-target analysis
-
-Voynich:
-
-- prefix: **1.019 [0.985, 1.060]**;
-- suffix: **1.108 [1.081, 1.132]**;
-- minimum: **1.019 [0.985, 1.060]**;
-- minimum at or above 1.0 in **170/200** replicates.
-
-All 15 comparators have their entire minimum-side 95% replicate interval below
-1.0.
-
-The smaller Voynich prefix/minimum interval crosses 1.0. This sample-size
-sensitivity limits any claim that Voynich is strictly above neutral on both
-sides under every matched target.
+The suffix signal therefore is not solely an exact-repetition artifact, although
+exact repeats contribute to its magnitude.
 
 ## Interpretation
 
-The Version 3 result is not that Voynich has extremely high affix
-self-clustering. The corrected prefix effect is close to neutral.
+The corrected Version 3 observation is not that Voynich is strongly
+self-clustered on both token edges.
 
-The validated finite-set pattern is instead:
+The supported statement is:
 
-- Voynich is near-neutral for prefix ordering and modestly self-clustering for
-  suffix ordering;
-- each tested comparator shows order-driven anti-clustering on at least one
-  token edge under the declared estimator;
-- the separation is strongest in the 28,447-token matched analysis;
-- the smaller all-system analysis weakens the claim that Voynich itself is
-  strictly above neutral on both edges, although comparator minimum-side
-  distributions remain below neutral.
+- prefix ordering is near neutral under page-level resampling;
+- suffix ordering is modestly self-clustering;
+- all tested comparator full-corpus minimum-side point estimates are below 1.0;
+- all 14 sufficiently large comparator minimum-side intervals are below 1.0
+  in the 28,447-token deletion-stability analysis;
+- smaller-target sensitivity weakens interval separation.
 
-This is a structural corpus contrast. It is not a language classifier.
+No language identity, natural-language uniqueness, decipherment, semantic,
+syntactic, or generating-mechanism inference follows.
 
-## Relationship to retained transition findings
+## Evidence
 
-The CHEDY->QOK and AIIN->QOK transition findings use a separate within-line
-shuffle null. That null already fixes each line's class composition and destroys
-only order. The Version 2 affix-estimator defect therefore does not invalidate
-their within-line permutation evidence.
+Corrected run: `36624694412`  
+Corrected validation artifact SHA-256:
+`132ab897cb68a2d1ffe76c204000436761190939b0a4ea6aaca3d7a766fd1585`
 
-The published pooled independence ratios for those cells remain descriptive
-effect-size summaries rather than composition-conditioned magnitudes.
+Committed JSON SHA-256:
+`ad89a8c3c1f887ba6b767069962f5f70226e4ef3b6949a86f58dc1b7ce28a2a3`
 
-## Limits
+Committed audit SHA-256:
+`07ad39d8a4fccbb75d4dfce1821c9df3993f11a6e5029851d9a296bda23a62f3`
 
-The validated Version 3 result does not establish:
+Canonical compatibility run `36624694574` passed the complete frozen Version 2
+pipeline and suite. Its canonical evidence artifact SHA-256 is
+`3febe255027419722a452576ea5b06c80fb4458637d777001d62fa171665f944`.
 
-- decipherment or translation;
-- language identity;
-- natural-language uniqueness;
-- syntax or semantics;
-- a specific historical, cipher, constructed, stenographic, or hybrid
-  mechanism;
-- generalization beyond the frozen comparator set;
-- robustness to every transcription alphabet, genre, affix-discovery rule, or
-  tokenization scheme.
-
-Most Leipzig comparators are modern Wikipedia proxies rather than
-genre-matched historical manuscripts. The finite comparator set is not a
-random sample of human languages.
-
-The 95% intervals are replicate intervals under the declared resampling
-procedures. They are not population confidence intervals over all possible
-languages or manuscripts.
-
-## Reproducibility
-
-Canonical Version 3 code:
-
-- `scripts/24_prefix_suffix_v3.py`
-- `scripts/25_v3_validation_audit.py`
-- `scripts/_canonical.py`
-
-Specification:
-
-- `docs/v3/prefix_suffix_order_estimator_spec.md`
-
-Interpretation record:
-
-- `docs/v3/validation_interpretation.md`
-
-The exact-final-head 200-replicate validation workflow and mechanical audit completed successfully on run #7 (run ID `36614286293`, head `b8833f6b8714232bae2ceeebffbd6ee070432863`). The uploaded validation artifact contains the JSON result and generated audit report. Artifact ZIP SHA-256:
-
-`1b71a5a24d29452b588eb9de4fd48e05396f091d0968da13f523b775906d6720`
-
-The verified release-candidate evidence ZIP has SHA-256 `b6d496e05a8203bbddd1490f56de8ccacdd2e63d94e2d9763db6d8362a0b9875` and is durably preserved in the ChatGPT Library at `/Voynich Transition Grammar/Voynich-v3-release-candidate-evidence.zip`.
-
-Full final-head provenance is recorded in `docs/v3/release_candidate_manifest.md`.
-
-## Release-candidate conclusion
-
-Version 3 resolves the verified Version 2 estimator defects and produces a
-bounded, reproducible structural result. The appropriate claim is the
-finite-set ordering contrast described above, not the earlier raw
-self-clustering elevation and not a claim of natural-language uniqueness.
-
-The Version 2 tag, paper, DOI record, hashes, and release assets remain frozen.
-A future Version 3 release should link directly to the Version 2 post-release
-defect record and identify this addendum as the replacement interpretation for
-the prefix/suffix cross-corpus analysis.
+The frozen Version 2 tag, paper, DOI record, hashes, and release assets remain
+unchanged.

@@ -1,3 +1,74 @@
+# Version 3.0.0
+
+Release date: 2026-09-29
+
+## Scientific change
+
+Version 3.0.0 replaces the reopened Version 2 prefix/suffix estimator. The
+release incorporates the original Version 3 repairs plus two pre-freeze
+external-review corrections:
+
+- comparator tokenization now breaks sequences at excluded or split lexical
+  items instead of joining their surviving neighbors;
+- Voynich neutrality is assessed with a page-block bootstrap rather than the
+  highly overlapping 90% line-deletion interval.
+
+The exact ordering null remains the within-unit expectation `k(k-1)/n`.
+Suffix nesting is side-aware, alphabetic one-character comparator words are
+retained, and cross-system replicate indices are never paired for a p-value.
+
+## Corrected Version 3 result
+
+Full-corpus Voynich:
+
+- prefix 1.013;
+- suffix 1.108.
+
+Voynich page-block robustness, 200 replicates:
+
+- prefix **1.020 [0.978, 1.064]**;
+- suffix **1.110 [1.074, 1.145]**;
+- minimum **1.020 [0.978, 1.064]**.
+
+The prefix/minimum interval crosses neutral. The suffix interval remains above
+neutral in all 200 page-block replicates.
+
+In the 28,447-token sequence-unit deletion-stability analysis, all 14
+sufficiently large comparators have their entire minimum-side 95% replicate
+interval below 1.0. The Voynich 1.013 [1.005, 1.025] line-deletion interval is
+reported only as stability information.
+
+At the smaller 14,380-token all-system target, Voynich minimum is
+1.019 [0.985, 1.060]. Arabic and Georgian minimum-side intervals cross neutral;
+13/15 comparator intervals remain entirely below 1.0.
+
+## Exact-repeat robustness
+
+Voynich has 249 exact adjacent repeated-token pairs versus 244.274 expected
+under the within-unit shuffle expectation. Breaking every such pair lowers the
+suffix ratio to 1.064, so exact repetition contributes but does not fully
+explain the suffix effect.
+
+## Scope
+
+These are finite-corpus robustness summaries under the declared transcription,
+corpora, boundary-safe tokenization, discovery rules, and estimator. They do
+not establish natural-language uniqueness, language identity, decipherment,
+syntax, semantics, or a generating mechanism.
+
+## Evidence
+
+Committed evidence:
+
+- `results/prefix_suffix_v3_validation.json`
+- `results/prefix_suffix_v3_validation_audit.md`
+- `results/prefix_suffix_v3_validation.sha256`
+
+The frozen Version 2 tag, paper, DOI record, hashes, and release assets are not
+rewritten.
+
+---
+
 # Version 2.0.0
 
 Release date: 2026-09-11
@@ -14,9 +85,7 @@ The frozen `v2.0.0` release, hashes, paper, and Zenodo artifact are unchanged.
 Current authority records the defect in
 `docs/v2/post_release_defect_2026-09-29.md`.
 
-A composition-controlled Version 3 replacement estimator has passed its 200-replicate validation and mechanical audit and is a validated descriptive release candidate. In the main 28,447-token matched analysis, Voynich has minimum-side order ratio 1.013 [1.005, 1.025], while all 14 tested large comparators have their entire minimum-side replicate interval below 1.0. In the smaller 14,380-token all-system sensitivity, the Voynich minimum interval is 1.019 [0.985, 1.060] and crosses neutral. That sensitivity remains part of the reported result. Version 3 does not establish natural-language uniqueness, language identity, decipherment, or a generating mechanism.
-
-No Version 3 tag, DOI/version record, or citation-version update is represented by this release-candidate section.
+The corrected Version 3 replacement uses boundary-safe comparator tokenization and page-block Voynich robustness. Its current pre-freeze evidence is documented in `docs/v3/validation_interpretation.md` and the committed machine-readable validation files. No Version 3 tag or version-specific DOI exists until the final exact-head release gates pass.
 
 ## Scientific scope
 

@@ -1,68 +1,56 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project are documented here. The project uses
+semantic versioning for public releases.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+## [3.0.0] - 2026-09-29
 
-## [Unreleased]
+### Corrected
+- Replaced the Version 2 pooled-marginal affix expectation with the exact
+  within-unit composition-conditioned expectation.
+- Corrected suffix nesting.
+- Retained valid alphabetic one-character comparator words.
+- Broke comparator sequences at excluded or split lexical items so filtering
+  cannot manufacture adjacency.
+- Removed cross-system replicate-index sign-test inference.
+- Demoted 90% Voynich line subsampling to deletion stability.
+- Added Voynich page-block robustness for the cluster-aware neutrality claim.
 
 ### Added
-- Plain-language preface and glossary on the dashboard Overview tab
-- `CITATION.cff` for academic citation
-- `CHANGELOG.md` (this file)
-- `RELEASE_NOTES.md` for the v1.0 GitHub release
-- `run_all.py` — single-command reproduction of the entire analysis pipeline
-- `tests/test_canonical_values.py` — regression tests that verify key findings
-  match published values within tolerance, catching silent drift
-- GitHub Actions CI workflow (`.github/workflows/ci.yml`) running manifest
-  validation and canonical value tests on every push
+- Regression tests for numeric gaps, foreign-script gaps, split orthographic
+  forms, punctuation-wrapped words, and one-character words.
+- Exact adjacent-repeat robustness.
+- Committed 200-replicate Version 3 JSON and audit evidence.
 
-### Changed
-- Dashboard Overview tab: each Core Finding and Eliminated Hypothesis now includes
-  a plain-language "→" translation line for non-specialist readers
-- README Reproduction section updated to document the one-command `run_all.py`
-  workflow alongside the per-script commands
+### Result
+- Voynich page-block prefix/minimum:
+  1.020 [0.978, 1.064].
+- Voynich page-block suffix:
+  1.110 [1.074, 1.145].
+- Large comparator minimum-side deletion-stability intervals below 1.0:
+  14/14.
+- Smaller all-system sensitivity weakens interval separation: Arabic and
+  Georgian minimum-side intervals cross 1.0.
+- Breaking every exact Voynich repeated-token pair leaves suffix ratio 1.064.
 
-## [1.0.0] — 2026-04-19
+The result is a finite-corpus structural contrast, not evidence of
+natural-language uniqueness, language identity, decipherment, semantics,
+syntax, or a generating mechanism.
 
-First public release. Full write-up, frozen datasets, reproducible analysis
-pipeline, and interactive dashboard.
+## [2.0.0] - 2026-09-11
 
-### Core Findings
-- Non-random sequential structure (Chi² = 1407.8, p ≈ 0)
-- Two robust transition rules: CHEDY→QOK attraction (2.625x) and AIIN→QOK
-  repulsion (0.504x), both distributed across 77% of CHEDY tokens and 369
-  unique token pairs
-- AIIN density invariant at 15.0% across Currier A and B (KS p = 0.742)
-- Bidirectional self-clustering symmetry: prefix 1.524x, suffix 1.544x,
-  ratio 0.99 — unique among 16 natural-language comparators
+Version 2 introduced boundary-preserving resampling, symmetric affix discovery,
+a frozen scientific tag, machine-readable release evidence, and a Zenodo
+software record. Its prefix/suffix cross-corpus claim was reopened on
+2026-09-29 after the estimator defects documented in
+`docs/v2/post_release_defect_2026-09-29.md`. The frozen Version 2 artifacts
+remain unchanged and reproducible.
 
-### Included
-- 5 analysis scripts (`scripts/`): fetch, validate, core, cross-linguistic,
-  stress tests
-- 6 canonical result JSONs (`results/`)
-- Frozen comparison datasets (~228 MB) with SHA-256 checksums and manifest
-- Research paper (`docs/paper.pdf`, built from `docs/main.tex`)
-- Durable findings document (`docs/durable_findings.md`) with 10 numbered
-  findings, caveats, retired claims, and a "minimum viable explanation"
-  checklist
-- Release documentation with claim ledger (`docs/release_documentation.md`)
-- Interactive HTML dashboard (`dashboard/voynich_dashboard.html`)
+## [1.0.0] - 2026-04-19
 
-### Retired claims
-Documented in `docs/durable_findings.md` § 3 and `docs/release_documentation.md`:
-- "Arabic is the closest structural match" — Arabic is suffix-dominant
-  (ratio 0.72); Voynich is symmetric (0.99). Different structural categories.
-- "Uralic languages (Estonian, Finnish) match Voynich" — false positives
-  from 10K-sentence corpora. Both are suffix-dominant at 100K.
-- "15 languages compared" — corrected to 11 verified + 3 pending + 1 control.
-- "Self-clustering = 1.44x fixed" — value is method-sensitive, range 0.93x
-  to 1.45x.
+First public release. Historical Version 1 findings and later retractions remain
+preserved in repository history and archive directories.
 
-### Not Claimed
-- No language identification
-- No decipherment or semantic content
-
-[Unreleased]: https://github.com/amy2213/Voynich-Transition-Grammar/compare/v1.0.0...HEAD
+[3.0.0]: https://github.com/amy2213/Voynich-Transition-Grammar/releases/tag/v3.0.0
+[2.0.0]: https://github.com/amy2213/Voynich-Transition-Grammar/releases/tag/v2.0.0
 [1.0.0]: https://github.com/amy2213/Voynich-Transition-Grammar/releases/tag/v1.0.0

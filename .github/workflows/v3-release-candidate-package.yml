@@ -1,87 +1,95 @@
-name: Version 3 release-candidate package
+name: Version 3 corrected release-candidate package
 
 on:
   push:
-    branches: [v3/release-candidate-final]
+    branches: [release/v3.0.0-final]
     paths:
+      - "results/prefix_suffix_v3_validation.json"
+      - "results/prefix_suffix_v3_validation_audit.md"
+      - "results/prefix_suffix_v3_validation.sha256"
       - "docs/v2/post_release_defect_2026-09-29.md"
+      - "docs/v2/canonical_claim_ledger.csv"
       - "docs/v3/**"
+      - "README.md"
       - "RELEASE_NOTES.md"
+      - "REPRODUCIBILITY.md"
       - "PROJECT_STATE.md"
       - ".github/workflows/v3-release-candidate-package.yml"
   workflow_dispatch:
 
 permissions:
   contents: read
-  actions: read
 
 jobs:
   package:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out release-candidate branch
+      - name: Check out exact package head
         uses: actions/checkout@v4
 
-      - name: Download exact-head Version 3 validation evidence
-        uses: actions/download-artifact@v4
-        with:
-          name: v3-validation-200-replicates
-          path: package/validation
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          repository: amy2213/Voynich-Transition-Grammar
-          run-id: 36614286293
-
-      - name: Assemble reviewed release-candidate documents
+      - name: Verify committed corrected evidence hashes
         run: |
-          mkdir -p package/docs/v2 package/docs/v3
+          sha256sum -c results/prefix_suffix_v3_validation.sha256
+
+      - name: Assemble corrected release-candidate evidence
+        run: |
+          mkdir -p package/results package/docs/v2 package/docs/v3
+          cp results/prefix_suffix_v3_validation.json package/results/
+          cp results/prefix_suffix_v3_validation_audit.md package/results/
+          cp results/prefix_suffix_v3_validation.sha256 package/results/
           cp docs/v2/post_release_defect_2026-09-29.md package/docs/v2/
+          cp docs/v2/canonical_claim_ledger.csv package/docs/v2/
           cp docs/v3/prefix_suffix_order_estimator_spec.md package/docs/v3/
           cp docs/v3/validation_interpretation.md package/docs/v3/
           cp docs/v3/release_candidate_addendum.md package/docs/v3/
           cp docs/v3/release_candidate_checklist.md package/docs/v3/
           cp docs/v3/release_candidate_manifest.md package/docs/v3/
+          cp README.md package/
           cp RELEASE_NOTES.md package/
+          cp REPRODUCIBILITY.md package/
           cp PROJECT_STATE.md package/
 
       - name: Write package manifest and checksums
         run: |
-          cat > package/PACKAGE_MANIFEST.md <<'EOF'
-          # Voynich Transition Grammar Version 3 release-candidate evidence package
+          cat > package/PACKAGE_MANIFEST.md <<EOF
+          # Voynich Transition Grammar Version 3 corrected release-candidate package
 
-          This package is release-candidate evidence only. It does not itself
-          create a Version 3 tag, GitHub release, DOI version, or citation update.
+          Package commit: ${GITHUB_SHA}
+          Package workflow run: ${GITHUB_RUN_ID}
 
-          Scientific validation source:
-          - PR final head: b8833f6b8714232bae2ceeebffbd6ee070432863
-          - validation run ID: 36614286293
-          - validation artifact ID: 11054779129
-          - validation artifact SHA-256: 1b71a5a24d29452b588eb9de4fd48e05396f091d0968da13f523b775906d6720
-          - validation result: success
-          - mechanical audit: success
+          Corrected scientific validation:
+          - methodological head: cdbdc78f9887446b3b602349e22a4cfc30afc0f2
+          - validation run ID: 36624694412
+          - validation artifact ID: 11060002732
+          - validation artifact SHA-256: 132ab897cb68a2d1ffe76c204000436761190939b0a4ea6aaca3d7a766fd1585
+          - result: PASS
 
-          Repository integration:
-          - validation PR: #6
-          - merged main commit: 67a2eb1b3cb86b75e509de94db685eba607799e4
+          Corrected canonical compatibility:
+          - canonical run ID: 36624694574
+          - canonical artifact ID: 11060427157
+          - canonical artifact SHA-256: 3febe255027419722a452576ea5b06c80fb4458637d777001d62fa171665f944
+          - result: PASS
 
-          Canonical compatibility:
-          - canonical workflow run ID: 36614286343
-          - canonical result: success
-          - canonical evidence artifact SHA-256: 5c5db28982eac41a67644bd7732f40e85a56f91dafb39103b6a38799a564ad8c
+          The committed validation JSON and audit are verified by
+          results/prefix_suffix_v3_validation.sha256.
+
+          This package is pre-release evidence only. It does not create the
+          v3.0.0 tag or an archival DOI version.
           EOF
 
           find package -type f ! -name SHA256SUMS -print0 \
             | sort -z \
             | xargs -0 sha256sum > package/SHA256SUMS
 
-          zip -r Voynich-v3-release-candidate-evidence.zip package
-          sha256sum Voynich-v3-release-candidate-evidence.zip \
-            > Voynich-v3-release-candidate-evidence.zip.sha256
+          zip -r Voynich-v3.0.0-corrected-release-candidate-evidence.zip package
+          sha256sum Voynich-v3.0.0-corrected-release-candidate-evidence.zip \
+            > Voynich-v3.0.0-corrected-release-candidate-evidence.zip.sha256
 
-      - name: Upload release-candidate evidence package
+      - name: Upload corrected evidence package
         uses: actions/upload-artifact@v4
         with:
-          name: v3-release-candidate-evidence-package
+          name: v3.0.0-corrected-release-candidate-evidence
           path: |
-            Voynich-v3-release-candidate-evidence.zip
-            Voynich-v3-release-candidate-evidence.zip.sha256
+            Voynich-v3.0.0-corrected-release-candidate-evidence.zip
+            Voynich-v3.0.0-corrected-release-candidate-evidence.zip.sha256
           retention-days: 90
