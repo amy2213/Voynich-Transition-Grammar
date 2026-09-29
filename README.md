@@ -72,7 +72,7 @@ inferential status.
 
 See `docs/v2/post_release_defect_2026-09-29.md` for the defect record.
 
-### Version 3 repair candidate
+### Version 3 validated candidate
 
 `scripts/24_prefix_suffix_v3.py` implements the replacement analysis. For a
 class with `k` occurrences inside a sequence unit of length `n`, its exact
@@ -81,9 +81,23 @@ expected adjacent self-transition count under random within-unit ordering is
 on each unit's composition and length, so page/line/sentence vocabulary mix
 cannot by itself create an order effect.
 
-Version 3 is currently a research candidate, not a released claim. These analyses
-do not establish natural-language uniqueness, identify a language, or identify a generating mechanism. Its design and acceptance criteria are documented in
-`docs/v3/prefix_suffix_order_estimator_spec.md`.
+The 200-replicate validation passed its mechanical audit. In the main matched
+analysis at 28,447 tokens, Voynich has median prefix order ratio 1.013
+(95% replicate interval 1.005-1.025), suffix 1.108 (1.099-1.116), and
+minimum-side ratio 1.013 (1.005-1.025). All 14 tested large comparators have
+their entire minimum-side 95% replicate interval below 1.0.
+
+A smaller 14,380-token sensitivity including Ottoman Turkish gives a Voynich
+minimum-side interval of 0.985-1.060, which crosses the neutral value 1.0.
+That sample-size sensitivity is part of the result, not something to hide.
+
+Version 3 is a validated descriptive release candidate, not yet a frozen
+scientific release. The result is limited to the declared corpora,
+transcription, discovery rules, and estimator. It does not establish
+natural-language uniqueness, identify a language, decipher the manuscript, or
+identify a generating mechanism. See
+`docs/v3/prefix_suffix_order_estimator_spec.md` and
+`docs/v3/validation_interpretation.md`.
 
 ### Other provisional findings
 
