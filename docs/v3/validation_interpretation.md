@@ -1,9 +1,12 @@
-# Version 3 validation interpretation
+# SUPERSEDED: Version 3 pre-correction validation interpretation
 
-Status: validated descriptive result; release candidate, not yet a frozen scientific release  
+Status: **superseded by pre-freeze external-review corrections; replacement analysis pending**  
 Validation date: 2026-09-29  
+Superseded: 2026-09-29 before release freeze  
 Estimator: `3.0.0-dev`  
 Matched replicates per profile: 200
+
+> This interpretation used seam-creating comparator tokenization and treated 90% Voynich line subsamples too prominently. It is retained for audit history only. Do not use its 199/200 statement or narrow line-subsample interval as current evidence.
 
 ## Executive result
 
