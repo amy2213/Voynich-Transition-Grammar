@@ -31,7 +31,7 @@ jobs:
       - name: Run Version 3 regression controls
         run: >
           python -m pytest -q tests/test_canonical_values.py
-          -k "suffix_nesting or discovered_suffixes or composition_control or v3_comparator"
+          -k "CurrentPublicClaims or suffix_nesting or discovered_suffixes or composition_control or v3_comparator"
 
       - name: Run Version 3 candidate estimator smoke analysis
         run: python scripts/24_prefix_suffix_v3.py --replicates 20
