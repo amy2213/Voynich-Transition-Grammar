@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Audit Version 3 validation output without promoting a scientific claim."""
+"""Audit Version 3 output against the declared scientific controls."""
 
 import argparse
 import json
@@ -118,8 +118,8 @@ def main():
     expected_replicates = data["method"]["matched_subsample_replicates"]
     failures = []
 
-    if data["status"] != "validation candidate; not a released scientific claim":
-        failures.append("result status is not validation-candidate")
+    if data["status"] != "validated descriptive scientific result; finite-corpus scope":
+        failures.append("result status does not match the frozen Version 3 scope")
 
     if data["method"]["cross_system_p_values"] != "none":
         failures.append("cross-system p-values are present")
