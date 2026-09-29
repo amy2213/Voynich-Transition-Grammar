@@ -1,0 +1,28 @@
+name: Version 3.1 minimal diagnostics
+
+on:
+  push:
+    branches: [review/v3.1-position-threshold-diagnostics]
+    paths:
+      - "scripts/30_v31_minimal_diagnostics.py"
+      - ".github/workflows/v31-minimal-diagnostics.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest
+      - run: python scripts/30_v31_minimal_diagnostics.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v3.1-minimal-diagnostics
+          path: results/v31_minimal_diagnostics.json
+          retention-days: 90
