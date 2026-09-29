@@ -1,84 +1,98 @@
-# Version 3 validation interpretation
+# Version 3 corrected validation interpretation
 
-Status: corrected 200-replicate pre-freeze result  
+Status: corrected pre-freeze validation complete; release gate remains closed pending final packaging and exact-head CI  
 Validation date: 2026-09-29  
-Estimator: `3.0.0`  
-Matched replicates per profile: 200
+Estimator: `3.0.0` pre-freeze candidate  
+Replicates per declared robustness profile: 200  
+Authoritative validation run: #22, run ID `36624694412`, methodological head `cdbdc78f9887446b3b602349e22a4cfc30afc0f2`
 
 ## Executive result
 
-Version 3 measures affix-class ordering against the exact expectation obtained
-after conditioning on each natural line or sentence fragment's own class
-composition. A pre-freeze external review identified two additional issues
-before Version 3 was tagged:
+Version 3.0.0 was re-audited before release after an external review identified
+two remaining methodological weaknesses:
 
-1. comparator regex filtering could join surviving words across excluded or
-   split lexical material;
-2. 90% Voynich line-deletion replicates overlap too heavily to serve as the
-   cluster-aware uncertainty summary for Voynich.
+1. 90% without-replacement Voynich line samples overlapped too heavily to serve
+   as the primary cluster-aware uncertainty summary.
+2. Comparator regex tokenization could create false adjacency when excluded or
+   split lexical material disappeared between surviving words.
 
-Both issues are corrected in the current result. Comparator tokenization now
-breaks the sequence at excluded or split whitespace items, and Voynich receives
-a separate page-block bootstrap while retaining line boundaries inside pages.
+Both issues are corrected in the current pre-freeze estimator.
 
-The corrected result is narrower than the earlier candidate claim:
+The corrected result is narrower and more defensible:
 
-- **Voynich prefix ordering is near neutral under page-level resampling.**
-- **Voynich suffix ordering remains modestly self-clustering.**
-- Every tested comparator has a full-corpus minimum-side point estimate below
-  1.0.
-- In the 28,447-token sequence-unit deletion-stability analysis, all 14 large
-  comparators have their entire minimum-side 95% replicate interval below 1.0.
-- At the smaller 14,380-token all-system target, Arabic and Georgian
-  minimum-side intervals cross 1.0, so that smaller sensitivity does not show
-  complete interval separation.
+- **Voynich prefix ordering is near neutral.** Under a page-block bootstrap,
+  prefix ratio median is **1.020**, 95% replicate interval
+  **[0.978, 1.064]**. The interval crosses 1.0.
+- **Voynich suffix ordering is modestly self-clustering.** Under the same
+  page-block bootstrap, suffix ratio median is **1.110**, 95% replicate
+  interval **[1.074, 1.145]**. All 200 page-bootstrap replicates are at or
+  above 1.0.
+- The page-bootstrap minimum-side ratio is **1.020 [0.978, 1.064]**, so the
+  project no longer claims that both Voynich edges are strictly above neutral.
+- After boundary-safe comparator tokenization, all 14 sufficiently large
+  comparators still have a minimum-side 95% interval entirely below 1.0 in the
+  declared 28,447-token line/sentence deletion-stability analysis.
+- All 15 comparators have a full-corpus minimum-side point estimate below 1.0.
 
-These are finite-corpus robustness summaries. They are not population
-confidence intervals and are not a natural-language classifier.
+This is a finite-corpus structural contrast under the declared corpora,
+transcription, tokenizer rules, affix discovery, sequence boundaries, and
+estimator. It is not a population confidence statement or a language
+classifier.
 
-## Voynich page-block robustness
+## Why the page bootstrap governs Voynich neutrality
 
-Target: 28,447 tokens. Pages are sampled with replacement while the lines
-nested inside each sampled page remain separate sequence units.
+The 28,447-token without-replacement Voynich samples retain about 90% of the
+available line material. They are useful as a **deletion/stability
+sensitivity**: they ask whether the result changes when roughly 10% of the
+lines are omitted.
+
+They are not the primary uncertainty summary for Voynich because the
+replicates overlap heavily.
+
+Version 3 therefore uses page blocks as the cluster-aware robustness unit.
+Pages are sampled with replacement while their nested lines remain separate
+sequence units.
+
+Corrected Voynich page-block results:
 
 | Metric | Median | 95% replicate interval | Fraction >= 1 |
 |---|---:|---:|---:|
-| Prefix order ratio | **1.020** | **[0.978, 1.064]** | 0.770 |
-| Suffix order ratio | **1.110** | **[1.074, 1.145]** | 1.000 |
-| Minimum-side ratio | **1.020** | **[0.978, 1.064]** | 0.770 |
+| Prefix | **1.020** | **0.978–1.064** | 0.770 |
+| Suffix | **1.110** | **1.074–1.145** | **1.000** |
+| Minimum side | **1.020** | **0.978–1.064** | 0.770 |
 
-The prefix/minimum interval crosses the neutral value 1.0. The suffix interval
-does not. The earlier 199/200 line-deletion statement is therefore not used as
-headline evidence about Voynich neutrality.
+Accordingly, the earlier `199/200` line-subsample statement is retained only
+as a stability diagnostic and is not used as a headline inference.
 
-## Line-deletion stability
+## Boundary-safe comparator tokenization
 
-The 90% without-replacement Voynich line analysis is retained as a deletion
-stability diagnostic:
+Comparator tokenization now operates one whitespace item at a time.
 
-- prefix: 1.013 [1.005, 1.025];
-- suffix: 1.108 [1.099, 1.116];
-- minimum: 1.013 [1.005, 1.025].
+A comparator item may contribute a token only when it contains exactly one
+accepted target-alphabet run and any surrounding characters are punctuation.
+If an item:
 
-Those narrow intervals mostly reflect highly overlapping 90% samples and are
-not the cluster-aware uncertainty summary.
+- contains no accepted target-alphabet run;
+- contains digits or foreign-script material outside the accepted run; or
+- splits into multiple accepted runs, such as `l'arte`;
 
-For the 14 sufficiently large comparators, the same 28,447-token
-sequence-unit deletion analysis gives minimum-side intervals entirely below
-1.0 for **14/14** systems after boundary-safe tokenization.
+the item terminates the current sequence.
 
-Notably, individual edges can cross neutral. Arabic suffix is centered near
-1.0 and Georgian suffix overlaps 1.0. The claim concerns the weaker/minimum
-edge in this declared stability analysis, not universal anti-clustering on both
-edges.
+Therefore surviving neighbors on opposite sides of excluded material never
+become adjacent.
 
-## Full-corpus descriptive values
+Regression tests explicitly cover:
 
-Boundary-safe comparator tokenization gives:
+- `word 123 word`;
+- a foreign-script gap;
+- a split orthographic form;
+- valid one-character words; and
+- punctuation-wrapped single tokens.
+
+## Corrected full-corpus comparator values
 
 | System | Prefix | Suffix | Minimum |
 |---|---:|---:|---:|
-| Voynich | **1.013** | **1.108** | **1.013** |
 | Arabic | 0.864 | 1.010 | 0.864 |
 | Estonian | 0.724 | 1.380 | 0.724 |
 | Finnish | 0.676 | 1.279 | 0.676 |
@@ -94,75 +108,95 @@ Boundary-safe comparator tokenization gives:
 | Swahili | 0.960 | 0.886 | 0.886 |
 | Tagalog | 0.536 | 0.903 | 0.536 |
 | Turkish | 0.637 | 0.747 | 0.637 |
+| **Voynich** | **1.013** | **1.108** | **1.013** |
 
-All 15 comparator minimum-side point estimates are below 1.0.
+Arabic demonstrates why the seam correction mattered: its suffix point
+estimate rises to approximately neutral, but its prefix remains below 1.0.
+The cross-system observation therefore concerns the **minimum edge**, not a
+claim that both edges of every comparator are anti-clustered.
 
-## All-system small-target sensitivity
+## 28,447-token deletion/stability profile
 
-Target: 14,380 tokens across all 16 systems.
+This profile includes Voynich plus 14 sufficiently large comparators. Ottoman
+Turkish is excluded because the preserved corpus is too small for this target.
 
-Voynich gives:
+After the boundary correction:
 
-- prefix: 1.019 [0.985, 1.060];
-- suffix: 1.108 [1.081, 1.132];
-- minimum: 1.019 [0.985, 1.060].
+- Voynich line-deletion prefix: **1.013 [1.005, 1.025]**;
+- Voynich line-deletion suffix: **1.108 [1.099, 1.116]**;
+- Voynich line-deletion minimum: **1.013 [1.005, 1.025]**;
+- **14/14** comparator minimum-side 95% replicate intervals remain entirely
+  below 1.0.
 
-Voynich prefix/minimum again crosses neutral. Among the 15 comparators, 13 have
-their entire minimum-side interval below 1.0. Arabic
-[0.622, 1.003] and Georgian [0.807, 1.006] cross neutral at this smaller target.
-Their minimum-side medians remain below 1.0.
+This profile is evidence of stability to line/sentence deletion. For Voynich,
+it is not the cluster-aware uncertainty summary.
 
-This sensitivity is retained precisely because it weakens interval separation.
+Notable corrected comparator minimum-side intervals include:
 
-## Boundary-safe comparator correction
+- Arabic: **0.861 [0.741, 0.997]**;
+- Georgian: **0.910 [0.841, 0.976]**;
+- Swahili: **0.884 [0.839, 0.943]**.
 
-Comparator alphabetic words of length 1 remain valid. In addition, any
-whitespace item that is excluded or would split into multiple accepted word
-runs now terminates the current sequence. Examples covered by regression tests
-include:
+## 14,380-token all-system sensitivity
 
-- `word 123 word`;
-- a foreign-script gap between target-script words;
-- split orthographic forms such as `l'arte`;
-- punctuation-wrapped valid words, which remain intact.
+At the smaller common target including Ottoman Turkish:
 
-Surviving words are never made adjacent across dropped material.
+- Voynich minimum: **1.019 [0.985, 1.060]**;
+- Voynich suffix: **1.108 [1.081, 1.132]**;
+- the Voynich minimum interval crosses neutral;
+- several comparator minimum intervals also widen enough to cross neutral,
+  including Arabic and Georgian.
 
-The correction changes some edge scores materially, for example Arabic suffix
-0.959 -> 1.010, while the comparator minimum-side pattern remains.
+This profile is retained as a sample-size sensitivity and prevents the larger
+28,447-token profile from being treated as universally scale-invariant.
 
-## Exact adjacent-repeat robustness
+## Exact repeated-token robustness
 
-In canonical Voynich lines:
+The frozen Voynich corpus contains:
 
-- observed exact adjacent repeated-token pairs: **249**;
-- exact expectation under within-line shuffle: **244.274**.
+- **249** exact adjacent repeated-token pairs;
+- expected exact adjacent repeated-token pairs under within-line random order:
+  **244.274**.
 
-As a deliberately harsh sensitivity, every exact adjacent repeat pair was
-turned into a sequence break while retaining all tokens. The suffix score falls
-from 1.108 to **1.064** but remains above 1.0.
+As a deliberately harsh robustness check, Version 3 breaks the sequence at
+every exact adjacent repeated-token pair, removing that adjacency while
+retaining the tokens in separate fragments.
 
-Exact repetition therefore contributes to the suffix effect but does not fully
-account for it. This is a robustness diagnostic, not an independent hypothesis
-test.
+Under that check:
 
-## Relationship to the Version 2 correction
+- original suffix order ratio: approximately **1.108**;
+- suffix order ratio after breaking exact repeats: **1.064**.
 
-Version 3 continues to confirm the central Version 2 correction: the old pooled
-marginal expectation substantially inflated the appearance of affix
-self-clustering by mixing order with between-unit composition.
+Exact repetition therefore contributes to the measured suffix effect but does
+not fully account for it.
 
-The pre-freeze corrections do not restore the Version 2 claim. They narrow
-Version 3 further by removing manufactured comparator seams and by using page
-blocks for the Voynich cluster-aware robustness statement.
+The earlier external-review figures of 205 observed versus 191 expected are not
+used because they were not reproduced on the frozen repository corpus.
+
+## Relationship to Version 2
+
+The corrected Version 3 result reinforces the central Version 2 correction.
+
+Version 2's pooled expectation mixed ordering with between-unit composition and
+also contained a suffix-nesting defect and invalid cross-system replicate
+pairing. Version 3 conditions on each unit's composition, uses side-aware
+nesting, boundary-safe comparator tokenization, and no paired cross-system
+p-value.
+
+Version 2 remains frozen and reproducible historical evidence. Its
+prefix/suffix cross-corpus interpretation is superseded, not silently rewritten.
 
 ## Retained independent transition findings
 
-CHEDY->QOK and AIIN->QOK use a separate within-line permutation design that
-already preserves line composition while destroying order. They remain separate
-from the affix-order estimator and retain their existing limitations.
+The separate CHEDY→QOK and AIIN→QOK analyses use within-line shuffling that
+fixes line composition while destroying order. The Version 3 affix correction
+does not invalidate those separate findings.
 
-## Scope
+Their pooled observed/expected ratios remain descriptive effect-size
+summaries; the within-line shuffle design is the relevant order-sensitive
+component.
+
+## What Version 3 does not establish
 
 Version 3 does not establish:
 
@@ -173,32 +207,55 @@ Version 3 does not establish:
 - syntax or semantics;
 - a cipher, constructed-language, stenographic, hybrid, or other generating
   mechanism;
-- generalization beyond the frozen tested corpora, transcription, discovery
-  rules, tokenization policy, and sequence-unit definitions.
+- generalization beyond the frozen tested corpora, transcription, tokenizer
+  rules, discovery rules, and sequence-unit definitions.
 
 No cross-system p-value is reported. Replicate indices are not paired across
 systems.
 
-## Current claim wording
+## Validation provenance
 
-> Under boundary-safe comparator tokenization and an exact within-unit
-> composition-conditioned ordering baseline, Voynich suffix ordering is
-> modestly self-clustering (full corpus 1.108; page-block bootstrap median
-> 1.110, 95% replicate interval 1.074-1.145), while prefix ordering is near
-> neutral under page-level resampling (1.020 [0.978, 1.064]). In the
-> 28,447-token sequence-unit deletion-stability analysis, all 14 large
-> comparators have minimum-side replicate intervals below 1.0. At the smaller
-> 14,380-token all-system target, Arabic and Georgian minimum-side intervals
-> cross neutral. The result is a finite-corpus structural contrast, not a
-> language classifier or evidence of decipherment.
+Corrected dedicated validation:
 
-## Evidence
+- workflow: `Version 3 scientific validation`;
+- run: #22;
+- run ID: `36624694412`;
+- methodological head:
+  `cdbdc78f9887446b3b602349e22a4cfc30afc0f2`;
+- result: **PASS**;
+- artifact: `v3-validation-200-replicates`;
+- artifact ID: `11060002732`;
+- artifact ZIP SHA-256:
+  `132ab897cb68a2d1ffe76c204000436761190939b0a4ea6aaca3d7a766fd1585`.
 
-Committed machine-readable evidence:
+Corrected canonical/V2 compatibility:
 
-- `results/prefix_suffix_v3_validation.json`
-- `results/prefix_suffix_v3_validation_audit.md`
-- `results/prefix_suffix_v3_validation.sha256`
+- workflow: `Canonical pipeline and tests`;
+- run: #85;
+- run ID: `36624694574`;
+- result: **PASS**;
+- canonical evidence artifact ID: `11060427157`;
+- artifact ZIP SHA-256:
+  `3febe255027419722a452576ea5b06c80fb4458637d777001d62fa171665f944`.
 
-Corrected validation workflow run: `36624694412`  
-Corrected canonical compatibility run: `36624694574`
+The generated JSON and audit report are committed under `results/`.
+
+## Recommended release wording
+
+> Under an exact composition-conditioned within-unit ordering baseline, the
+> Voynich EVA transcription shows modest suffix self-clustering
+> (full-corpus ratio 1.108; page-block bootstrap median 1.110, 95% replicate
+> interval 1.074–1.145), while prefix ordering is near neutral
+> (page-block median 1.020, interval 0.978–1.064). After boundary-safe
+> comparator tokenization, every tested comparator has a full-corpus
+> minimum-edge ratio below 1.0, and all 14 sufficiently large comparators have
+> minimum-edge 95% intervals below 1.0 in the declared 28,447-token
+> deletion-stability analysis. This is a finite-corpus structural contrast,
+> not evidence of decipherment, language identity, or natural-language
+> uniqueness.
+
+## Release recommendation
+
+The corrected estimator and evidence are suitable to proceed through final
+release packaging and exact-head CI. The Version 3 tag should remain uncreated
+until those final gates pass.
