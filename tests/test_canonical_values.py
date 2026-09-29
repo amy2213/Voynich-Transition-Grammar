@@ -31,6 +31,7 @@ tolerance rationale.
 
 import hashlib
 import importlib.util
+import itertools
 import json
 import os
 import sys
@@ -52,6 +53,8 @@ from _canonical import (  # noqa: E402
     assign_affix_sequences,
     bootstrap_groups_to_target,
     composition_controlled_self_clustering_details,
+    position_aware_affix_scores,
+    position_aware_self_clustering_details,
     discover_affixes,
     sample_units_to_target,
     self_clustering_details,
@@ -479,6 +482,105 @@ class TestBoundaryAwareAffixUtilities(unittest.TestCase):
         result = composition_controlled_self_clustering_details(
             sequences, min_n=0, include_other=True)
         self.assertAlmostEqual(result["score"], 0.0, places=12)
+
+    @staticmethod
+    def _brute_fixed_endpoint_expectation(classes, label):
+        classes = tuple(classes)
+        if len(classes) < 2:
+            return 0.0
+        if len(classes) == 2:
+            return float(classes[0] == label == classes[1])
+
+        first = classes[0]
+        last = classes[-1]
+        interior = classes[1:-1]
+        values = []
+        for permuted in itertools.permutations(interior):
+            sequence = (first, *permuted, last)
+            values.append(sum(
+                left == label == right
+                for left, right in zip(sequence, sequence[1:])
+            ))
+        return sum(values) / len(values)
+
+    def test_v31_position_aware_expectation_matches_brute_force(self):
+        sequences = [
+            ("A", "B", "A", "A", "B"),
+            ("B", "A", "B", "A"),
+            ("A", "A", "B"),
+            ("B", "B"),
+            ("A",),
+        ]
+        result = position_aware_self_clustering_details(
+            sequences,
+            min_n=-1,
+            include_other=True,
+        )
+        for label in ("A", "B"):
+            brute = sum(
+                self._brute_fixed_endpoint_expectation(seq, label)
+                for seq in sequences
+            )
+            exact = result["classes"][label][
+                "expected_fixed_endpoint_shuffle"
+            ]
+            self.assertAlmostEqual(exact, brute, places=12)
+
+    def test_v31_length_two_unit_is_fully_conditioned(self):
+        result = position_aware_self_clustering_details(
+            [("A", "A"), ("A", "B")],
+            min_n=-1,
+            include_other=True,
+        )
+        self.assertAlmostEqual(
+            result["classes"]["A"]["expected_fixed_endpoint_shuffle"],
+            1.0,
+            places=12,
+        )
+        self.assertEqual(result["transition_n"], 2)
+
+    def test_v31_position_aware_null_differs_from_full_exchangeability(self):
+        # Repeated units have A concentrated at both line edges. The v3.0
+        # complete-line null allows those A endpoints to move; the v3.1 null
+        # conditions on them. The expectations must therefore differ.
+        sequences = [
+            ("A", "B", "B", "B", "A")
+            for _ in range(40)
+        ]
+        old = composition_controlled_self_clustering_details(
+            sequences,
+            min_n=0,
+            include_other=True,
+        )
+        new = position_aware_self_clustering_details(
+            sequences,
+            min_n=0,
+            include_other=True,
+        )
+        self.assertNotAlmostEqual(
+            old["classes"]["A"]["expected_within_unit_shuffle"],
+            new["classes"]["A"]["expected_fixed_endpoint_shuffle"],
+            places=12,
+        )
+
+    def test_v31_affix_score_reports_fixed_endpoint_null(self):
+        sequences = [
+            ("abx", "cdy", "aby", "cdx", "abz")
+            for _ in range(40)
+        ]
+        score = position_aware_affix_scores(
+            sequences,
+            n_families=2,
+            min_len=2,
+            max_len=2,
+            min_coverage=0.05,
+            max_coverage=0.80,
+            candidate_pool=20,
+            min_n=0,
+            nesting_mode="side_aware",
+        )
+        self.assertIn("fixed", score["prefix"]["null"])
+        self.assertIn("fixed", score["suffix"]["null"])
 
     def _load_v3_module(self, name="prefix_suffix_v3"):
         path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
