@@ -31,6 +31,9 @@ jobs:
       - name: Run complete Version 2 canonical pipeline and full suite
         run: python run_all.py
 
+      - name: Run Version 3 candidate estimator smoke analysis
+        run: python scripts/24_prefix_suffix_v3.py --replicates 20
+
       - name: Upload machine-readable run evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -46,4 +49,5 @@ jobs:
             results/prefix_suffix_v2.csv
             results/prefix_suffix_v2.md
             results/prefix_suffix_v2.svg
+            results/prefix_suffix_v3.json
           retention-days: 30
