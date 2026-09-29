@@ -480,15 +480,48 @@ class TestBoundaryAwareAffixUtilities(unittest.TestCase):
             sequences, min_n=0, include_other=True)
         self.assertAlmostEqual(result["score"], 0.0, places=12)
 
-    def test_v3_comparator_tokenizer_retains_one_character_words(self):
+    def _load_v3_module(self, name="prefix_suffix_v3"):
         path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
-        spec = importlib.util.spec_from_file_location("prefix_suffix_v3", path)
+        spec = importlib.util.spec_from_file_location(name, path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
-        self.assertEqual(
-            module.tokenize("a b cd", r"[a-z]+"),
-            ("a", "b", "cd"),
-        )
+        return module
+
+    def test_v3_comparator_tokenizer_retains_one_character_words(self):
+        module = self._load_v3_module("prefix_suffix_v3_one_char")
+        segments, diagnostics = module.tokenize_segments(
+            "a b cd", r"[a-z]+")
+        self.assertEqual(segments, (("a", "b", "cd"),))
+        self.assertEqual(diagnostics["break_items"], 0)
+
+    def test_v3_numeric_gap_breaks_sequence(self):
+        module = self._load_v3_module("prefix_suffix_v3_numeric_gap")
+        segments, diagnostics = module.tokenize_segments(
+            "word 123 word", r"[a-z]+")
+        self.assertEqual(segments, (("word",), ("word",)))
+        self.assertEqual(diagnostics["break_items"], 1)
+
+    def test_v3_foreign_script_gap_breaks_sequence(self):
+        module = self._load_v3_module("prefix_suffix_v3_foreign_gap")
+        segments, diagnostics = module.tokenize_segments(
+            "word 漢字 word", r"[a-z]+")
+        self.assertEqual(segments, (("word",), ("word",)))
+        self.assertEqual(diagnostics["break_items"], 1)
+
+    def test_v3_split_orthographic_form_breaks_sequence(self):
+        module = self._load_v3_module("prefix_suffix_v3_split_form")
+        segments, diagnostics = module.tokenize_segments(
+            "prima l'arte dopo", r"[a-z]+")
+        self.assertEqual(segments, (("prima",), ("dopo",)))
+        self.assertEqual(diagnostics["split_items"], 1)
+        self.assertEqual(diagnostics["break_items"], 1)
+
+    def test_v3_punctuation_wrapped_token_does_not_break_sequence(self):
+        module = self._load_v3_module("prefix_suffix_v3_punctuation")
+        segments, diagnostics = module.tokenize_segments(
+            'one "two," three', r"[a-z]+")
+        self.assertEqual(segments, (("one", "two", "three"),))
+        self.assertEqual(diagnostics["break_items"], 0)
 
     def test_v3_validation_profiles_have_independent_seed_schedules(self):
         path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
