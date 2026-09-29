@@ -28,7 +28,7 @@ Opened: 2026-09-29
       reported.
 - [x] No cross-system p-value generated.
 - [x] Validation artifact retained with SHA-256
-      `d1778bb989681aee45a08a6028f565b4b57948aa377a49e1117aad5fef725cae`.
+      `1b71a5a24d29452b588eb9de4fd48e05396f091d0968da13f523b775906d6720`.
 
 ## Claim governance
 
@@ -43,16 +43,14 @@ Opened: 2026-09-29
 
 ## Repository release-candidate gates
 
-- [ ] Version 3 validation PR ordinary repository CI passes on final head.
-- [ ] Version 3 validation workflow passes on final methodological head.
-- [ ] Generated validation JSON and audit report are included in the release
-      evidence package.
-- [ ] Release-candidate provenance manifest records final commit and input
-      hashes.
-- [ ] Addendum receives final scope/wording review.
+- [x] Version 3 validation PR ordinary repository CI passes on final head (run #66, head `b8833f6b8714232bae2ceeebffbd6ee070432863`).
+- [x] Version 3 validation workflow passes on the exact final PR head (run #7, head `b8833f6b8714232bae2ceeebffbd6ee070432863`).
+- [x] Generated validation JSON and audit report are included in the final-head `v3-validation-200-replicates` evidence artifact (ID `11054779129`).
+- [x] Release-candidate provenance manifest records validation head, merge commit, workflow artifacts, and all frozen input hashes.
+- [x] Addendum received final scope/wording review; finite-set and sample-size limitations remain explicit.
 - [ ] Version number and citation metadata updated only when a Version 3 release
       is explicitly approved.
-- [ ] Release notes clearly distinguish frozen Version 2 from Version 3.
+- [x] Release notes clearly distinguish frozen Version 2 from the validated Version 3 release candidate.
 - [ ] Dashboard/current authority updated only after release approval.
 - [ ] Final Version 3 tag is created only after all prior gates are green.
 - [ ] Archival DOI/version record is created or updated only after the final tag
