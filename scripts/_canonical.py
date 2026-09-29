@@ -438,13 +438,16 @@ def affixes_nested(left, right, side):
 
 def discover_affixes(sequences, side, n_families=5, min_len=2, max_len=3,
                      min_coverage=0.02, max_coverage=0.20,
-                     candidate_pool=80, nesting_mode="side_aware"):
+                     candidate_pool=80, nesting_mode="legacy_v2"):
     """Discover affix families identically on separate token sequences.
 
     Discovery itself does not use adjacency, but accepting sequences here
     makes the boundary-preserving representation the common interface for all
     systems. Ties are resolved lexically so results do not depend on Counter
     insertion order.
+
+    nesting_mode defaults to legacy_v2 solely so the frozen Version 2 pipeline
+    remains reproducible. New analyses must request side_aware explicitly.
     """
     if side not in ("prefix", "suffix"):
         raise ValueError("side must be 'prefix' or 'suffix'")
