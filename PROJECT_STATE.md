@@ -1,12 +1,12 @@
 # Voynich Transition Grammar Project State
 
 PROJECT: Voynich Transition Grammar
-CURRENT VERSION: 2.0.0
+CURRENT VERSION: 3.0.0
 CURRENT BRANCH: main
 LAST VERIFIED SCIENTIFIC COMMIT: 039acf4873104d7c8b60a3a5ff946667a8e0193c
 FROZEN RELEASE TAG: v2.0.0 -> 039acf4873104d7c8b60a3a5ff946667a8e0193c
-CURRENT PHASE: Version 3 validated descriptive release candidate
-AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Zenodo Version 2 archival record and durable release evidence preserved in the portfolio Drive folder
+CURRENT PHASE: Version 3.0.0 release approved; publication is gated by final exact-commit validation
+AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish workflow succeeds; Version 2.0.0 remains frozen historical evidence with its Zenodo record
 
 ## Working
 - Version 3 composition-controlled affix-order estimator passed its 200-replicate validation and mechanical audit on 2026-09-29.
@@ -51,7 +51,7 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Ze
 
 ## Blockers
 - None for Version 2 archival release.
-- Version 3 is not yet a frozen release. Validation, final-head CI, addendum review, provenance, and evidence packaging are complete. Remaining public-release gates are version/citation metadata, current-authority surfaces, final tag/release assets, and archival version publication.
+- Version 3.0.0 release is explicitly approved. Version/citation metadata and current-authority surfaces are prepared on the final release branch. The publish workflow must pass exact-commit regression, 200-replicate validation, mechanical audit, and canonical compatibility before creating the tag and GitHub release. Archival DOI ingestion follows the frozen GitHub release.
 
 
 ## Final audit result
@@ -67,7 +67,7 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Ze
 - Documentation/control commits after the frozen scientific tag do not replace the verified scientific commit in provenance records.
 
 ## Next action
-Finalize the public Version 3 release from the validated candidate without modifying the frozen `v2.0.0` tag or Version 2 release assets.
+Merge the final Version 3.0.0 release PR only after its exact-head CI is green; then allow the one-shot publish workflow to create the v3.0.0 tag and release assets. Verify archival ingestion afterward. Do not modify frozen Version 2 release assets.
 
 ## Source-of-truth rules
 - Notion: portfolio state and release decisions
