@@ -1,0 +1,53 @@
+name: Check Version 2 Zenodo public metadata
+
+on:
+  push:
+    branches: [review/claude-v3-pre-freeze]
+    paths:
+      - ".github/workflows/zenodo-v2-status-check.yml"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Zenodo Version 2 public record
+        run: |
+          python - <<'PY'
+          import json
+          import urllib.request
+          from html import unescape
+          import re
+
+          url = "https://zenodo.org/api/records/22715079"
+          with urllib.request.urlopen(url, timeout=30) as r:
+              data = json.load(r)
+
+          md = data.get("metadata", {})
+          desc = unescape(md.get("description", ""))
+          desc_text = re.sub(r"<[^>]+>", " ", desc)
+          desc_text = " ".join(desc_text.split())
+
+          print("TITLE:", md.get("title"))
+          print("VERSION:", md.get("version"))
+          print("DOI:", md.get("doi"))
+          print("DESCRIPTION:", desc_text)
+          print("CONCEPT DOI:", md.get("conceptdoi"))
+          print("RELATED:", json.dumps(md.get("related_identifiers", []), indent=2))
+
+          terms = [
+              "14 eligible",
+              "14 tested",
+              "minimum-side",
+              "self-clustering",
+              "natural-language uniqueness",
+              "Version 3",
+              "post-release",
+              "correction",
+              "reopened",
+          ]
+          print("TERM CHECKS:")
+          lower = desc_text.lower()
+          for term in terms:
+              print(term, term.lower() in lower)
+          PY
