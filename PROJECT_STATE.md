@@ -5,7 +5,7 @@ CURRENT VERSION: 3.0.0
 CURRENT BRANCH: main
 LAST VERIFIED SCIENTIFIC COMMIT: 039acf4873104d7c8b60a3a5ff946667a8e0193c
 FROZEN RELEASE TAG: v2.0.0 -> 039acf4873104d7c8b60a3a5ff946667a8e0193c
-CURRENT PHASE: Version 3.0.0 release approved; publication is gated by final exact-commit validation
+CURRENT PHASE: Version 3.0.0 pre-freeze correction after external review
 AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish workflow succeeds; Version 2.0.0 remains frozen historical evidence with its Zenodo record
 
 ## Working
@@ -51,7 +51,7 @@ AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish wor
 
 ## Blockers
 - None for Version 2 archival release.
-- Version 3.0.0 release is explicitly approved. Version/citation metadata and current-authority surfaces are prepared on the final release branch. The publish workflow must pass exact-commit regression, 200-replicate validation, mechanical audit, and canonical compatibility before creating the tag and GitHub release. Archival DOI ingestion follows the frozen GitHub release.
+- Version 3.0.0 publication is paused before freeze. External review independently reproduced two material pre-freeze issues: comparator seam creation across excluded lexical items and over-narrow Voynich line-deletion intervals. Boundary-safe comparator tokenization and page-block Voynich robustness are being incorporated before release.
 
 
 ## Final audit result
@@ -67,7 +67,7 @@ AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish wor
 - Documentation/control commits after the frozen scientific tag do not replace the verified scientific commit in provenance records.
 
 ## Next action
-Merge the final Version 3.0.0 release PR only after its exact-head CI is green; then allow the one-shot publish workflow to create the v3.0.0 tag and release assets. Verify archival ingestion afterward. Do not modify frozen Version 2 release assets.
+Complete corrected seam-safe/page-block validation, commit final machine-readable evidence, revise all claim surfaces, rerun canonical compatibility, then explicitly re-arm the Version 3.0.0 publish marker. Do not modify frozen Version 2 release assets.
 
 ## Source-of-truth rules
 - Notion: portfolio state and release decisions
