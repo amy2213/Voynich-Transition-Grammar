@@ -39,6 +39,7 @@ DISCOVERY = {
     "max_coverage": 0.20,
     "candidate_pool": 80,
     "min_n": 10,
+    "nesting_mode": "side_aware",
 }
 
 LATIN = r"[a-z]+"
