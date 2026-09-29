@@ -1,0 +1,40 @@
+name: Version 3.1 position and threshold diagnostics
+
+on:
+  push:
+    branches: [review/v3.1-position-threshold-diagnostics]
+    paths:
+      - "scripts/28_v31_position_threshold_diagnostics.py"
+      - ".github/workflows/v31-position-threshold-diagnostics.yml"
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out frozen-release diagnostic branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest
+
+      - name: Compile diagnostic
+        run: python -m compileall -q scripts/28_v31_position_threshold_diagnostics.py
+
+      - name: Run Version 3.1 diagnostics
+        run: python scripts/28_v31_position_threshold_diagnostics.py
+
+      - name: Upload diagnostic evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v3.1-position-threshold-diagnostics
+          path: results/v31_position_threshold_diagnostics.json
+          retention-days: 90
