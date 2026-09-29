@@ -1,0 +1,54 @@
+name: Version 3 scientific validation
+
+on:
+  push:
+    branches: [v3/validation-200-replicates]
+  pull_request:
+    branches: [main]
+    paths:
+      - "scripts/24_prefix_suffix_v3.py"
+      - "scripts/_canonical.py"
+      - "tests/test_canonical_values.py"
+      - "docs/v3/**"
+      - ".github/workflows/v3-validation.yml"
+  workflow_dispatch:
+
+jobs:
+  validate-v3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install locked runtime inputs
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt pytest
+
+      - name: Compile analysis and tests
+        run: python -m compileall -q scripts tests
+
+      - name: Run Version 3 regression controls
+        run: >
+          python -m pytest -q tests/test_canonical_values.py
+          -k "suffix_nesting or discovered_suffixes or composition_control or v3_"
+
+      - name: Run 200-replicate Version 3 validation
+        run: >
+          python scripts/24_prefix_suffix_v3.py
+          --replicates 200
+          --out results/prefix_suffix_v3_validation.json
+
+      - name: Upload Version 3 validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v3-validation-200-replicates
+          path: results/prefix_suffix_v3_validation.json
+          retention-days: 90
