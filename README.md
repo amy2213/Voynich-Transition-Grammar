@@ -78,30 +78,46 @@ See `docs/v2/post_release_defect_2026-09-29.md` for the defect record.
 
 ### Version 3.0.0 current result
 
-`scripts/24_prefix_suffix_v3.py` implements the replacement analysis. For a
-class with `k` occurrences inside a sequence unit of length `n`, its exact
-expected adjacent self-transition count under random within-unit ordering is
-`k(k-1)/n`. Summing that expectation over natural units conditions the null
-on each unit's composition and length, so page/line/sentence vocabulary mix
-cannot by itself create an order effect.
+`scripts/24_prefix_suffix_v3.py` implements the corrected replacement
+analysis. Comparator sequences break at excluded or split lexical items, and
+Voynich receives a separate page-block bootstrap for the cluster-aware
+neutrality statement.
 
-The 200-replicate validation passed its mechanical audit. In the main matched
-analysis at 28,447 tokens, Voynich has median prefix order ratio 1.013
-(95% replicate interval 1.005-1.025), suffix 1.108 (1.099-1.116), and
-minimum-side ratio 1.013 (1.005-1.025). All 14 tested large comparators have
-their entire minimum-side 95% replicate interval below 1.0.
+Full-corpus Voynich scores are prefix 1.013 and suffix 1.108.
 
-A smaller 14,380-token sensitivity including Ottoman Turkish gives a Voynich
-minimum-side interval of 0.985-1.060, which crosses the neutral value 1.0.
-That sample-size sensitivity is part of the result, not something to hide.
+Across 200 Voynich page-block replicates:
 
-Version 3.0.0 is the current bounded scientific release. The result is limited
-to the declared corpora, transcription, discovery rules, and estimator. These
-analyses do not establish natural-language uniqueness, identify a language,
-decipher the manuscript, or identify a generating mechanism. See
-`docs/v3/prefix_suffix_order_estimator_spec.md`,
-`docs/v3/validation_interpretation.md`, and
-`docs/v3/release_candidate_manifest.md`.
+- prefix: **1.020 [0.978, 1.064]**;
+- suffix: **1.110 [1.074, 1.145]**;
+- minimum: **1.020 [0.978, 1.064]**.
+
+The prefix/minimum interval crosses neutral. The suffix interval remains above
+neutral in all 200 page-block replicates.
+
+The 90% line-deletion result, 1.013 [1.005, 1.025], is retained only as a
+stability diagnostic because those samples overlap heavily. It is not the
+headline uncertainty statement.
+
+After boundary-safe comparator tokenization, all 14 sufficiently large
+comparators have minimum-side 95% replicate intervals below 1.0 in the
+28,447-token sequence-unit deletion-stability analysis. At the smaller
+14,380-token all-system target, Arabic and Georgian minimum-side intervals
+cross neutral.
+
+Exact adjacent repetition does not fully explain the suffix effect: 249 exact
+adjacent repeats are observed versus 244.274 expected, and breaking every exact
+repeat pair leaves the suffix ratio at 1.064.
+
+Version 3.0.0 remains a bounded finite-corpus structural result. These analyses
+do not establish natural-language uniqueness, identify a language, decipher
+the manuscript, infer syntax or semantics, or identify a generating mechanism.
+
+See:
+
+- `docs/v3/prefix_suffix_order_estimator_spec.md`
+- `docs/v3/validation_interpretation.md`
+- `results/prefix_suffix_v3_validation.json`
+- `results/prefix_suffix_v3_validation_audit.md`
 
 ### Other provisional findings
 

@@ -59,7 +59,7 @@ jobs:
         run: |
           python scripts/25_v3_validation_audit.py             --input release/v3.0.0/prefix_suffix_v3_validation.json             --out release/v3.0.0/prefix_suffix_v3_validation_audit.md
 
-      - name: Verify Version 3 numerical fingerprint
+      - name: Verify corrected Version 3 numerical fingerprint
         run: |
           python - <<'PY'
           import json
@@ -70,40 +70,66 @@ jobs:
 
           assert d["schema_version"] == "3.1"
           assert d["estimator_version"] == "3.0.0"
-          assert d["status"] == "validated descriptive scientific result; finite-corpus scope"
           assert d["method"]["matched_subsample_replicates"] == 200
           assert d["method"]["cross_system_p_values"] == "none"
+          assert "break sequences" in d["method"]["comparator_boundary_policy"]
 
-          main = d["matched_analyses"]["main"]["systems"]
-          voy = main["VOYNICH"]["summary"]
-          assert round(voy["prefix_order_ratio"]["median"], 3) == 1.013
-          assert [round(x, 3) for x in voy["prefix_order_ratio"]["ci95"]] == [1.005, 1.025]
-          assert round(voy["suffix_order_ratio"]["median"], 3) == 1.108
-          assert [round(x, 3) for x in voy["suffix_order_ratio"]["ci95"]] == [1.099, 1.116]
-          assert round(voy["minimum_order_ratio"]["median"], 3) == 1.013
-          assert [round(x, 3) for x in voy["minimum_order_ratio"]["ci95"]] == [1.005, 1.025]
-          assert round(voy["minimum_order_ratio"]["fraction_at_or_above_neutral"], 3) == 0.995
+          page = d["voynich_cluster_robustness"][
+              "page_block_bootstrap"
+          ]["summary"]
+          assert round(page["prefix_order_ratio"]["median"], 3) == 1.020
+          assert [round(x, 3) for x in page["prefix_order_ratio"]["ci95"]] == [0.978, 1.064]
+          assert round(page["suffix_order_ratio"]["median"], 3) == 1.110
+          assert [round(x, 3) for x in page["suffix_order_ratio"]["ci95"]] == [1.074, 1.145]
+          assert [round(x, 3) for x in page["minimum_order_ratio"]["ci95"]] == [0.978, 1.064]
+          assert round(page["minimum_order_ratio"]["fraction_at_or_above_neutral"], 3) == 0.770
+          assert round(page["suffix_order_ratio"]["fraction_at_or_above_neutral"], 3) == 1.000
 
-          comparators = [name for name in main if name != "VOYNICH"]
+          line = d["matched_analyses"]["line_deletion_stability"]["systems"]
+          comparators = [name for name in line if name != "VOYNICH"]
           assert len(comparators) == 14
           assert all(
-              main[name]["summary"]["minimum_order_ratio"]["ci95"][1] < 1.0
+              line[name]["summary"]["minimum_order_ratio"]["ci95"][1] < 1.0
               for name in comparators
           )
+
+          full = d["full_corpus"]
+          full_comparators = [name for name in full if name != "VOYNICH"]
+          assert len(full_comparators) == 15
+          assert all(
+              full[name]["score"]["minimum_order_ratio"] < 1.0
+              for name in full_comparators
+          )
+          assert round(full["Arabic"]["score"]["suffix_order_ratio"], 3) == 1.010
+          assert round(full["Georgian"]["score"]["minimum_order_ratio"], 3) == 0.910
 
           small = d["matched_analyses"]["all_system_small_target"]["systems"]
           sv = small["VOYNICH"]["summary"]["minimum_order_ratio"]
           assert round(sv["median"], 3) == 1.019
           assert [round(x, 3) for x in sv["ci95"]] == [0.985, 1.060]
-          assert sv["ci95"][0] < 1.0 < sv["ci95"][1]
-
           small_comparators = [name for name in small if name != "VOYNICH"]
-          assert len(small_comparators) == 15
-          assert all(
+          below = sum(
               small[name]["summary"]["minimum_order_ratio"]["ci95"][1] < 1.0
               for name in small_comparators
           )
-          print("Version 3.0.0 numerical fingerprint: PASS")
+          assert below == 13
+          assert small["Arabic"]["summary"]["minimum_order_ratio"]["ci95"][1] > 1.0
+          assert small["Georgian"]["summary"]["minimum_order_ratio"]["ci95"][1] > 1.0
+
+          repeat = d["voynich_exact_repeat_robustness"]
+          assert repeat["observed_exact_adjacent_repeats"] == 249
+          assert round(
+              repeat["expected_exact_adjacent_repeats_under_within_unit_shuffle"],
+              3,
+          ) == 244.274
+          assert round(
+              repeat["score_after_breaking_at_exact_repeat_pairs"][
+                  "suffix_order_ratio"
+              ],
+              3,
+          ) == 1.064
+
+          print("Corrected Version 3.0.0 numerical fingerprint: PASS")
           PY
 
       - name: Run complete frozen Version 2 canonical pipeline and suite
@@ -133,7 +159,7 @@ jobs:
           - Version 3 regression controls
           - 200-replicate Version 3 analysis
           - Version 3 mechanical audit
-          - Version 3 numerical fingerprint
+          - corrected Version 3 numerical fingerprint
           - complete frozen Version 2 canonical pipeline and tests
           - frozen v2.0.0 tag verification
 

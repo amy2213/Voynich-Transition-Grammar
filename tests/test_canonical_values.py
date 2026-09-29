@@ -648,6 +648,109 @@ class TestCurrentPublicClaims(unittest.TestCase):
             self.assertIn(limitation, combined)
 
 
+class TestCommittedVersionThreeEvidence(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.json_path = (
+            PROJECT_ROOT / "results" / "prefix_suffix_v3_validation.json"
+        )
+        cls.audit_path = (
+            PROJECT_ROOT / "results" /
+            "prefix_suffix_v3_validation_audit.md"
+        )
+        cls.data = json.loads(cls.json_path.read_text(encoding="utf-8"))
+
+    def test_v3_committed_evidence_hashes_match_corrected_run(self):
+        self.assertEqual(
+            hashlib.sha256(self.json_path.read_bytes()).hexdigest(),
+            "ad89a8c3c1f887ba6b767069962f5f70226e4ef3b6949a86f58dc1b7ce28a2a3",
+        )
+        self.assertEqual(
+            hashlib.sha256(self.audit_path.read_bytes()).hexdigest(),
+            "07ad39d8a4fccbb75d4dfce1821c9df3993f11a6e5029851d9a296bda23a62f3",
+        )
+
+    def test_v3_committed_page_block_fingerprint(self):
+        page = self.data["voynich_cluster_robustness"][
+            "page_block_bootstrap"
+        ]["summary"]
+        self.assertEqual(
+            [round(x, 3) for x in page["prefix_order_ratio"]["ci95"]],
+            [0.978, 1.064],
+        )
+        self.assertEqual(
+            [round(x, 3) for x in page["suffix_order_ratio"]["ci95"]],
+            [1.074, 1.145],
+        )
+        self.assertAlmostEqual(
+            page["minimum_order_ratio"]["fraction_at_or_above_neutral"],
+            0.770,
+            places=3,
+        )
+        self.assertAlmostEqual(
+            page["suffix_order_ratio"]["fraction_at_or_above_neutral"],
+            1.0,
+            places=12,
+        )
+
+    def test_v3_committed_comparator_pattern_is_boundary_safe(self):
+        self.assertIn(
+            "break sequences",
+            self.data["method"]["comparator_boundary_policy"],
+        )
+        line = self.data["matched_analyses"][
+            "line_deletion_stability"
+        ]["systems"]
+        comparators = [name for name in line if name != "VOYNICH"]
+        self.assertEqual(len(comparators), 14)
+        self.assertTrue(all(
+            line[name]["summary"]["minimum_order_ratio"]["ci95"][1] < 1.0
+            for name in comparators
+        ))
+        full = self.data["full_corpus"]
+        full_comparators = [name for name in full if name != "VOYNICH"]
+        self.assertEqual(len(full_comparators), 15)
+        self.assertTrue(all(
+            full[name]["score"]["minimum_order_ratio"] < 1.0
+            for name in full_comparators
+        ))
+
+    def test_v3_committed_small_target_and_repeat_sensitivities(self):
+        small = self.data["matched_analyses"][
+            "all_system_small_target"
+        ]["systems"]
+        comps = [name for name in small if name != "VOYNICH"]
+        below = sum(
+            small[name]["summary"]["minimum_order_ratio"]["ci95"][1] < 1.0
+            for name in comps
+        )
+        self.assertEqual(below, 13)
+        self.assertGreater(
+            small["Arabic"]["summary"]["minimum_order_ratio"]["ci95"][1],
+            1.0,
+        )
+        self.assertGreater(
+            small["Georgian"]["summary"]["minimum_order_ratio"]["ci95"][1],
+            1.0,
+        )
+        repeat = self.data["voynich_exact_repeat_robustness"]
+        self.assertEqual(repeat["observed_exact_adjacent_repeats"], 249)
+        self.assertAlmostEqual(
+            repeat[
+                "expected_exact_adjacent_repeats_under_within_unit_shuffle"
+            ],
+            244.2737062040074,
+            places=9,
+        )
+        self.assertAlmostEqual(
+            repeat["score_after_breaking_at_exact_repeat_pairs"][
+                "suffix_order_ratio"
+            ],
+            1.0640569268847115,
+            places=12,
+        )
+
+
 class TestFrozenVersion2Release(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

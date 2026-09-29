@@ -10,8 +10,9 @@ abstract: >-
   Reproducible corpus-analysis code, frozen inputs, generated results, tests,
   and audit records for boundary-aware token-structure analysis of the
   Voynich Manuscript. Version 3 replaces the Version 2 prefix/suffix estimator
-  with an exact within-unit composition-conditioned ordering baseline. The
-  project makes no decipherment, translation, language-identification, or
+  with an exact within-unit composition-conditioned ordering baseline,
+  boundary-safe comparator tokenization, and page-block Voynich robustness.
+  The project makes no decipherment, translation, language-identification, or
   natural-language-uniqueness claim.
 repository-code: "https://github.com/amy2213/Voynich-Transition-Grammar"
 url: "https://github.com/amy2213/Voynich-Transition-Grammar"

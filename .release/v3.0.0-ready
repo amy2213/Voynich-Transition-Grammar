@@ -1,0 +1,4 @@
+Version 3.0.0 public release approved on 2026-09-29.
+Pre-freeze external-review corrections are incorporated.
+Publishing is permitted only through .github/workflows/publish-v3.0.0.yml
+after exact-commit corrected validation succeeds.

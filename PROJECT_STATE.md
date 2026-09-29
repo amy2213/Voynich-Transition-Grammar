@@ -5,18 +5,18 @@ CURRENT VERSION: 3.0.0
 CURRENT BRANCH: main
 LAST VERIFIED SCIENTIFIC COMMIT: 039acf4873104d7c8b60a3a5ff946667a8e0193c
 FROZEN RELEASE TAG: v2.0.0 -> 039acf4873104d7c8b60a3a5ff946667a8e0193c
-CURRENT PHASE: Version 3.0.0 pre-freeze correction after external review
+CURRENT PHASE: corrected Version 3.0.0 evidence complete; final exact-head validation pending
 AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish workflow succeeds; Version 2.0.0 remains frozen historical evidence with its Zenodo record
 
 ## Working
 - Version 3 composition-controlled affix-order estimator passed its 200-replicate validation and mechanical audit on 2026-09-29.
-- Main matched validation target is 28,447 tokens across Voynich plus 14 sufficiently large comparators; Ottoman Turkish is reserved for the smaller all-system sensitivity.
-- Main matched Voynich order ratios: prefix 1.013 [1.005, 1.025], suffix 1.108 [1.099, 1.116], minimum 1.013 [1.005, 1.025].
+- The 28,447-token sequence-unit deletion-stability analysis retains 14/14 large comparator minimum-side intervals below 1.0. The Voynich 90% line interval is stability-only, not cluster-aware uncertainty.
+- Corrected Voynich page-block robustness: prefix/minimum 1.020 [0.978, 1.064], suffix 1.110 [1.074, 1.145]. Prefix/minimum crosses neutral; suffix remains above neutral.
 - All 14 main comparators have their entire minimum-side 95% replicate interval below 1.0.
-- The all-system 14,380-token sensitivity gives Voynich minimum 1.019 [0.985, 1.060], so the smaller-sample interval crosses neutral and must remain part of the interpretation.
+- The all-system 14,380-token sensitivity gives Voynich minimum 1.019 [0.985, 1.060]; Arabic and Georgian comparator minimum intervals also cross neutral at this smaller target.
 - Version 3 reports no cross-system paired p-value; replicate indices have no linguistic pairing.
 - Version 3 validation PR #6 merged to `main` at `67a2eb1b3cb86b75e509de94db685eba607799e4` after exact-head validation and ordinary canonical CI both passed.
-- Final-head Version 3 validation artifact SHA-256: `1b71a5a24d29452b588eb9de4fd48e05396f091d0968da13f523b775906d6720`.
+- Corrected pre-freeze validation artifact SHA-256: `132ab897cb68a2d1ffe76c204000436761190939b0a4ea6aaca3d7a766fd1585`; committed JSON SHA-256: `ad89a8c3c1f887ba6b767069962f5f70226e4ef3b6949a86f58dc1b7ce28a2a3`.
 - Final-head canonical evidence artifact SHA-256: `5c5db28982eac41a67644bd7732f40e85a56f91dafb39103b6a38799a564ad8c`.
 - Verified release-candidate evidence ZIP SHA-256: `b6d496e05a8203bbddd1490f56de8ccacdd2e63d94e2d9763db6d8362a0b9875`.
 - Durable release-candidate evidence is preserved in the ChatGPT Library at `/Voynich Transition Grammar/Voynich-v3-release-candidate-evidence.zip`.
@@ -51,7 +51,7 @@ AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish wor
 
 ## Blockers
 - None for Version 2 archival release.
-- Version 3.0.0 publication is paused before freeze. External review independently reproduced two material pre-freeze issues: comparator seam creation across excluded lexical items and over-narrow Voynich line-deletion intervals. Boundary-safe comparator tokenization and page-block Voynich robustness are being incorporated before release.
+- External-review corrections are implemented and independently validated: boundary-safe comparator tokenization, page-block Voynich robustness, and exact-repeat diagnostics. Corrected 200-replicate validation and frozen Version 2 compatibility both pass. Final claim/document updates and exact-head release validation remain.
 
 
 ## Final audit result
@@ -67,7 +67,7 @@ AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish wor
 - Documentation/control commits after the frozen scientific tag do not replace the verified scientific commit in provenance records.
 
 ## Next action
-Complete corrected seam-safe/page-block validation, commit final machine-readable evidence, revise all claim surfaces, rerun canonical compatibility, then explicitly re-arm the Version 3.0.0 publish marker. Do not modify frozen Version 2 release assets.
+Run final exact-head Version 3 validation and canonical compatibility after this claim/document update, rebuild the release evidence package, then mark PR #10 ready. Do not modify frozen Version 2 release assets.
 
 ## Source-of-truth rules
 - Notion: portfolio state and release decisions

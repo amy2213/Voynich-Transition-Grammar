@@ -1,96 +1,96 @@
 # Version 3 release-candidate provenance manifest
 
-Status: release candidate, not a frozen release  
+Status: corrected release candidate; final exact-head freeze pending  
 Prepared: 2026-09-29
 
 ## Repository provenance
 
-- Repository: `amy2213/Voynich-Transition-Grammar`
-- Version 3 validation PR: #6
-- Validated PR head: `b8833f6b8714232bae2ceeebffbd6ee070432863`
-- Squash merge to `main`: `67a2eb1b3cb86b75e509de94db685eba607799e4`
-- Frozen Version 2 scientific tag remains:
-  `v2.0.0 -> 039acf4873104d7c8b60a3a5ff946667a8e0193c`
+- Frozen Version 2 tag: `v2.0.0`
+- Frozen Version 2 scientific commit:
+  `039acf4873104d7c8b60a3a5ff946667a8e0193c`
+- Version 2 DOI: `10.5281/zenodo.22715079`
+- Version-family concept DOI: `10.5281/zenodo.19996904`
+- Corrected Version 3 scientific-code/evidence run head:
+  `cdbdc78f9887446b3b602349e22a4cfc30afc0f2`
+- Corrected evidence commit:
+  `0404fd32165123b8dd087ca64c0872747ab13675`
+- Release PR: #10, intentionally draft until final exact-head validation
+
+The corrected pre-freeze review added boundary-safe comparator tokenization,
+Voynich page-block robustness, explicit line-deletion demotion, and
+exact-repeat robustness. No Version 2 artifact changed.
 
 ## Final validation runs
 
-### Ordinary canonical repository CI
+### Corrected ordinary canonical compatibility
 
 - Workflow: Canonical pipeline and tests
-- Run: #66
-- Run ID: `36614286343`
+- Run ID: `36624694574`
+- Head SHA: `cdbdc78f9887446b3b602349e22a4cfc30afc0f2`
 - Result: success
-- Validated final PR head:
-  `b8833f6b8714232bae2ceeebffbd6ee070432863`
+- Version 3 seam/page regression controls: success
+- Version 3 corrected smoke analysis: success
+- Complete frozen Version 2 canonical pipeline and suite: success
+- Canonical evidence artifact SHA-256:
+  `3febe255027419722a452576ea5b06c80fb4458637d777001d62fa171665f944`
 
-The run passed:
-
-- Python compilation;
-- Version 3 regression controls;
-- Version 3 smoke analysis;
-- frozen Version 2 canonical pipeline and complete test suite;
-- machine-readable evidence upload.
-
-### Dedicated Version 3 validation
+### Corrected dedicated Version 3 validation
 
 - Workflow: Version 3 scientific validation
-- Run: #7
-- Run ID: `36614286293`
+- Run ID: `36624694412`
+- Head SHA: `cdbdc78f9887446b3b602349e22a4cfc30afc0f2`
 - Result: success
-- Validated final PR head:
-  `b8833f6b8714232bae2ceeebffbd6ee070432863`
-- Replicates per matched profile: 200
-- Master seed: `20260929`
-
-Validation artifact:
-
-- name: `v3-validation-200-replicates`
-- artifact ID: `11054779129`
-- artifact size: 501,354 bytes
-- artifact ZIP SHA-256:
-  `1b71a5a24d29452b588eb9de4fd48e05396f091d0968da13f523b775906d6720`
-- contents:
-  - `prefix_suffix_v3_validation.json`
-  - `prefix_suffix_v3_validation_audit.md`
-
-The generated audit reported PASS under the declared Version 3 validation rules.
-
-Final ordinary canonical evidence artifact:
-
-- name: `canonical-run-evidence`
-- artifact ID: `11055321097`
-- artifact ZIP SHA-256: `5c5db28982eac41a67644bd7732f40e85a56f91dafb39103b6a38799a564ad8c`
-
-Verified release-candidate evidence package:
-
-- inner evidence ZIP SHA-256: `b6d496e05a8203bbddd1490f56de8ccacdd2e63d94e2d9763db6d8362a0b9875`
-- durable Library path: `/Voynich Transition Grammar/Voynich-v3-release-candidate-evidence.zip`
+- 200-replicate sequence-unit deletion stability: success
+- 200-replicate Voynich page-block bootstrap: success
+- 200-replicate all-system small-target sensitivity: success
+- Mechanical audit: success
+- Artifact ID: `11060002732`
+- Artifact SHA-256:
+  `132ab897cb68a2d1ffe76c204000436761190939b0a4ea6aaca3d7a766fd1585`
+- Committed JSON SHA-256:
+  `ad89a8c3c1f887ba6b767069962f5f70226e4ef3b6949a86f58dc1b7ce28a2a3`
+- Committed audit SHA-256:
+  `07ad39d8a4fccbb75d4dfce1821c9df3993f11a6e5029851d9a296bda23a62f3`
 
 ## Validation profiles
 
-### Main matched profile
+### Voynich page-block robustness
 
-- target: 28,447 tokens
-- target rule: 90% of canonical Voynich token count
-- systems: Voynich plus 14 sufficiently large comparators
-- excluded from this profile: Ottoman Turkish only
-- result:
-  - Voynich prefix 1.013 [1.005, 1.025]
-  - Voynich suffix 1.108 [1.099, 1.116]
-  - Voynich minimum 1.013 [1.005, 1.025]
-  - Voynich minimum >= 1.0 in 199/200 replicates
-  - 14/14 comparator minimum-side medians below 1.0
-  - 14/14 comparator minimum-side 95% replicate intervals entirely below 1.0
+Target: 28,447 tokens; 200 page-block bootstrap replicates.
 
-### All-system small-target profile
+- prefix 1.020 [0.978, 1.064]
+- suffix 1.110 [1.074, 1.145]
+- minimum 1.020 [0.978, 1.064]
+- prefix/minimum fraction >= 1.0: 0.770
+- suffix fraction >= 1.0: 1.000
 
-- target: 14,380 tokens
-- target rule: 90% of smallest available corpus
-- systems: all 16 systems, including Ottoman Turkish
-- result:
-  - Voynich minimum 1.019 [0.985, 1.060]
-  - Voynich minimum >= 1.0 in 170/200 replicates
-  - Voynich minimum interval crosses neutral
+This is the cluster-aware Voynich robustness summary.
+
+### Sequence-unit deletion stability
+
+Target: 28,447 tokens; 200 without-replacement replicates.
+
+- Voynich prefix 1.013 [1.005, 1.025]
+- Voynich suffix 1.108 [1.099, 1.116]
+- comparator minimum-side intervals entirely below 1.0: 14/14
+
+The Voynich interval here is deletion stability only, not the cluster-aware
+neutrality statement.
+
+### All-system small-target sensitivity
+
+Target: 14,380 tokens; all 16 systems.
+
+- Voynich minimum 1.019 [0.985, 1.060]
+- comparator minimum-side medians below 1.0: 15/15
+- comparator minimum-side intervals entirely below 1.0: 13/15
+- Arabic and Georgian minimum-side intervals cross neutral.
+
+### Exact-repeat robustness
+
+- observed exact adjacent repeats: 249
+- within-unit shuffle expectation: 244.274
+- suffix ratio after breaking each exact repeat pair: 1.064
 
 ## Frozen input SHA-256 values
 
@@ -123,14 +123,14 @@ above is the durable release-candidate reference for the frozen source files.
 
 ## Scientific authority
 
-The current public frozen scientific release remains Version 2.0.0.
+The current corrected Version 3 evidence supports a bounded finite-corpus
+structural claim: Voynich suffix ordering remains modestly self-clustering under
+page-level resampling, while prefix ordering is near neutral. The large
+comparator set retains minimum-side anti-clustering in the declared
+28,447-token deletion-stability analysis.
 
-Version 3 is a validated descriptive release candidate. Its bounded
-interpretation is documented in:
+This does not establish natural-language uniqueness, language identity,
+decipherment, semantics, syntax, or a generating mechanism.
 
-- `docs/v3/validation_interpretation.md`
-- `docs/v3/release_candidate_addendum.md`
-- `docs/v3/release_candidate_checklist.md`
-
-No Version 3 tag, release, DOI, or citation-version change is authorized by
-this manifest.
+No Version 3 tag or version-specific archival DOI exists until the final
+exact-head release gates pass.

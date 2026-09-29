@@ -1,50 +1,43 @@
 # Voynich Transition Grammar v3.0.0
 
-Version 3.0.0 is the corrected prefix/suffix ordering release.
+Version 3.0.0 is the corrected affix-ordering release.
 
-## What changed
+## Corrected result
 
-Version 2's prefix/suffix comparison was reopened after a post-release audit
-identified a pooled-marginal composition confound, incorrect suffix-nesting
-logic, comparator one-character-token asymmetry, and invalid cross-system
-replicate-index sign-test framing.
+Voynich page-block robustness, 200 replicates:
 
-Version 3 replaces that analysis with an exact within-unit
-composition-conditioned ordering baseline. For a class occurring `k` times in
-a natural unit of length `n`, expected adjacent self-transitions under random
-within-unit order are `k(k-1)/n`.
+- prefix **1.020 [0.978, 1.064]**
+- suffix **1.110 [1.074, 1.145]**
+- minimum **1.020 [0.978, 1.064]**
 
-## Validated result
+Prefix/minimum crosses neutral. Suffix remains above neutral.
 
-Main matched analysis, 28,447 tokens, 200 replicates:
+In the 28,447-token sequence-unit deletion-stability analysis, all 14 large
+comparators have minimum-side 95% replicate intervals below 1.0 after
+boundary-safe tokenization. At the smaller 14,380-token all-system target,
+Arabic and Georgian minimum-side intervals cross neutral.
 
-- Voynich prefix: **1.013 [1.005, 1.025]**
-- Voynich suffix: **1.108 [1.099, 1.116]**
-- Voynich minimum side: **1.013 [1.005, 1.025]**
-- all 14 tested large comparators have their entire minimum-side 95% replicate
-  interval below 1.0
+Exact adjacent repeats do not fully explain the suffix result: 249 are observed
+versus 244.274 expected, and breaking every exact repeat pair leaves suffix
+ratio 1.064.
 
-All-system sensitivity, 14,380 tokens:
+## What changed before freeze
 
-- Voynich minimum side: **1.019 [0.985, 1.060]**
-- the interval crosses neutral, and that sample-size sensitivity is part of the
-  released interpretation
+A hostile pre-freeze review correctly identified that regex filtering could
+manufacture comparator adjacency and that 90% Voynich line samples overlap too
+heavily to support the headline neutrality interval. Both were fixed before the
+tag was created.
 
 ## Scope
 
-This is a finite-corpus structural result under the declared transcription,
-corpora, affix-discovery rules, natural-unit definitions, and estimator.
-
-It does **not** establish natural-language uniqueness, identify a language,
-decipher the manuscript, infer syntax or semantics, or identify a cipher,
-constructed-language, stenographic, hybrid, or other generating mechanism.
+This is a finite-corpus structural result. It does **not** establish
+natural-language uniqueness, identify a language, decipher the manuscript,
+infer syntax or semantics, or identify a generating mechanism.
 
 ## Version 2
 
 The frozen `v2.0.0` tag, paper, DOI record, hashes, and release assets remain
-unchanged as historical evidence. The Version 2 prefix/suffix claim is
-superseded by Version 3. The separate within-line CHEDY→QOK and AIIN→QOK
-shuffle findings remain retained with their existing limitations.
+unchanged. Its prefix/suffix claim is superseded by Version 3.
 
 ## Archival identifiers
 

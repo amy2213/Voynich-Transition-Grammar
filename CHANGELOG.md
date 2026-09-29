@@ -6,33 +6,36 @@ semantic versioning for public releases.
 ## [3.0.0] - 2026-09-29
 
 ### Corrected
-- Replaced the Version 2 pooled-marginal prefix/suffix expectation with an
-  exact within-unit composition-conditioned ordering expectation.
-- Corrected suffix-family nesting to use suffix-aware `endswith` logic.
-- Retained alphabetic one-character comparator words for tokenizer symmetry.
-- Removed index-paired cross-system sign-test inference from independently
-  generated replicate schedules.
+- Replaced the Version 2 pooled-marginal affix expectation with the exact
+  within-unit composition-conditioned expectation.
+- Corrected suffix nesting.
+- Retained valid alphabetic one-character comparator words.
+- Broke comparator sequences at excluded or split lexical items so filtering
+  cannot manufacture adjacency.
+- Removed cross-system replicate-index sign-test inference.
+- Demoted 90% Voynich line subsampling to deletion stability.
+- Added Voynich page-block robustness for the cluster-aware neutrality claim.
 
 ### Added
-- Two declared Version 3 matched-size validation profiles:
-  - 28,447-token main analysis across Voynich plus 14 sufficiently large
-    comparators;
-  - 14,380-token all-system sensitivity including Ottoman Turkish.
-- 200-replicate Version 3 validation workflow and machine audit.
-- Release-candidate provenance manifest with frozen input SHA-256 values.
-- Explicit post-release Version 2 defect record and Version 3 addendum.
+- Regression tests for numeric gaps, foreign-script gaps, split orthographic
+  forms, punctuation-wrapped words, and one-character words.
+- Exact adjacent-repeat robustness.
+- Committed 200-replicate Version 3 JSON and audit evidence.
 
 ### Result
-- Main matched Voynich prefix: 1.013 [1.005, 1.025].
-- Main matched Voynich suffix: 1.108 [1.099, 1.116].
-- Main matched minimum: 1.013 [1.005, 1.025].
-- All 14 large comparators have their entire minimum-side 95% replicate
-  interval below 1.0.
-- At the smaller all-system target, Voynich minimum is
-  1.019 [0.985, 1.060], crossing neutral.
+- Voynich page-block prefix/minimum:
+  1.020 [0.978, 1.064].
+- Voynich page-block suffix:
+  1.110 [1.074, 1.145].
+- Large comparator minimum-side deletion-stability intervals below 1.0:
+  14/14.
+- Smaller all-system sensitivity weakens interval separation: Arabic and
+  Georgian minimum-side intervals cross 1.0.
+- Breaking every exact Voynich repeated-token pair leaves suffix ratio 1.064.
 
-This finite-corpus result does not establish natural-language uniqueness,
-language identity, decipherment, syntax, semantics, or a generating mechanism.
+The result is a finite-corpus structural contrast, not evidence of
+natural-language uniqueness, language identity, decipherment, semantics,
+syntax, or a generating mechanism.
 
 ## [2.0.0] - 2026-09-11
 

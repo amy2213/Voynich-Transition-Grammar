@@ -1,139 +1,168 @@
-# SUPERSEDED: Version 3 pre-correction validation interpretation
+# Version 3 validation interpretation
 
-Status: **superseded by pre-freeze external-review corrections; replacement analysis pending**  
+Status: corrected 200-replicate pre-freeze result  
 Validation date: 2026-09-29  
-Superseded: 2026-09-29 before release freeze  
-Estimator: `3.0.0-dev`  
+Estimator: `3.0.0`  
 Matched replicates per profile: 200
-
-> This interpretation used seam-creating comparator tokenization and treated 90% Voynich line subsamples too prominently. It is retained for audit history only. Do not use its 199/200 statement or narrow line-subsample interval as current evidence.
 
 ## Executive result
 
-Version 3 changes the interpretation of the prefix/suffix analysis.
+Version 3 measures affix-class ordering against the exact expectation obtained
+after conditioning on each natural line or sentence fragment's own class
+composition. A pre-freeze external review identified two additional issues
+before Version 3 was tagged:
 
-Version 2 reported elevated raw self-clustering against pooled corpus marginals.
-That result was reopened because the pooled expectation could mix true ordering
-with between-line or between-sentence composition.
+1. comparator regex filtering could join surviving words across excluded or
+   split lexical material;
+2. 90% Voynich line-deletion replicates overlap too heavily to serve as the
+   cluster-aware uncertainty summary for Voynich.
 
-Version 3 instead conditions the expectation on each natural unit's own class
-composition. Under that estimator, the large Version 2 elevation mostly
-disappears. The remaining pattern is about **order relative to fixed local
-composition**, not raw clustering.
+Both issues are corrected in the current result. Comparator tokenization now
+breaks the sequence at excluded or split whitespace items, and Voynich receives
+a separate page-block bootstrap while retaining line boundaries inside pages.
 
-In the main matched analysis at 28,447 tokens, Voynich has:
+The corrected result is narrower than the earlier candidate claim:
 
-- prefix order ratio: **1.013**, 95% replicate interval **[1.005, 1.025]**;
-- suffix order ratio: **1.108**, 95% replicate interval **[1.099, 1.116]**;
-- minimum-side order ratio: **1.013**, 95% replicate interval
-  **[1.005, 1.025]**;
-- minimum-side ratio at or above the neutral value 1.0 in **199/200**
-  replicates.
+- **Voynich prefix ordering is near neutral under page-level resampling.**
+- **Voynich suffix ordering remains modestly self-clustering.**
+- Every tested comparator has a full-corpus minimum-side point estimate below
+  1.0.
+- In the 28,447-token sequence-unit deletion-stability analysis, all 14 large
+  comparators have their entire minimum-side 95% replicate interval below 1.0.
+- At the smaller 14,380-token all-system target, Arabic and Georgian
+  minimum-side intervals cross 1.0, so that smaller sensitivity does not show
+  complete interval separation.
 
-All 14 eligible large comparators have a minimum-side median below 1.0, and
-all 14 have their entire 95% minimum-side replicate interval below 1.0.
+These are finite-corpus robustness summaries. They are not population
+confidence intervals and are not a natural-language classifier.
 
-This is a finite-set descriptive separation under the declared Version 3
-estimator. It is not a p-value and is not a population-level claim about all
-languages.
+## Voynich page-block robustness
 
-## What the order ratio means
+Target: 28,447 tokens. Pages are sampled with replacement while the lines
+nested inside each sampled page remain separate sequence units.
 
-The Version 3 null fixes the class composition of every line or sentence and
-asks what self-transition count is expected if order inside that unit were
-random.
-
-- ratio > 1: ordering adds self-clustering;
-- ratio = 1: ordering contributes no net self-clustering;
-- ratio < 1: ordering produces anti-clustering.
-
-The main result therefore does **not** say that Voynich has dramatically high
-affix clustering. Its prefix ratio is close to neutral. The notable contrast is
-that the tested comparators show order-driven anti-clustering on at least one
-token edge, while Voynich does not in the main matched analysis.
-
-## Main matched sensitivity
-
-Target: 28,447 tokens, equal to 90% of the canonical Voynich corpus.  
-Systems: Voynich plus 14 comparators.  
-Excluded: Ottoman Turkish only, because its preserved corpus is too small for
-this target.
-
-| System | Prefix median [95%] | Suffix median [95%] | Minimum median [95%] |
+| Metric | Median | 95% replicate interval | Fraction >= 1 |
 |---|---:|---:|---:|
-| Voynich | **1.013 [1.005, 1.025]** | **1.108 [1.099, 1.116]** | **1.013 [1.005, 1.025]** |
-| Arabic | 0.804 [0.630, 0.931] | 0.963 [0.824, 1.075] | 0.803 [0.630, 0.927] |
-| Estonian | 0.687 [0.552, 0.816] | 1.390 [1.213, 1.513] | 0.687 [0.552, 0.816] |
-| Finnish | 0.641 [0.511, 0.790] | 1.286 [1.228, 1.354] | 0.641 [0.511, 0.790] |
-| Georgian | 0.911 [0.815, 0.995] | 0.958 [0.905, 1.000] | 0.907 [0.815, 0.973] |
-| Hebrew | 0.574 [0.394, 0.775] | 1.651 [1.564, 1.750] | 0.574 [0.394, 0.775] |
-| Hungarian | 0.572 [0.470, 0.708] | 0.635 [0.507, 0.765] | 0.564 [0.470, 0.676] |
-| Italian | 0.649 [0.552, 0.749] | 0.679 [0.568, 0.796] | 0.633 [0.541, 0.722] |
-| KJV English | 0.316 [0.281, 0.355] | 0.093 [0.061, 0.126] | 0.093 [0.061, 0.126] |
-| Latin | 0.619 [0.505, 0.732] | 1.592 [1.516, 1.668] | 0.619 [0.505, 0.732] |
-| Middle English | 0.483 [0.435, 0.531] | 0.333 [0.263, 0.413] | 0.333 [0.263, 0.413] |
-| North Azerbaijani | 0.639 [0.481, 0.803] | 0.794 [0.673, 0.925] | 0.639 [0.481, 0.786] |
-| Swahili | 0.937 [0.886, 0.984] | 0.867 [0.816, 0.915] | 0.867 [0.816, 0.915] |
-| Tagalog | 0.536 [0.481, 0.594] | 0.889 [0.838, 0.941] | 0.536 [0.481, 0.594] |
-| Turkish | 0.613 [0.481, 0.736] | 0.776 [0.640, 0.932] | 0.613 [0.481, 0.732] |
+| Prefix order ratio | **1.020** | **[0.978, 1.064]** | 0.770 |
+| Suffix order ratio | **1.110** | **[1.074, 1.145]** | 1.000 |
+| Minimum-side ratio | **1.020** | **[0.978, 1.064]** | 0.770 |
 
-The intervals above are replicate intervals from the declared frozen-corpus
-subsampling procedures. They are not confidence intervals for a population of
-all languages.
+The prefix/minimum interval crosses the neutral value 1.0. The suffix interval
+does not. The earlier 199/200 line-deletion statement is therefore not used as
+headline evidence about Voynich neutrality.
 
-## All-system small-target sensitivity
+## Line-deletion stability
 
-Target: 14,380 tokens, equal to 90% of the smallest available corpus.  
-Systems: all 16 systems, including Ottoman Turkish.
+The 90% without-replacement Voynich line analysis is retained as a deletion
+stability diagnostic:
 
-Voynich minimum-side order ratio is **1.019 [0.985, 1.060]**, with 170/200
-replicates at or above 1.0. Its suffix result remains above neutral at
-**1.108 [1.081, 1.132]**, but its prefix/minimum interval crosses 1.0.
+- prefix: 1.013 [1.005, 1.025];
+- suffix: 1.108 [1.099, 1.116];
+- minimum: 1.013 [1.005, 1.025].
 
-All 15 comparators still have their entire minimum-side 95% replicate interval
-below 1.0 in this smaller-target analysis.
+Those narrow intervals mostly reflect highly overlapping 90% samples and are
+not the cluster-aware uncertainty summary.
 
-This sensitivity matters. At the smaller sample size, the evidence that
-Voynich itself is strictly above neutral on both sides is weaker. The
-cross-corpus descriptive pattern remains: the tested comparator minimum-side
-distributions are below neutral, while Voynich is centered near or above
-neutral.
+For the 14 sufficiently large comparators, the same 28,447-token
+sequence-unit deletion analysis gives minimum-side intervals entirely below
+1.0 for **14/14** systems after boundary-safe tokenization.
+
+Notably, individual edges can cross neutral. Arabic suffix is centered near
+1.0 and Georgian suffix overlaps 1.0. The claim concerns the weaker/minimum
+edge in this declared stability analysis, not universal anti-clustering on both
+edges.
 
 ## Full-corpus descriptive values
 
-The complete available corpora give:
+Boundary-safe comparator tokenization gives:
 
-- Voynich prefix: **1.013**;
-- Voynich suffix: **1.108**;
-- Voynich minimum: **1.013**.
+| System | Prefix | Suffix | Minimum |
+|---|---:|---:|---:|
+| Voynich | **1.013** | **1.108** | **1.013** |
+| Arabic | 0.864 | 1.010 | 0.864 |
+| Estonian | 0.724 | 1.380 | 0.724 |
+| Finnish | 0.676 | 1.279 | 0.676 |
+| Georgian | 0.910 | 0.979 | 0.910 |
+| Hebrew | 0.539 | 1.614 | 0.539 |
+| Hungarian | 0.603 | 0.566 | 0.566 |
+| Italian | 0.688 | 0.711 | 0.688 |
+| KJV English | 0.316 | 0.090 | 0.090 |
+| Latin | 0.610 | 1.543 | 0.610 |
+| Middle English | 0.512 | 0.325 | 0.325 |
+| North Azerbaijani | 0.496 | 0.756 | 0.496 |
+| Ottoman Turkish | 0.306 | 0.345 | 0.306 |
+| Swahili | 0.960 | 0.886 | 0.886 |
+| Tagalog | 0.536 | 0.903 | 0.536 |
+| Turkish | 0.637 | 0.747 | 0.637 |
 
-Every tested comparator has a full-corpus minimum-side ratio below 1.0.
+All 15 comparator minimum-side point estimates are below 1.0.
 
-Full-corpus values are descriptive because corpus sizes differ substantially.
+## All-system small-target sensitivity
+
+Target: 14,380 tokens across all 16 systems.
+
+Voynich gives:
+
+- prefix: 1.019 [0.985, 1.060];
+- suffix: 1.108 [1.081, 1.132];
+- minimum: 1.019 [0.985, 1.060].
+
+Voynich prefix/minimum again crosses neutral. Among the 15 comparators, 13 have
+their entire minimum-side interval below 1.0. Arabic
+[0.622, 1.003] and Georgian [0.807, 1.006] cross neutral at this smaller target.
+Their minimum-side medians remain below 1.0.
+
+This sensitivity is retained precisely because it weakens interval separation.
+
+## Boundary-safe comparator correction
+
+Comparator alphabetic words of length 1 remain valid. In addition, any
+whitespace item that is excluded or would split into multiple accepted word
+runs now terminates the current sequence. Examples covered by regression tests
+include:
+
+- `word 123 word`;
+- a foreign-script gap between target-script words;
+- split orthographic forms such as `l'arte`;
+- punctuation-wrapped valid words, which remain intact.
+
+Surviving words are never made adjacent across dropped material.
+
+The correction changes some edge scores materially, for example Arabic suffix
+0.959 -> 1.010, while the comparator minimum-side pattern remains.
+
+## Exact adjacent-repeat robustness
+
+In canonical Voynich lines:
+
+- observed exact adjacent repeated-token pairs: **249**;
+- exact expectation under within-line shuffle: **244.274**.
+
+As a deliberately harsh sensitivity, every exact adjacent repeat pair was
+turned into a sequence break while retaining all tokens. The suffix score falls
+from 1.108 to **1.064** but remains above 1.0.
+
+Exact repetition therefore contributes to the suffix effect but does not fully
+account for it. This is a robustness diagnostic, not an independent hypothesis
+test.
 
 ## Relationship to the Version 2 correction
 
-The Version 3 result confirms the central criticism of Version 2: much of the
-old apparent elevation was caused by the pooled expectation rather than word
-order alone.
+Version 3 continues to confirm the central Version 2 correction: the old pooled
+marginal expectation substantially inflated the appearance of affix
+self-clustering by mixing order with between-unit composition.
 
-That correction does not erase the project. It changes the scientific claim.
-
-The defensible Version 3 observation is that, under a local
-composition-conditioned ordering baseline, Voynich is near-neutral to modestly
-self-clustering at both token edges, whereas each tested comparator shows
-anti-clustering on at least one edge in the declared frozen corpus set.
+The pre-freeze corrections do not restore the Version 2 claim. They narrow
+Version 3 further by removing manufactured comparator seams and by using page
+blocks for the Voynich cluster-aware robustness statement.
 
 ## Retained independent transition findings
 
-The CHEDY->QOK and AIIN->QOK findings come from a separate within-line
-permutation design that already preserves line composition while destroying
-order. They are not invalidated by the Version 2 prefix/suffix defect.
+CHEDY->QOK and AIIN->QOK use a separate within-line permutation design that
+already preserves line composition while destroying order. They remain separate
+from the affix-order estimator and retain their existing limitations.
 
-Their pooled observed/expected ratios remain descriptive effect-size summaries;
-their within-line shuffle evidence is the stronger order-sensitive component.
-
-## What Version 3 does not establish
+## Scope
 
 Version 3 does not establish:
 
@@ -145,35 +174,31 @@ Version 3 does not establish:
 - a cipher, constructed-language, stenographic, hybrid, or other generating
   mechanism;
 - generalization beyond the frozen tested corpora, transcription, discovery
-  rules, and sequence-unit definitions.
+  rules, tokenization policy, and sequence-unit definitions.
 
 No cross-system p-value is reported. Replicate indices are not paired across
 systems.
 
-## Validation record
+## Current claim wording
 
-The 200-replicate validation workflow completed successfully. The mechanical
-audit passed all declared structural checks, including output completeness,
-supported class counts, side-aware suffix nesting, sampling profiles, and the
-prohibition on cross-system replicate pairing.
+> Under boundary-safe comparator tokenization and an exact within-unit
+> composition-conditioned ordering baseline, Voynich suffix ordering is
+> modestly self-clustering (full corpus 1.108; page-block bootstrap median
+> 1.110, 95% replicate interval 1.074-1.145), while prefix ordering is near
+> neutral under page-level resampling (1.020 [0.978, 1.064]). In the
+> 28,447-token sequence-unit deletion-stability analysis, all 14 large
+> comparators have minimum-side replicate intervals below 1.0. At the smaller
+> 14,380-token all-system target, Arabic and Georgian minimum-side intervals
+> cross neutral. The result is a finite-corpus structural contrast, not a
+> language classifier or evidence of decipherment.
 
-Machine-generated evidence is retained as the GitHub Actions artifact
-`v3-validation-200-replicates` for the validation run.
+## Evidence
 
-## Recommended claim wording
+Committed machine-readable evidence:
 
-> Under a composition-conditioned within-unit ordering baseline, the Voynich
-> EVA transcription is near-neutral for prefix self-transition ordering and
-> modestly self-clustering for suffix ordering. In the 28,447-token matched
-> analysis, its minimum-side order ratio is 1.013 [1.005, 1.025], while all 14
-> tested large comparators have minimum-side 95% replicate intervals below
-> 1.0. At the smaller 14,380-token all-system target, the Voynich minimum
-> interval crosses 1.0, so the result is reported as a finite-corpus structural
-> contrast rather than evidence of language identity or natural-language
-> uniqueness.
+- `results/prefix_suffix_v3_validation.json`
+- `results/prefix_suffix_v3_validation_audit.md`
+- `results/prefix_suffix_v3_validation.sha256`
 
-## Release recommendation
-
-The Version 3 estimator and validation result are suitable to advance to a
-release-candidate/addendum stage. The frozen Version 2 artifact should remain
-unchanged and linked to its post-release defect record.
+Corrected validation workflow run: `36624694412`  
+Corrected canonical compatibility run: `36624694574`

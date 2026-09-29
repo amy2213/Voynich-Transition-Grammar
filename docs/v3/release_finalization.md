@@ -1,48 +1,41 @@
 # Version 3.0.0 release finalization
 
-Status: approved for public release  
-Approval date: 2026-09-29  
+Status: corrected release candidate; final exact-head gates pending  
 Release tag: `v3.0.0`
 
-## Release boundary
+## Completed before final freeze
 
-Version 3.0.0 is a software, validation-evidence, and scientific-addendum
-release. It does not rewrite the frozen Version 2 paper or Version 2 release
-assets.
+- boundary-safe comparator tokenization implemented and regression-tested;
+- Voynich page-block robustness implemented;
+- 90% line interval demoted to deletion stability;
+- corrected 200-replicate run `36624694412` passed;
+- corrected mechanical audit passed;
+- complete frozen Version 2 compatibility run `36624694574` passed;
+- exact JSON and audit committed with SHA-256 records;
+- exact-repeat robustness reported with reproduced values.
 
-The release is created only after the exact merge commit passes:
+## Exact release-commit gates
 
-1. Python source compilation;
+The final merge commit must again pass:
+
+1. Python compilation;
 2. Version 3 regression controls;
-3. the complete 200-replicate Version 3 validation;
-4. the Version 3 mechanical audit;
-5. the declared numerical fingerprint check;
-6. the complete frozen Version 2 canonical pipeline and test suite;
+3. complete 200-replicate corrected Version 3 validation;
+4. Version 3 mechanical audit;
+5. corrected numerical fingerprint;
+6. complete frozen Version 2 canonical pipeline and suite;
 7. verification that `v2.0.0` still resolves to
    `039acf4873104d7c8b60a3a5ff946667a8e0193c`.
 
 ## Release assets
 
-The publishing workflow packages:
+The guarded publisher packages the final-run JSON and audit together with the
+corrected addendum, interpretation, provenance manifest, Version 2 defect
+record, citation metadata, release notes, validation record, manifest, and
+SHA-256 sums.
 
-- final Version 3 validation JSON;
-- generated Version 3 audit report;
-- Version 3 addendum;
-- Version 3 interpretation;
-- Version 3 provenance manifest;
-- Version 2 post-release defect record;
-- citation metadata;
-- release notes;
-- release validation record;
-- file-level SHA-256 sums;
-- a combined Version 3 evidence ZIP.
+The `.release/v3.0.0-ready` marker is armed on this branch but remains inert
+until the reviewed PR is merged to `main`.
 
-## Publication
-
-The merge that adds `.release/v3.0.0-ready` triggers
-`.github/workflows/publish-v3.0.0.yml`. The workflow creates the GitHub
-`v3.0.0` tag and release only after every gate above succeeds.
-
-The Zenodo concept DOI remains `10.5281/zenodo.19996904`. The
-version-specific Version 3 DOI is recorded after archival ingestion and is not
-invented in advance.
+Zenodo publication follows the frozen GitHub release. The version-specific DOI
+is recorded only after archival ingestion.
