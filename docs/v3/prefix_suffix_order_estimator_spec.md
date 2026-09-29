@@ -80,8 +80,14 @@ A value:
 - = 1 indicates no net order contribution;
 - < 1 indicates order-driven anti-clustering.
 
-The side score is the unweighted mean over supported discovered classes.
-`OTHER` is excluded from the primary score.
+The primary side score is the aggregate observed self-transition count divided
+by the aggregate composition-conditioned expectation across supported
+discovered classes. This weights classes by their null self-transition
+exposure and avoids giving a rare class the same leverage as a common class.
+
+The unweighted mean of class-specific ratios is retained as a sensitivity
+diagnostic, not the primary cross-system statistic. `OTHER` is excluded from
+the primary score.
 
 This statistic conditions directly on unit composition and therefore cannot be
 inflated solely because different lines or sentences contain different affix
