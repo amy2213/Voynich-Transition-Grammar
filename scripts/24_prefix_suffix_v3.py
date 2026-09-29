@@ -21,6 +21,7 @@ import hashlib
 import json
 import re
 import tarfile
+import unicodedata
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
@@ -80,9 +81,60 @@ def sha256(path):
     return digest.hexdigest()
 
 
-def tokenize(text, pattern):
-    """Comparator tokenizer: retain alphabetic words including length 1."""
-    return tuple(re.findall(pattern, text.lower()))
+def _punctuation_only(text):
+    """True when every character is Unicode punctuation."""
+    return all(
+        unicodedata.category(char).startswith("P")
+        for char in text
+    )
+
+
+def tokenize_segments(text, pattern):
+    """Tokenize without manufacturing adjacency across excluded material.
+
+    Input is inspected one whitespace item at a time. An item is accepted only
+    when it contains exactly one target-alphabet run and every character
+    outside that run is punctuation. Items that contain no target word, contain
+    digits or foreign-script material outside the run, or split into multiple
+    target-alphabet runs terminate the current sequence. Their neighbors
+    therefore never become adjacent.
+    """
+    segments = []
+    current = []
+    diagnostics = Counter()
+
+    for raw in text.split():
+        item = raw.lower()
+        matches = list(re.finditer(pattern, item))
+        token = None
+
+        if len(matches) == 1:
+            match = matches[0]
+            remainder = item[:match.start()] + item[match.end():]
+            if not remainder or _punctuation_only(remainder):
+                token = match.group(0)
+        elif len(matches) > 1:
+            diagnostics["split_items"] += 1
+
+        if token is not None:
+            current.append(token)
+            diagnostics["retained_items"] += 1
+            continue
+
+        diagnostics["break_items"] += 1
+        if not matches:
+            diagnostics["no_target_run_items"] += 1
+        elif len(matches) == 1:
+            diagnostics["mixed_content_items"] += 1
+
+        if current:
+            segments.append(tuple(current))
+            current = []
+
+    if current:
+        segments.append(tuple(current))
+
+    return tuple(segments), dict(diagnostics)
 
 
 def load_leipzig(label, folder, archive, pattern):
