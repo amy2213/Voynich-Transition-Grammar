@@ -30,6 +30,7 @@ import numpy as np
 
 from _canonical import (
     SequenceUnit,
+    bootstrap_groups_to_target,
     composition_controlled_affix_scores,
     load_corpus,
     sample_units_to_target,
@@ -461,6 +462,110 @@ def run_matched_profile(
     }
 
 
+def run_voynich_page_bootstrap(
+        units, target_tokens, replicates, master_seed):
+    """Page-block bootstrap for cluster-aware Voynich robustness."""
+    schedule = build_seed_schedule(
+        ["VOYNICH"],
+        "voynich_page_block_bootstrap",
+        master_seed,
+        replicates,
+    )["VOYNICH"]
+    sampled = []
+    for index, seed in enumerate(schedule, start=1):
+        sample = bootstrap_groups_to_target(
+            units,
+            "page",
+            target_tokens,
+            np.random.default_rng(seed),
+        )
+        sampled.append(compact_score(sample))
+        if index % 25 == 0 or index == replicates:
+            print(
+                f"  voynich_page_block_bootstrap: {index}/{replicates}",
+                flush=True,
+            )
+    return {
+        "profile": "voynich_page_block_bootstrap",
+        "target_tokens": target_tokens,
+        "replicate_n": replicates,
+        "group_attribute": "page",
+        "sampling": "page blocks with replacement; line boundaries preserved",
+        "summary": summarize_replicates(sampled),
+        "replicates": sampled,
+        "seed_schedule": schedule,
+    }
+
+
+def exact_repeat_robustness(units):
+    """Measure exact adjacent repeats and a break-at-repeat sensitivity."""
+    observed = 0
+    expected = 0.0
+    broken = []
+
+    for unit in units:
+        tokens = unit.tokens
+        observed += sum(
+            left == right
+            for left, right in zip(tokens, tokens[1:])
+        )
+        n = len(tokens)
+        if n:
+            counts = Counter(tokens)
+            expected += sum(
+                k * (k - 1) / n
+                for k in counts.values()
+            )
+
+        if not tokens:
+            continue
+        segment = [tokens[0]]
+        segment_index = 0
+        for left, right in zip(tokens, tokens[1:]):
+            if left == right:
+                broken.append(SequenceUnit(
+                    unit_id=(
+                        f"{unit.unit_id}:repeat-break-{segment_index}"
+                    ),
+                    tokens=tuple(segment),
+                    boundary_type=f"{unit.boundary_type}_repeat_fragment",
+                    page=unit.page,
+                    section=unit.section,
+                    hand=unit.hand,
+                    currier=unit.currier,
+                    document=unit.document,
+                ))
+                segment_index += 1
+                segment = [right]
+            else:
+                segment.append(right)
+        if segment:
+            broken.append(SequenceUnit(
+                unit_id=f"{unit.unit_id}:repeat-break-{segment_index}",
+                tokens=tuple(segment),
+                boundary_type=f"{unit.boundary_type}_repeat_fragment",
+                page=unit.page,
+                section=unit.section,
+                hand=unit.hand,
+                currier=unit.currier,
+                document=unit.document,
+            ))
+
+    return {
+        "observed_exact_adjacent_repeats": int(observed),
+        "expected_exact_adjacent_repeats_under_within_unit_shuffle": (
+            float(expected)
+        ),
+        "original_score": compact_score(units),
+        "score_after_breaking_at_exact_repeat_pairs": compact_score(broken),
+        "interpretation": (
+            "Breaking every exact adjacent repeated-token pair is a harsh "
+            "robustness check. It removes those adjacencies while preserving "
+            "all tokens in separate sequence fragments."
+        ),
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -483,6 +588,10 @@ def main():
             "units": sequence_units(load_corpus()),
             "source_type": "Voynich lines",
             "paths": [Path(__import__("_canonical").PARQUET_PATH)],
+            "tokenization_diagnostics": {
+                "break_items": 0,
+                "policy": "preserved cleaned parquet whitespace tokens",
+            },
         }
     }
     systems.update(corpus_inventory())
@@ -506,6 +615,9 @@ def main():
             "boundary_unit": record["source_type"],
             "available_tokens": available[name],
             "natural_units": len(record["units"]),
+            "tokenization_diagnostics": record.get(
+                "tokenization_diagnostics", {}
+            ),
             "score": compact_score(record["units"]),
         }
         input_paths.extend(record["paths"])
@@ -536,6 +648,18 @@ def main():
     )
 
     print(
+        f"\nVoynich page-block robustness: {main_target} tokens, "
+        f"{args.replicates} bootstrap replicates",
+        flush=True,
+    )
+    voynich_page_bootstrap = run_voynich_page_bootstrap(
+        systems["VOYNICH"]["units"],
+        main_target,
+        args.replicates,
+        args.seed,
+    )
+
+    print(
         f"\nAll-system small-target sensitivity: "
         f"{all_system_target} tokens, {len(systems)} systems",
         flush=True,
@@ -563,13 +687,25 @@ def main():
         "method": {
             "full_corpus_primary": True,
             "matched_subsample_replicates": args.replicates,
-            "main_matched": {
+            "line_deletion_stability": {
                 "systems": main_systems,
                 "excluded_system": UNDERSIZED_SYSTEM,
                 "target_rule": (
                     f"{MAIN_MATCH_FRACTION:.0%} of canonical Voynich token count"
                 ),
                 "target_tokens": main_target,
+                "interpretation": (
+                    "without-replacement line/sentence deletion stability; "
+                    "not the cluster-aware uncertainty summary for Voynich"
+                ),
+            },
+            "voynich_page_block_robustness": {
+                "target_tokens": main_target,
+                "group_attribute": "page",
+                "interpretation": (
+                    "cluster-aware Voynich robustness summary; page blocks "
+                    "sampled with replacement while preserving line units"
+                ),
             },
             "all_system_small_target": {
                 "systems": sorted(systems),
@@ -590,6 +726,10 @@ def main():
             "cross_system_p_values": "none",
             "replicate_pairing": "none; indices have no cross-system meaning",
             "comparator_min_token_length": 1,
+            "comparator_boundary_policy": (
+                "excluded or split whitespace items break sequences; "
+                "surviving neighbors are never joined across dropped material"
+            ),
             "suffix_nesting": "side-aware endswith logic",
             "primary_side_score": (
                 "aggregate observed self-transitions divided by aggregate "
@@ -600,9 +740,15 @@ def main():
         },
         "full_corpus": full_corpus,
         "matched_analyses": {
-            "main": main_matched,
+            "line_deletion_stability": main_matched,
             "all_system_small_target": all_system_small,
         },
+        "voynich_cluster_robustness": {
+            "page_block_bootstrap": voynich_page_bootstrap,
+        },
+        "voynich_exact_repeat_robustness": exact_repeat_robustness(
+            systems["VOYNICH"]["units"]
+        ),
         "provenance": {
             "master_seed": args.seed,
             "input_sha256": {
@@ -652,7 +798,7 @@ def main():
             )
 
     print_matched_table(
-        "Main matched sensitivity",
+        "Line-deletion stability sensitivity",
         main_matched,
     )
     print_matched_table(
@@ -660,9 +806,34 @@ def main():
         all_system_small,
     )
 
+    print("\nVoynich page-block robustness")
+    page = voynich_page_bootstrap["summary"]
+    for metric in (
+        "prefix_order_ratio",
+        "suffix_order_ratio",
+        "minimum_order_ratio",
+    ):
+        value = page[metric]
+        print(
+            f"{metric}\t{value['median']:.3f}\t"
+            f"[{value['ci95'][0]:.3f},{value['ci95'][1]:.3f}]\t"
+            f"fraction>=1={value['fraction_at_or_above_neutral']:.3f}"
+        )
+
+    repeats = exact_repeat_robustness(systems["VOYNICH"]["units"])
+    print("\nVoynich exact-repeat robustness")
+    print(
+        "observed=",
+        repeats["observed_exact_adjacent_repeats"],
+        "expected=",
+        f"{repeats['expected_exact_adjacent_repeats_under_within_unit_shuffle']:.3f}",
+        "suffix_after_break=",
+        f"{repeats['score_after_breaking_at_exact_repeat_pairs']['suffix_order_ratio']:.3f}",
+    )
+
     print("\nVoynich discovered-family diagnostics")
     for profile_name, profile in (
-        ("main", main_matched),
+        ("line_deletion_stability", main_matched),
         ("all_system_small_target", all_system_small),
     ):
         voy = profile["systems"]["VOYNICH"]["summary"]
