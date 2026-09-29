@@ -120,6 +120,10 @@ The suffix signal is the strongest surviving observation, but it is not
 promoted as a Version 3.1 frozen claim until the position-aware page-bootstrap
 analysis and pre-registered sensitivity grid are complete.
 
+These analyses **do not establish natural-language uniqueness**, identify a
+language, decipher the manuscript, infer syntax or semantics, or identify a
+generating mechanism.
+
 See:
 
 - `docs/v3/post_release_defect_2026-09-29.md`
