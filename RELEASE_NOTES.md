@@ -12,8 +12,11 @@ cross-system replicate sign-test framing were also verified.
 
 The frozen `v2.0.0` release, hashes, paper, and Zenodo artifact are unchanged.
 Current authority records the defect in
-`docs/v2/post_release_defect_2026-09-29.md`. A composition-controlled Version
-3 estimator is under validation and carries no promoted cross-corpus claim yet.
+`docs/v2/post_release_defect_2026-09-29.md`.
+
+A composition-controlled Version 3 replacement estimator has passed its 200-replicate validation and mechanical audit and is a validated descriptive release candidate. In the main 28,447-token matched analysis, Voynich has minimum-side order ratio 1.013 [1.005, 1.025], while all 14 tested large comparators have their entire minimum-side replicate interval below 1.0. In the smaller 14,380-token all-system sensitivity, the Voynich minimum interval is 1.019 [0.985, 1.060] and crosses neutral. That sensitivity remains part of the reported result. Version 3 does not establish natural-language uniqueness, language identity, decipherment, or a generating mechanism.
+
+No Version 3 tag, DOI/version record, or citation-version update is represented by this release-candidate section.
 
 ## Scientific scope
 
