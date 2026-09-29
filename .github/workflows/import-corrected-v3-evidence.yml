@@ -1,0 +1,49 @@
+name: Import corrected Version 3 evidence
+
+on:
+  push:
+    branches: [release/v3.0.0-final]
+    paths:
+      - ".github/workflows/import-corrected-v3-evidence.yml"
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  import-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out release branch
+        uses: actions/checkout@v4
+        with:
+          ref: release/v3.0.0-final
+
+      - name: Download corrected 200-replicate evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: v3-validation-200-replicates
+          path: imported
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repository: amy2213/Voynich-Transition-Grammar
+          run-id: 36624694412
+
+      - name: Commit exact generated evidence
+        run: |
+          mkdir -p results
+          cp imported/prefix_suffix_v3_validation.json             results/prefix_suffix_v3_validation.json
+          cp imported/prefix_suffix_v3_validation_audit.md             results/prefix_suffix_v3_validation_audit.md
+
+          echo "ad89a8c3c1f887ba6b767069962f5f70226e4ef3b6949a86f58dc1b7ce28a2a3  prefix_suffix_v3_validation.json"             > results/prefix_suffix_v3_validation.sha256
+          echo "07ad39d8a4fccbb75d4dfce1821c9df3993f11a6e5029851d9a296bda23a62f3  prefix_suffix_v3_validation_audit.md"             >> results/prefix_suffix_v3_validation.sha256
+
+          sha256sum -c results/prefix_suffix_v3_validation.sha256             --ignore-missing
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add results/prefix_suffix_v3_validation.json
+          git add results/prefix_suffix_v3_validation_audit.md
+          git add results/prefix_suffix_v3_validation.sha256
+          git rm .github/workflows/import-corrected-v3-evidence.yml
+          git commit -m "Commit corrected Version 3 validation evidence"
+          git push origin HEAD:release/v3.0.0-final
