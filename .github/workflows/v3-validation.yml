@@ -45,10 +45,18 @@ jobs:
           --replicates 200
           --out results/prefix_suffix_v3_validation.json
 
+      - name: Audit Version 3 validation result
+        run: >
+          python scripts/25_v3_validation_audit.py
+          --input results/prefix_suffix_v3_validation.json
+          --out results/prefix_suffix_v3_validation_audit.md
+
       - name: Upload Version 3 validation evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: v3-validation-200-replicates
-          path: results/prefix_suffix_v3_validation.json
+          path: |
+            results/prefix_suffix_v3_validation.json
+            results/prefix_suffix_v3_validation_audit.md
           retention-days: 90
