@@ -2,6 +2,29 @@
 
 Release date: 2026-09-29
 
+## Post-release scientific status: REOPENED
+
+A post-release audit found that the Version 3.0.0 complete-line permutation
+null treats line-initial and line-final Voynich positions as exchangeable.
+Interior-only diagnostics change the full-corpus Voynich prefix/suffix ratios
+from 1.013/1.108 to **0.933/1.053**, and an analytic fixed-endpoint
+full-corpus diagnostic gives approximately **0.912/1.048**.
+
+The cross-corpus comparator headline is also sensitive to the automatic affix
+discovery thresholds. Under widened 1%–30% coverage, Arabic's weaker edge is
+**1.010**, rather than below neutral.
+
+The frozen Version 3.0.0 files remain reproducible. The prefix-neutral and
+universal-comparator interpretations are reopened and will be replaced by a
+Version 3.1 position-aware analysis.
+
+The suffix signal remains the strongest surviving observation. Symmetric
+subtraction of exact-repeat observed and expected contributions leaves the
+suffix ratio at approximately **1.110**.
+
+See `docs/v3/post_release_defect_2026-09-29.md`.
+
+
 ## Scientific change
 
 Version 3.0.0 replaces the reopened Version 2 prefix/suffix estimator. The
@@ -85,7 +108,7 @@ The frozen `v2.0.0` release, hashes, paper, and Zenodo artifact are unchanged.
 Current authority records the defect in
 `docs/v2/post_release_defect_2026-09-29.md`.
 
-The corrected Version 3 replacement uses boundary-safe comparator tokenization and page-block Voynich robustness. Its current pre-freeze evidence is documented in `docs/v3/validation_interpretation.md` and the committed machine-readable validation files. No Version 3 tag or version-specific DOI exists until the final exact-head release gates pass.
+Version 3.0.0 was subsequently released and is now frozen historical evidence. Its cross-corpus headline was reopened after a later line-position and affix-threshold audit; see `docs/v3/post_release_defect_2026-09-29.md`.
 
 ## Scientific scope
 
