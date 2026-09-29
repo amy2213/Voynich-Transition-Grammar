@@ -490,6 +490,37 @@ class TestBoundaryAwareAffixUtilities(unittest.TestCase):
             ("a", "b", "cd"),
         )
 
+    def test_v3_validation_profiles_have_independent_seed_schedules(self):
+        path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
+        spec = importlib.util.spec_from_file_location("prefix_suffix_v3_seeds", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        first = module.build_seed_schedule(
+            ["VOYNICH", "Latin"], "main", 20260929, 5)
+        repeat = module.build_seed_schedule(
+            ["VOYNICH", "Latin"], "main", 20260929, 5)
+        second = module.build_seed_schedule(
+            ["VOYNICH", "Latin"], "all_system", 20260929, 5)
+        self.assertEqual(first, repeat)
+        self.assertNotEqual(first, second)
+
+    def test_v3_neutral_fraction_summary_is_within_system(self):
+        path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
+        spec = importlib.util.spec_from_file_location("prefix_suffix_v3_summary", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        records = [
+            {"minimum_order_ratio": 0.8},
+            {"minimum_order_ratio": 1.0},
+            {"minimum_order_ratio": 1.2},
+            {"minimum_order_ratio": 1.4},
+        ]
+        summary = module.summarize_values(
+            records, "minimum_order_ratio", neutral=1.0)
+        self.assertEqual(summary["replicate_n"], 4)
+        self.assertAlmostEqual(summary["fraction_below_neutral"], 0.25)
+        self.assertAlmostEqual(summary["fraction_at_or_above_neutral"], 0.75)
+
 
 class TestGeneratedRepairArtifacts(unittest.TestCase):
     def test_overlap_arithmetic_is_exact_and_consistent(self):
