@@ -93,19 +93,34 @@ This statistic conditions directly on unit composition and therefore cannot be
 inflated solely because different lines or sentences contain different affix
 mixtures.
 
-## Full-corpus estimate and size-matched sensitivity
+## Full-corpus estimate and matched-size sensitivities
 
 The primary descriptive estimate is calculated on each system's complete
 available corpus.
 
-A secondary matched-size sensitivity repeatedly samples natural units without
-replacement for every system using the same algorithm. The common target is
-90% of the smallest available system corpus so the smallest system also has
-resampling headroom. If the final unit would exceed the target, a single
-contiguous fragment supplies the remainder and remains an independent unit.
+Two matched-size robustness analyses are required.
 
-This matched-size distribution is a robustness diagnostic. Replicate indices
-across systems have no linguistic pairing.
+### Main matched sensitivity
+
+The main matched analysis includes Voynich plus every comparator except the
+undersized Ottoman Turkish CoNLL-U corpus. The target is 90% of the canonical
+Voynich token count. This gives Voynich itself resampling headroom while
+preventing the substantially smaller Ottoman corpus from determining the main
+comparison scale.
+
+### All-system small-target sensitivity
+
+A second sensitivity includes Ottoman Turkish and every other system. Its
+target is 90% of the smallest available system token count.
+
+Both analyses repeatedly sample natural units without replacement using the
+same algorithm for every included system. If the final unit would exceed the
+target, one contiguous fragment supplies the remaining tokens and remains a
+separate unit.
+
+Matched-size distributions are robustness diagnostics. Replicate indices
+across systems have no linguistic pairing and must not be used as paired
+observations.
 
 ## Inference
 
@@ -115,8 +130,13 @@ replicate indices.
 Initial reporting is descriptive:
 
 - full-corpus prefix and suffix order ratios;
-- matched-size medians and percentile intervals;
-- discovered-family identities and supported-class counts.
+- 200-replicate main matched-size medians and percentile intervals;
+- 200-replicate all-system small-target medians and percentile intervals;
+- within-system fractions below or at/above the neutral order ratio of 1.0;
+- discovered-family identities and supported-class counts;
+- the unweighted mean of class-specific ratios as a sensitivity diagnostic.
+
+No cross-system replicate-index pairing is permitted.
 
 Any future hypothesis test must define its null and sampling unit separately
 and pass an explicit review gate before publication.
@@ -132,7 +152,11 @@ At minimum:
 3. a deliberately alternating class sequence scores below 1.0;
 4. one-character comparator words survive tokenization;
 5. no adjacency is created across natural-unit or sampling boundaries;
-6. the frozen `v2.0.0` tag remains unchanged.
+6. the main matched target is based on 90% of Voynich and excludes only the
+   undersized Ottoman Turkish corpus;
+7. the all-system sensitivity target is based on 90% of the smallest corpus;
+8. no cross-system paired p-value is produced;
+9. the frozen `v2.0.0` tag remains unchanged.
 
 ## Claim gate
 
