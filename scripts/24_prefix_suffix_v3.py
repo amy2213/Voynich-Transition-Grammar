@@ -551,17 +551,48 @@ def main():
             f"{score['minimum_order_ratio']:.3f}"
         )
 
-    print("\nMain matched sensitivity medians")
-    print("System\tPrefix\tSuffix\tMinimum\tMin>=1")
-    for name, record in main_matched["systems"].items():
-        summary = record["summary"]
-        minimum = summary["minimum_order_ratio"]
+    def print_matched_table(title, profile):
+        print(f"\n{title}")
         print(
-            f"{name}\t"
-            f"{summary['prefix_order_ratio']['median']:.3f}\t"
-            f"{summary['suffix_order_ratio']['median']:.3f}\t"
-            f"{minimum['median']:.3f}\t"
-            f"{minimum['fraction_at_or_above_neutral']:.3f}"
+            "System\tPrefix median [95%]\tSuffix median [95%]\t"
+            "Minimum median [95%]\tMin>=1"
+        )
+        for name, record in profile["systems"].items():
+            summary = record["summary"]
+            prefix = summary["prefix_order_ratio"]
+            suffix = summary["suffix_order_ratio"]
+            minimum = summary["minimum_order_ratio"]
+            print(
+                f"{name}\t"
+                f"{prefix['median']:.3f} "
+                f"[{prefix['ci95'][0]:.3f},{prefix['ci95'][1]:.3f}]\t"
+                f"{suffix['median']:.3f} "
+                f"[{suffix['ci95'][0]:.3f},{suffix['ci95'][1]:.3f}]\t"
+                f"{minimum['median']:.3f} "
+                f"[{minimum['ci95'][0]:.3f},{minimum['ci95'][1]:.3f}]\t"
+                f"{minimum['fraction_at_or_above_neutral']:.3f}"
+            )
+
+    print_matched_table(
+        "Main matched sensitivity",
+        main_matched,
+    )
+    print_matched_table(
+        "All-system small-target sensitivity",
+        all_system_small,
+    )
+
+    print("\nVoynich discovered-family diagnostics")
+    for profile_name, profile in (
+        ("main", main_matched),
+        ("all_system_small_target", all_system_small),
+    ):
+        voy = profile["systems"]["VOYNICH"]["summary"]
+        print(
+            f"{profile_name}\tprefix={voy['modal_prefix_affixes']}\t"
+            f"suffix={voy['modal_suffix_affixes']}\t"
+            f"prefix_class_n={voy['included_class_n_range']['prefix']}\t"
+            f"suffix_class_n={voy['included_class_n_range']['suffix']}"
         )
 
     print(
