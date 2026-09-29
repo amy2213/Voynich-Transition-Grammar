@@ -2,6 +2,19 @@
 
 Release date: 2026-09-11
 
+## Post-release scientific status
+
+On 2026-09-29 the Version 2 prefix/suffix cross-corpus claim was reopened after
+a verified estimator defect. The frozen outputs remain reproducible, but the
+pooled source/destination marginal expectation can confound within-unit order
+with between-unit composition. A suffix-nesting implementation defect and the
+cross-system replicate sign-test framing were also verified.
+
+The frozen `v2.0.0` release, hashes, paper, and Zenodo artifact are unchanged.
+Current authority records the defect in
+`docs/v2/post_release_defect_2026-09-29.md`. A composition-controlled Version
+3 estimator is under validation and carries no promoted cross-corpus claim yet.
+
 ## Scientific scope
 
 Version 2 reports reproducible corpus measurements of Voynich Manuscript token
@@ -9,7 +22,7 @@ structure. It does not claim decipherment, translation, semantic
 identification, proof of natural or encoded language, or exclusion of
 constructed, hybrid, stenographic, cipher, or other historical mechanisms.
 
-## Canonical results
+## Frozen release results
 
 - Under the canonical prefix-first classifier and strictly within Voynich
   lines, CHEDY→QOK occurs 615 times at 2.659 times its independence
