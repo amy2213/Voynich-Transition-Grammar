@@ -2,26 +2,26 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Voynich Transition Grammar: Version 3.0.0</title>
+<title>Voynich Transition Grammar: v3.0.0 Post-Release Status</title>
 <style>
 :root{--bg:#0a0e17;--surface:#111827;--border:#2a3a52;--accent:#c4a35a;--text:#e8e0d4;--muted:#a7b0bf;--green:#86efac;--blue:#93c5fd}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}.wrap{max-width:980px;margin:auto;padding:32px 22px 64px}.eyebrow{color:var(--accent);font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.8rem}h1{font-size:clamp(2rem,7vw,4rem);line-height:1.05;margin:.35rem 0 1rem}h2{color:var(--accent);margin-top:0}.lead,.small{color:var(--muted)}.notice,.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:20px}.notice{border-left:4px solid var(--accent)}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px}.stat{font-size:1.8rem;font-weight:800;color:var(--green)}.label{color:var(--muted);font-size:.9rem}.links{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}.btn{display:inline-block;padding:10px 14px;border:1px solid var(--border);border-radius:8px;color:var(--blue);text-decoration:none;background:var(--surface)}a{color:var(--blue)}code{background:#1a2235;padding:.15rem .35rem;border-radius:4px}
 </style>
 </head><body><main class="wrap">
-<div class="eyebrow">Version 3.0.0 corrected release candidate</div>
+<div class="eyebrow">Version 3.0.0 · post-release headline reopened</div>
 <h1>Voynich Transition Grammar</h1>
 <p class="lead">Boundary-aware token-structure analysis with frozen inputs, machine-readable evidence, explicit correction records, and adversarial pre-freeze review.</p>
-<div class="notice"><strong>Pre-freeze correction incorporated.</strong> Comparator filtering can no longer create adjacency across excluded lexical items, and Voynich prefix/minimum neutrality is assessed with a page-block bootstrap rather than highly overlapping 90% line samples.</div>
+<div class="notice"><strong>Post-release correction in progress.</strong> The frozen v3.0.0 outputs remain reproducible, but the complete-line null treats line-edge positions as exchangeable and the comparator separation depends on affix-discovery thresholds. The prefix-neutral and universal-comparator headlines are reopened pending v3.1.</div>
 <div class="grid">
-<section class="card"><div class="stat">1.020</div><div class="label">Voynich page-block prefix median; interval 0.978–1.064 crosses neutral</div></section>
-<section class="card"><div class="stat">1.110</div><div class="label">Voynich page-block suffix median; interval 1.074–1.145</div></section>
-<section class="card"><div class="stat">14/14</div><div class="label">Large comparators with minimum-side deletion-stability intervals below 1.0</div></section>
-<section class="card"><div class="stat">13/15</div><div class="label">Comparator minimum intervals below 1.0 at the smaller all-system target</div></section>
-<section class="card"><div class="stat">1.064</div><div class="label">Voynich suffix ratio after breaking every exact adjacent repeat pair</div></section>
+<section class="card"><div class="stat">0.933</div><div class="label">Voynich prefix after removing first/last token from each line, full corpus</div></section>
+<section class="card"><div class="stat">1.053</div><div class="label">Voynich suffix after removing first/last token from each line, full corpus</div></section>
+<section class="card"><div class="stat">1.010</div><div class="label">Arabic weaker edge under widened 1%–30% discovery coverage</div></section>
+<section class="card"><div class="stat">1.110</div><div class="label">Voynich suffix after symmetric exact-repeat subtraction</div></section>
+<section class="card"><div class="stat">1.013–1.025</div><div class="label">Voynich prefix range across the release setting plus six discovery perturbations</div></section>
 <section class="card"><div class="stat">249 / 244.274</div><div class="label">Observed / expected exact adjacent repeated-token pairs</div></section>
 </div>
-<section class="card"><h2>Current finding</h2><p>Voynich suffix ordering remains modestly self-clustering under page-level resampling. Prefix ordering is near neutral. After boundary-safe comparator tokenization, all tested comparator full-corpus minimum-side point estimates are below 1.0, and all 14 large-comparator minimum-side intervals are below 1.0 in the declared 28,447-token deletion-stability analysis.</p><p class="small">At the 14,380-token all-system target, Arabic and Georgian minimum intervals cross neutral. That weaker sensitivity is part of the result, not a footnote to be misplaced in a drawer.</p></section>
+<section class="card"><h2>Current scientific status</h2><p>The v3.0.0 prefix-near-neutral and all-comparators-below-neutral headlines are reopened. Line-edge control shifts Voynich prefix into anti-clustering, while suffix self-clustering survives the initial interior-only, fixed-endpoint, discovery, and repeat diagnostics.</p><p class="small">Version 3.1 will use a position-aware null and explicit discovery-threshold sensitivity before any replacement cross-corpus claim is frozen.</p></section>
 <section class="card"><h2>Scope</h2><p>This finite-corpus result does not establish natural-language uniqueness, identify a language, decipher the manuscript, infer syntax or semantics, or identify a generating mechanism.</p></section>
-<section class="card"><h2>Evidence</h2><p><a href="https://github.com/amy2213/Voynich-Transition-Grammar/blob/main/results/prefix_suffix_v3_validation_audit.md">Corrected validation audit</a><br><a href="https://github.com/amy2213/Voynich-Transition-Grammar/blob/main/docs/v3/validation_interpretation.md">Corrected interpretation</a><br><a href="https://github.com/amy2213/Voynich-Transition-Grammar/blob/main/docs/v2/post_release_defect_2026-09-29.md">Version 2 defect record</a></p></section>
+<section class="card"><h2>Evidence and correction records</h2><p><a href="https://github.com/amy2213/Voynich-Transition-Grammar/blob/main/docs/v3/post_release_defect_2026-09-29.md">Version 3.0.0 defect record</a><br><a href="https://github.com/amy2213/Voynich-Transition-Grammar/blob/main/docs/v3/validation_interpretation.md">Frozen Version 3.0.0 interpretation</a><br><a href="https://github.com/amy2213/Voynich-Transition-Grammar/blob/main/docs/v2/post_release_defect_2026-09-29.md">Version 2 defect record</a></p></section>
 <div class="links"><a class="btn" href="https://github.com/amy2213/Voynich-Transition-Grammar">GitHub repository</a><a class="btn" href="https://doi.org/10.5281/zenodo.19996904">Zenodo version family</a></div>
 </main></body></html>
