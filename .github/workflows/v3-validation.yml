@@ -14,9 +14,10 @@ on:
     branches: [main]
     paths:
       - "scripts/24_prefix_suffix_v3.py"
+      - "scripts/25_v3_validation_audit.py"
       - "scripts/_canonical.py"
       - "tests/test_canonical_values.py"
-      - "docs/v3/**"
+      - "docs/v3/prefix_suffix_order_estimator_spec.md"
       - ".github/workflows/v3-validation.yml"
   workflow_dispatch:
 
