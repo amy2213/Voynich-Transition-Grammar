@@ -81,8 +81,8 @@ expected adjacent self-transition count under random within-unit ordering is
 on each unit's composition and length, so page/line/sentence vocabulary mix
 cannot by itself create an order effect.
 
-Version 3 is currently a research candidate, not a released claim. Its design
-and acceptance criteria are documented in
+Version 3 is currently a research candidate, not a released claim. Neither the
+historical Version 2 comparison nor the Version 3 candidate results **do not establish natural-language uniqueness**; they also do not identify a language or mechanism. Its design and acceptance criteria are documented in
 `docs/v3/prefix_suffix_order_estimator_spec.md`.
 
 ### Other provisional findings
