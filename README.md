@@ -16,8 +16,9 @@ Historical Version 2 remains frozen at tag `v2.0.0`, scientific commit
 
 This repository analyzes token structure in Voynich Manuscript transcriptions
 with reproducible corpus methods. It does not claim decipherment, translation,
-semantic identification, natural-language proof, or exclusion of sophisticated
-constructed, hybrid, stenographic, cipher, or historical mechanisms.
+semantic identification, natural-language proof, or exclusion of untested
+mechanisms, including sophisticated constructed, hybrid, stenographic, cipher,
+or other historical mechanisms.
 
 ## Current scientific position
 
