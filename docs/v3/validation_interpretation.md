@@ -1,3 +1,5 @@
+> **POST-RELEASE STATUS: REOPENED.** This file records the frozen Version 3.0.0 interpretation and remains part of the historical audit trail. A later audit showed that the complete-line permutation null treats line-initial and line-final positions as exchangeable and that comparator separation depends on affix-discovery thresholds. Do not treat the prefix-neutral or universal-comparator statements below as current supported conclusions. See `docs/v3/post_release_defect_2026-09-29.md`.
+
 # Version 3 corrected validation interpretation
 
 Status: corrected pre-freeze validation complete; release gate remains closed pending final packaging and exact-head CI  

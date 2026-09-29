@@ -1,6 +1,8 @@
 # Voynich Transition Grammar
 
-Current scientific release: `3.0.0`.
+Current frozen release: `3.0.0`.
+
+**Post-release scientific status:** the Version 3.0.0 cross-corpus affix-ordering headline is **REOPENED** pending Version 3.1. The frozen tag and release remain immutable historical evidence.
 
 - GitHub release: `v3.0.0`
 - Zenodo concept DOI: `10.5281/zenodo.19996904`
@@ -39,10 +41,16 @@ candidates such as `dy/edy` and `in/iin` to be selected even though the
 specification prohibited nested same-side families. The frozen `v2.0.0` tag
 and Zenodo artifact are not being rewritten.
 
-Version 3 is the replacement current estimator. It uses an exact within-unit
-permutation expectation, side-aware affix nesting, one-character comparator
-words, and the same without-replacement natural-unit sampling rule for every
-system. Cross-system replicate-index sign tests have been removed.
+Version 3.0.0 fixed the verified Version 2 defects, but a post-release audit
+found that its within-line permutation null still treats line positions as
+exchangeable. Voynich line beginnings and endings have strong positional
+structure, so the released statistic can mix local ordering with line-edge
+effects. A second sensitivity shows that the "all comparators below neutral"
+contrast depends materially on the affix-discovery coverage thresholds.
+
+See `docs/v3/post_release_defect_2026-09-29.md`. Version 3.1 is being
+developed with a position-aware null and explicit discovery-threshold
+sensitivity.
 
 
 ### Retained descriptive results
@@ -76,48 +84,53 @@ inferential status.
 
 See `docs/v2/post_release_defect_2026-09-29.md` for the defect record.
 
-### Version 3.0.0 current result
+### Version 3.0.0 prefix/suffix result: reopened
 
-`scripts/24_prefix_suffix_v3.py` implements the corrected replacement
-analysis. Comparator sequences break at excluded or split lexical items, and
-Voynich receives a separate page-block bootstrap for the cluster-aware
-neutrality statement.
+The frozen Version 3.0.0 outputs remain reproducible:
 
-Full-corpus Voynich scores are prefix 1.013 and suffix 1.108.
+- full-corpus Voynich prefix 1.013 and suffix 1.108;
+- released page-bootstrap prefix 1.020 [0.978, 1.064];
+- released page-bootstrap suffix 1.110 [1.074, 1.145].
 
-Across 200 Voynich page-block replicates:
+Those values were computed correctly for the Version 3.0.0 null. The
+interpretation is now narrowed because that null allows line-initial and
+line-final tokens to move anywhere within the line.
 
-- prefix: **1.020 [0.978, 1.064]**;
-- suffix: **1.110 [1.074, 1.145]**;
-- minimum: **1.020 [0.978, 1.064]**.
+Independent diagnostics from the frozen release baseline show:
 
-The prefix/minimum interval crosses neutral. The suffix interval remains above
-neutral in all 200 page-block replicates.
+- removing the first and last token of each Voynich line changes the
+  full-corpus prefix ratio to **0.933** and suffix ratio to **1.053**;
+- an analytic fixed-endpoint diagnostic gives approximately **0.912** prefix
+  and **1.048** suffix on the full corpus;
+- a 200-replicate fixed-endpoint page bootstrap gives **0.919 [0.884, 0.954]**
+  prefix and **1.048 [1.017, 1.086]** suffix;
+- Voynich prefix discovery remains stable at **1.013–1.025** across the
+  released setting plus six reasonable discovery perturbations;
+- Arabic's weaker edge changes from **0.864** under the release thresholds to
+  **1.010** when discovery coverage is widened from 2%–20% to 1%–30%;
+- symmetrically subtracting exact-repeat contributions from observed and
+  expected suffix counts leaves the suffix ratio at **1.110**. The released
+  1.064 break-at-repeat value is retained only as a deliberately harsh
+  structural stress test.
 
-The 90% line-deletion result, 1.013 [1.005, 1.025], is retained only as a
-stability diagnostic because those samples overlap heavily. It is not the
-headline uncertainty statement.
+Accordingly, the Version 3.0.0 statements that prefix ordering is generally
+near neutral and that every tested comparator is below neutral are **reopened**.
 
-After boundary-safe comparator tokenization, all 14 sufficiently large
-comparators have minimum-side 95% replicate intervals below 1.0 in the
-28,447-token sequence-unit deletion-stability analysis. At the smaller
-14,380-token all-system target, Arabic and Georgian minimum-side intervals
-cross neutral.
+The suffix signal is the strongest surviving observation, but it is not
+promoted as a Version 3.1 frozen claim until the position-aware page-bootstrap
+analysis and pre-registered sensitivity grid are complete.
 
-Exact adjacent repetition does not fully explain the suffix effect: 249 exact
-adjacent repeats are observed versus 244.274 expected, and breaking every exact
-repeat pair leaves the suffix ratio at 1.064.
-
-Version 3.0.0 remains a bounded finite-corpus structural result. These analyses
-do not establish natural-language uniqueness, identify a language, decipher
-the manuscript, infer syntax or semantics, or identify a generating mechanism.
+These analyses **do not establish natural-language uniqueness**, identify a
+language, decipher the manuscript, infer syntax or semantics, or identify a
+generating mechanism.
 
 See:
 
-- `docs/v3/prefix_suffix_order_estimator_spec.md`
-- `docs/v3/validation_interpretation.md`
-- `results/prefix_suffix_v3_validation.json`
-- `results/prefix_suffix_v3_validation_audit.md`
+- `docs/v3/post_release_defect_2026-09-29.md`
+- `docs/v3/validation_interpretation.md` for the frozen Version 3.0.0
+  interpretation
+- `results/prefix_suffix_v3_validation.json` for frozen Version 3.0.0
+  machine-readable evidence
 
 ### Other provisional findings
 

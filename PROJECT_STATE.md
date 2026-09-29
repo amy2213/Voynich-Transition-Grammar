@@ -3,10 +3,11 @@
 PROJECT: Voynich Transition Grammar
 CURRENT VERSION: 3.0.0
 CURRENT BRANCH: main
-LAST VERIFIED SCIENTIFIC COMMIT: 039acf4873104d7c8b60a3a5ff946667a8e0193c
-FROZEN RELEASE TAG: v2.0.0 -> 039acf4873104d7c8b60a3a5ff946667a8e0193c
-CURRENT PHASE: corrected Version 3.0.0 evidence complete; final exact-head validation pending
-AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish workflow succeeds; Version 2.0.0 remains frozen historical evidence with its Zenodo record
+LAST VERIFIED RELEASE COMMIT: b93e87468347c154cbe9c84cb12ebbbdc9823821
+FROZEN RELEASE TAG: v3.0.0 -> b93e87468347c154cbe9c84cb12ebbbdc9823821
+HISTORICAL V2 TAG: v2.0.0 -> 039acf4873104d7c8b60a3a5ff946667a8e0193c
+CURRENT PHASE: Version 3.0.0 post-release headline reopened; Version 3.1 position-aware correction in development
+AUTHORITATIVE ARTIFACT: frozen v3.0.0 release plus post-release defect record; affected cross-corpus interpretation is not current scientific authority
 
 ## Working
 - Version 3 composition-controlled affix-order estimator passed its 200-replicate validation and mechanical audit on 2026-09-29.
@@ -46,12 +47,20 @@ AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish wor
 - Verified 2026-09-29: Version 2 suffix discovery applies `startswith` nesting logic to suffixes, permitting nested candidates such as `dy/edy` and `in/iin`.
 - Verified 2026-09-29: the Version 2 cross-system `p = 0.00995` sign-test framing pairs independently generated replicate distributions by index and is not retained as inferential evidence.
 - Verified 2026-09-29: comparator tokenization dropped one-character words while canonical Voynich tokenization retained them. Version 3 retains one-character comparator words.
+- Verified post-release 2026-09-29: Version 3.0.0 complete-line permutation treats first/last Voynich line positions as exchangeable; interior-only full-corpus prefix/suffix becomes 0.933/1.053 and a fixed-endpoint full-corpus diagnostic is about 0.912/1.048.
+- Verified post-release 2026-09-29: Version 3.0.0 comparator separation is affix-discovery-threshold dependent; Arabic weaker edge changes from 0.864 at the release thresholds to 1.010 at 1%-30% coverage.
+- Verified post-release 2026-09-29: the frozen v3.0.0 PROJECT_STATE and release-finalization files contain stale pre-release state text.
 - The frozen released paper says both test entry points passed 34 tests, while the frozen machine-readable `results/test_report.json` records 37 pytest and 37 direct-execution tests passed. The machine-readable test report is authoritative. This is a documentation-only discrepancy and does not alter any scientific result, release tag, dataset, estimator, or artifact hash.
 - The original May 2026 public dashboard contained retired claims. The live dashboard source on `main` has been replaced with a Version 2 authority page; the old content remains recoverable through repository history.
 
 ## Blockers
-- None for Version 2 archival release.
-- External-review corrections are implemented and independently validated: boundary-safe comparator tokenization, page-block Voynich robustness, and exact-repeat diagnostics. Corrected 200-replicate validation and frozen Version 2 compatibility both pass. Final claim/document updates and exact-head release validation remain.
+- None for the historical Version 2 archival release.
+- Version 3.0.0 prefix-neutral and universal-comparator headlines are reopened.
+- Version 3.1 requires a position-aware fixed-endpoint null, page-level
+  resampling under that null, and a pre-specified affix-discovery sensitivity
+  grid before a replacement cross-corpus claim can freeze.
+- Version 2 Zenodo still lacks a correction/supersession notice linking to the
+  defect record and replacement versions.
 
 
 ## Final audit result
@@ -67,7 +76,10 @@ AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish wor
 - Documentation/control commits after the frozen scientific tag do not replace the verified scientific commit in provenance records.
 
 ## Next action
-Run final exact-head Version 3 validation and canonical compatibility after this claim/document update, rebuild the release evidence package, then mark PR #10 ready. Do not modify frozen Version 2 release assets.
+Merge the Version 3.0.0 post-release defect/governance correction without moving
+the frozen tag. Then develop Version 3.1 on a separate branch using the
+position-aware null, discovery-threshold sensitivity, symmetric repeat
+adjustment, and outside design review before a new freeze.
 
 ## Source-of-truth rules
 - Notion: portfolio state and release decisions
