@@ -17,9 +17,9 @@ AUTHORITATIVE ARTIFACT: Version 3.0.0 GitHub release/tag after final publish wor
 - Version 3 reports no cross-system paired p-value; replicate indices have no linguistic pairing.
 - Version 3 validation PR #6 merged to `main` at `67a2eb1b3cb86b75e509de94db685eba607799e4` after exact-head validation and ordinary canonical CI both passed.
 - Corrected pre-freeze validation artifact SHA-256: `132ab897cb68a2d1ffe76c204000436761190939b0a4ea6aaca3d7a766fd1585`; committed JSON SHA-256: `ad89a8c3c1f887ba6b767069962f5f70226e4ef3b6949a86f58dc1b7ce28a2a3`.
-- Final-head canonical evidence artifact SHA-256: `5c5db28982eac41a67644bd7732f40e85a56f91dafb39103b6a38799a564ad8c`.
-- Verified release-candidate evidence ZIP SHA-256: `b6d496e05a8203bbddd1490f56de8ccacdd2e63d94e2d9763db6d8362a0b9875`.
-- Durable release-candidate evidence is preserved in the ChatGPT Library at `/Voynich Transition Grammar/Voynich-v3-release-candidate-evidence.zip`.
+- Corrected canonical compatibility artifact SHA-256: `3febe255027419722a452576ea5b06c80fb4458637d777001d62fa171665f944` (run `36624694574`).
+- Earlier pre-review release-candidate package is superseded. A corrected package is rebuilt from the committed corrected JSON/audit and current-head release documents before freeze.
+- The existing Library package is historical pre-review evidence until replaced by the corrected final package after exact-head packaging passes.
 - Version 2 scientific/code baseline is finalized and frozen at `039acf4873104d7c8b60a3a5ff946667a8e0193c`.
 - Canonical pipeline passed at that scientific commit.
 - Finalization evidence records 37 pytest tests and 37 direct-execution tests passing.
