@@ -5,7 +5,7 @@ CURRENT VERSION: 2.0.0
 CURRENT BRANCH: main
 LAST VERIFIED SCIENTIFIC COMMIT: 039acf4873104d7c8b60a3a5ff946667a8e0193c
 FROZEN RELEASE TAG: v2.0.0 -> 039acf4873104d7c8b60a3a5ff946667a8e0193c
-CURRENT PHASE: Maintenance
+CURRENT PHASE: Reopened verified defect / Version 3 repair
 AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Zenodo Version 2 archival record and durable release evidence preserved in the portfolio Drive folder
 
 ## Working
@@ -31,6 +31,10 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Ze
 - Version 1 preprint releases remain historical and must not be confused with Version 2.
 
 ## Known issues
+- Verified 2026-09-29: the Version 2 prefix/suffix estimator pools source/destination marginals across natural units, so its headline self-clustering comparison can confound within-unit order with between-unit composition. The v2 cross-corpus claim is reopened; frozen artifacts remain unchanged.
+- Verified 2026-09-29: Version 2 suffix discovery applies `startswith` nesting logic to suffixes, permitting nested candidates such as `dy/edy` and `in/iin`.
+- Verified 2026-09-29: the Version 2 cross-system `p = 0.00995` sign-test framing pairs independently generated replicate distributions by index and is not retained as inferential evidence.
+- Verified 2026-09-29: comparator tokenization dropped one-character words while canonical Voynich tokenization retained them. Version 3 retains one-character comparator words.
 - The frozen released paper says both test entry points passed 34 tests, while the frozen machine-readable `results/test_report.json` records 37 pytest and 37 direct-execution tests passed. The machine-readable test report is authoritative. This is a documentation-only discrepancy and does not alter any scientific result, release tag, dataset, estimator, or artifact hash.
 - The original May 2026 public dashboard contained retired claims. The live dashboard source on `main` has been replaced with a Version 2 authority page; the old content remains recoverable through repository history.
 
@@ -50,7 +54,7 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Ze
 - Documentation/control commits after the frozen scientific tag do not replace the verified scientific commit in provenance records.
 
 ## Next action
-Maintenance only. Reopen active work only for a verified defect, a deliberate Version 3 research plan, or required archival metadata correction. Do not alter the frozen `v2.0.0` tag or scientific release assets.
+Validate the Version 3 composition-controlled affix-order estimator on the frozen corpus set, review generated results, and keep the Version 2 prefix/suffix claim in reopened status until the replacement analysis passes its claim gate. Do not alter the frozen `v2.0.0` tag or scientific release assets.
 
 ## Source-of-truth rules
 - Notion: portfolio state and release decisions
