@@ -5,10 +5,16 @@ CURRENT VERSION: 2.0.0
 CURRENT BRANCH: main
 LAST VERIFIED SCIENTIFIC COMMIT: 039acf4873104d7c8b60a3a5ff946667a8e0193c
 FROZEN RELEASE TAG: v2.0.0 -> 039acf4873104d7c8b60a3a5ff946667a8e0193c
-CURRENT PHASE: Reopened verified defect / Version 3 repair
+CURRENT PHASE: Version 3 validated descriptive release candidate
 AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Zenodo Version 2 archival record and durable release evidence preserved in the portfolio Drive folder
 
 ## Working
+- Version 3 composition-controlled affix-order estimator passed its 200-replicate validation and mechanical audit on 2026-09-29.
+- Main matched validation target is 28,447 tokens across Voynich plus 14 sufficiently large comparators; Ottoman Turkish is reserved for the smaller all-system sensitivity.
+- Main matched Voynich order ratios: prefix 1.013 [1.005, 1.025], suffix 1.108 [1.099, 1.116], minimum 1.013 [1.005, 1.025].
+- All 14 main comparators have their entire minimum-side 95% replicate interval below 1.0.
+- The all-system 14,380-token sensitivity gives Voynich minimum 1.019 [0.985, 1.060], so the smaller-sample interval crosses neutral and must remain part of the interpretation.
+- Version 3 reports no cross-system paired p-value; replicate indices have no linguistic pairing.
 - Version 2 scientific/code baseline is finalized and frozen at `039acf4873104d7c8b60a3a5ff946667a8e0193c`.
 - Canonical pipeline passed at that scientific commit.
 - Finalization evidence records 37 pytest tests and 37 direct-execution tests passing.
@@ -40,6 +46,8 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Ze
 
 ## Blockers
 - None for Version 2 archival release.
+- Version 3 is not yet a frozen release. Remaining release gates are final PR CI, addendum/release-candidate packaging, provenance hashes, and an explicit Version 3 release decision.
+
 
 ## Final audit result
 - DAT-40 final public release integrity audit: PASS on 2026-09-11.
@@ -54,7 +62,7 @@ AUTHORITATIVE ARTIFACT: GitHub v2.0.0 release and frozen scientific tag, with Ze
 - Documentation/control commits after the frozen scientific tag do not replace the verified scientific commit in provenance records.
 
 ## Next action
-Validate the Version 3 composition-controlled affix-order estimator on the frozen corpus set, review generated results, and keep the Version 2 prefix/suffix claim in reopened status until the replacement analysis passes its claim gate. Do not alter the frozen `v2.0.0` tag or scientific release assets.
+Advance the validated Version 3 result through a release-candidate PR, finalize the bounded addendum and release checklist, rerun ordinary repository CI, and prepare Version 3 archival packaging without modifying the frozen `v2.0.0` tag or Version 2 scientific release assets.
 
 ## Source-of-truth rules
 - Notion: portfolio state and release decisions
