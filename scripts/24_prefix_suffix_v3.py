@@ -135,7 +135,17 @@ def tokenize_segments(text, pattern):
     if current:
         segments.append(tuple(current))
 
-    return tuple(segments), dict(diagnostics)
+    diagnostic_keys = (
+        "retained_items",
+        "break_items",
+        "no_target_run_items",
+        "mixed_content_items",
+        "split_items",
+    )
+    return tuple(segments), {
+        key: int(diagnostics[key])
+        for key in diagnostic_keys
+    }
 
 
 def load_leipzig(label, folder, archive, pattern):
@@ -244,7 +254,17 @@ def load_conllu(folder, filenames):
                     diagnostics["mixed_content_items"] += 1
                     flush(path.name)
         flush(path.name)
-    return units, paths, dict(diagnostics)
+    diagnostic_keys = (
+        "retained_items",
+        "break_items",
+        "no_target_run_items",
+        "mixed_content_items",
+        "split_items",
+    )
+    return units, paths, {
+        key: int(diagnostics[key])
+        for key in diagnostic_keys
+    }
 
 
 def corpus_inventory():
