@@ -1,10 +1,13 @@
-# Version 3 candidate validation record
+# SUPERSEDED: Version 3 20-replicate smoke validation record
 
 Date: 2026-09-29  
-Status: candidate evidence only; claim gate remains closed  
+Superseded: 2026-09-29 by the corrected 200-replicate pre-freeze analysis  
+Status: **superseded smoke evidence; not current scientific authority**  
 GitHub Actions run: `59` / `36607933106`  
 Candidate artifact: `v3-candidate-evidence`  
 Artifact SHA-256: `38e17487d61cf5f791f2bab863425371b7ddd9debf8112f769710d754bb5f527`
+
+> This file is retained only as an audit trail of an early 20-replicate smoke run. It must not be cited for current Version 3 numerical claims. The final pre-freeze analysis adds boundary-safe comparator tokenization and Voynich page-block robustness.
 
 ## Gates completed
 
