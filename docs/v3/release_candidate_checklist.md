@@ -28,7 +28,7 @@ Opened: 2026-09-29
       reported.
 - [x] No cross-system p-value generated.
 - [x] Validation artifact retained with SHA-256
-      `d1778bb989681aee45a08a6028f565b4b57948aa377a49e1117aad5fef725cae`.
+      `1b71a5a24d29452b588eb9de4fd48e05396f091d0968da13f523b775906d6720`.
 
 ## Claim governance
 
@@ -43,11 +43,11 @@ Opened: 2026-09-29
 
 ## Repository release-candidate gates
 
-- [ ] Version 3 validation PR ordinary repository CI passes on final head.
-- [ ] Version 3 validation workflow passes on final methodological head.
+- [x] Version 3 validation PR ordinary repository CI passes on final head.
+- [x] Version 3 validation workflow passes on final methodological head.
 - [ ] Generated validation JSON and audit report are included in the release
       evidence package.
-- [ ] Release-candidate provenance manifest records final commit and input
+- [x] Release-candidate provenance manifest records final commit and input
       hashes.
 - [ ] Addendum receives final scope/wording review.
 - [ ] Version number and citation metadata updated only when a Version 3 release
