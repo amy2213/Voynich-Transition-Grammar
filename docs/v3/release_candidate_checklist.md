@@ -1,6 +1,6 @@
 # Version 3 release-candidate checklist
 
-Status: Version 3.0.0 release approved; final publish workflow pending  
+Status: pre-freeze correction in progress; publish gate disarmed  
 Opened: 2026-09-29
 
 ## Scientific method
@@ -19,26 +19,24 @@ Opened: 2026-09-29
 
 - [x] Python compilation passes.
 - [x] Version 3 targeted regression controls pass.
-- [x] 200-replicate main matched analysis completed.
-- [x] 200-replicate all-system small-target analysis completed.
-- [x] Mechanical validation audit passes.
-- [x] Main matched Voynich minimum interval: 1.005-1.025.
-- [x] Main matched comparator minimum intervals below 1.0: 14/14.
+- [ ] Corrected 200-replicate line-deletion stability analysis completed.
+- [ ] Corrected 200-replicate all-system small-target analysis completed.
+- [ ] Corrected mechanical validation audit passes.
+- [ ] Voynich page-block prefix/minimum interval reported as cluster-aware robustness.
+- [ ] Comparator pattern recalculated after boundary-safe tokenization.
 - [x] Small-target Voynich minimum interval crossing neutral is explicitly
       reported.
 - [x] No cross-system p-value generated.
-- [x] Validation artifact retained with SHA-256
-      `1b71a5a24d29452b588eb9de4fd48e05396f091d0968da13f523b775906d6720`.
+- [ ] Corrected validation JSON and audit report committed and packaged.
 
 ## Claim governance
 
 - [x] Version 2 affix claim remains reopened/retired as current evidence.
-- [x] Version 3 ledger status updated to validated descriptive release
-      candidate.
+- [ ] Claim ledger updated after corrected pre-freeze validation.
 - [x] Interpretation document states finite-set scope.
 - [x] Natural-language uniqueness language excluded.
 - [x] Language identity and decipherment claims excluded.
-- [x] Sample-size sensitivity retained in headline interpretation.
+- [ ] Line-deletion interval demoted to stability-only; page-block result governs Voynich neutrality wording.
 - [x] CHEDY->QOK / AIIN->QOK findings kept separate from the affix estimator.
 
 ## Repository release-candidate gates
@@ -48,10 +46,10 @@ Opened: 2026-09-29
 - [x] Generated validation JSON and audit report are included in the verified release-candidate evidence package.
 - [x] Release-candidate provenance manifest records final commit and input
       hashes.
-- [x] Addendum received final scope/wording review; finite-set and sample-size limits remain explicit.
-- [x] Version 3.0.0 release explicitly approved; VERSION and citation metadata updated on the final release branch.
+- [ ] Addendum receives final review after corrected results are generated.
+- [ ] Version 3.0.0 release freeze re-approved after corrected evidence is complete.
 - [x] Release notes clearly distinguish frozen Version 2 from the validated Version 3 release candidate.
-- [x] README and dashboard current authority updated after explicit release approval.
+- [ ] README/dashboard updated to corrected final values before freeze.
 - [ ] Final Version 3 tag is created only after all prior gates are green.
 - [ ] Archival DOI/version record is created or updated only after the final tag
       and assets are frozen.
