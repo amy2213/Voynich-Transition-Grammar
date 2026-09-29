@@ -3,6 +3,13 @@ name: Version 3 scientific validation
 on:
   push:
     branches: [v3/validation-200-replicates]
+    paths:
+      - "scripts/24_prefix_suffix_v3.py"
+      - "scripts/25_v3_validation_audit.py"
+      - "scripts/_canonical.py"
+      - "tests/test_canonical_values.py"
+      - "docs/v3/prefix_suffix_order_estimator_spec.md"
+      - ".github/workflows/v3-validation.yml"
   pull_request:
     branches: [main]
     paths:
