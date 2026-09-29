@@ -1,6 +1,6 @@
 # Version 3 release-candidate checklist
 
-Status: release-candidate gates complete; public-release gates remain  
+Status: Version 3.0.0 release approved; final publish workflow pending  
 Opened: 2026-09-29
 
 ## Scientific method
@@ -49,10 +49,9 @@ Opened: 2026-09-29
 - [x] Release-candidate provenance manifest records final commit and input
       hashes.
 - [x] Addendum received final scope/wording review; finite-set and sample-size limits remain explicit.
-- [ ] Version number and citation metadata updated only when a Version 3 release
-      is explicitly approved.
+- [x] Version 3.0.0 release explicitly approved; VERSION and citation metadata updated on the final release branch.
 - [x] Release notes clearly distinguish frozen Version 2 from the validated Version 3 release candidate.
-- [ ] Dashboard/current authority updated only after release approval.
+- [x] README and dashboard current authority updated after explicit release approval.
 - [ ] Final Version 3 tag is created only after all prior gates are green.
 - [ ] Archival DOI/version record is created or updated only after the final tag
       and assets are frozen.
