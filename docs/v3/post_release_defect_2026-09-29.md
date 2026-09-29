@@ -73,9 +73,24 @@ Voynich scores to approximately:
 - prefix: **0.912**;
 - suffix: **1.048**.
 
-The final Version 3.1 claim will use a pre-specified position-aware null and
-page-level resampling. These full-corpus diagnostics establish the defect but
-do not by themselves define the final Version 3.1 estimate.
+Independent 200-replicate page-bootstrap diagnostics then confirm the effect.
+
+Interior-only lines:
+
+- prefix median **0.934**, 95% replicate interval **[0.893, 0.978]**;
+- suffix median **1.052**, interval **[1.022, 1.088]**.
+
+Exact fixed-endpoint position-aware null:
+
+- prefix median **0.919**, interval **[0.884, 0.954]**;
+- suffix median **1.048**, interval **[1.017, 1.086]**;
+- prefix below 1.0 in **200/200** replicates;
+- suffix at or above 1.0 in **200/200** replicates.
+
+The released Version 3.0.0 prefix-near-neutral interpretation therefore does
+not survive direct position control. The suffix effect does survive this
+diagnostic. These values are correction diagnostics, not yet a frozen Version
+3.1 release claim.
 
 ### Historical relevance
 
