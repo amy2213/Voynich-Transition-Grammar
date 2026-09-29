@@ -427,18 +427,32 @@ def self_clustering_sequences(sequences, min_n=10, include_other=False,
 
 
 # ─── Symmetric affix estimator ──────────────────────────────────────────────
+def affixes_nested(left, right, side):
+    """Return whether two affixes are nested on the declared side."""
+    if side == "prefix":
+        return left.startswith(right) or right.startswith(left)
+    if side == "suffix":
+        return left.endswith(right) or right.endswith(left)
+    raise ValueError("side must be 'prefix' or 'suffix'")
+
+
 def discover_affixes(sequences, side, n_families=5, min_len=2, max_len=3,
                      min_coverage=0.02, max_coverage=0.20,
-                     candidate_pool=80):
+                     candidate_pool=80, nesting_mode="legacy_v2"):
     """Discover affix families identically on separate token sequences.
 
     Discovery itself does not use adjacency, but accepting sequences here
     makes the boundary-preserving representation the common interface for all
     systems. Ties are resolved lexically so results do not depend on Counter
     insertion order.
+
+    nesting_mode defaults to legacy_v2 solely so the frozen Version 2 pipeline
+    remains reproducible. New analyses must request side_aware explicitly.
     """
     if side not in ("prefix", "suffix"):
         raise ValueError("side must be 'prefix' or 'suffix'")
+    if nesting_mode not in ("side_aware", "legacy_v2"):
+        raise ValueError("nesting_mode must be 'side_aware' or 'legacy_v2'")
     tokens = [token for sequence in sequences for token in sequence]
     if not tokens:
         return []
@@ -453,13 +467,39 @@ def discover_affixes(sequences, side, n_families=5, min_len=2, max_len=3,
         coverage = counts[affix] / len(tokens)
         if not min_coverage <= coverage <= max_coverage:
             continue
-        if any(affix.startswith(old) or old.startswith(affix)
-               for old in selected):
+        if nesting_mode == "legacy_v2":
+            # Frozen Version 2 behavior. This intentionally preserves the
+            # historical suffix bug for exact v2 reproduction: startswith()
+            # was used on both sides.
+            nested = any(affix.startswith(old) or old.startswith(affix)
+                         for old in selected)
+        else:
+            nested = any(affixes_nested(affix, old, side)
+                         for old in selected)
+        if nested:
             continue
         selected.append(affix)
         if len(selected) == n_families:
             break
     return selected
+
+
+def shuffle_within_sequences(sequences, rng):
+    """Shuffle tokens independently inside each natural sequence unit.
+
+    The token multiset and every sequence boundary are preserved. Only order
+    is destroyed, making this the composition-preserving null used by the
+    Version 3 affix-order analysis.
+    """
+    shuffled = []
+    for sequence in sequences:
+        sequence = tuple(sequence)
+        if len(sequence) < 2:
+            shuffled.append(sequence)
+            continue
+        order = rng.permutation(len(sequence))
+        shuffled.append(tuple(sequence[int(index)] for index in order))
+    return shuffled
 
 
 def assign_affix_sequences(sequences, affixes, side):
@@ -516,6 +556,147 @@ def self_clustering_details(sequences, min_n=10, include_other=False):
         "included_class_n": len(ratios),
         "classes": details,
     }
+
+
+def composition_controlled_self_clustering_details(
+        sequences, min_n=10, include_other=False):
+    """Self-transition ratios against an exact within-unit shuffle baseline.
+
+    For class c with k occurrences in a unit of length n, a uniformly random
+    permutation of that unit has expected adjacent c->c count
+
+        k * (k - 1) / n.
+
+    Summing that quantity over units conditions the baseline on each unit's
+    class composition and length. Between-unit vocabulary heterogeneity can no
+    longer inflate the expected-vs-observed contrast. No Monte Carlo shuffle
+    is required to obtain the null expectation.
+    """
+    observed_same = Counter()
+    total_counts = Counter()
+    source_counts = Counter()
+    destination_counts = Counter()
+    expected_shuffle = Counter()
+    transition_n = 0
+
+    for classes in sequences:
+        classes = tuple(classes)
+        n = len(classes)
+        if not n:
+            continue
+        counts = Counter(classes)
+        total_counts.update(counts)
+        if n >= 2:
+            transition_n += n - 1
+            source_counts.update(classes[:-1])
+            destination_counts.update(classes[1:])
+            for source, destination in zip(classes, classes[1:]):
+                observed_same[source] += int(source == destination)
+        for label, k in counts.items():
+            expected_shuffle[label] += k * (k - 1) / n
+
+    details = {}
+    ratios = []
+    included_observed = 0.0
+    included_expected = 0.0
+    candidates = set(total_counts)
+    if not include_other:
+        candidates.discard("OTHER")
+    candidates.discard(AMBIGUOUS)
+
+    for label in sorted(set(total_counts)):
+        expected = expected_shuffle[label]
+        supported = (
+            source_counts[label] > min_n
+            and destination_counts[label] > min_n
+            and expected > 1
+            and label in candidates
+        )
+        ratio = observed_same[label] / expected if expected else None
+        details[label] = {
+            "observed": observed_same[label],
+            "expected_within_unit_shuffle": expected,
+            "source_n": source_counts[label],
+            "destination_n": destination_counts[label],
+            "token_n": total_counts[label],
+            "ratio_observed_to_shuffle_expectation": ratio,
+            "included_in_mean": supported,
+        }
+        if supported:
+            ratios.append(ratio)
+            included_observed += observed_same[label]
+            included_expected += expected
+
+    aggregate = (included_observed / included_expected
+                 if included_expected > 0 else None)
+    return {
+        "score": aggregate,
+        "unweighted_mean_class_ratio": (
+            sum(ratios) / len(ratios) if ratios else None),
+        "transition_n": transition_n,
+        "included_class_n": len(ratios),
+        "classes": details,
+        "null": "exact expectation under independent permutation within each sequence unit",
+    }
+
+
+def composition_controlled_affix_scores(
+        sequences, include_other=False, **discovery):
+    """Discover affixes and score only the ordering contribution."""
+    discovery = dict(discovery)
+    min_n = discovery.pop("min_n", 10)
+    output = {}
+    for side in ("prefix", "suffix"):
+        affixes = discover_affixes(sequences, side, **discovery)
+        classes = assign_affix_sequences(sequences, affixes, side)
+        output[side] = {
+            "affixes": affixes,
+            **composition_controlled_self_clustering_details(
+                classes, min_n=min_n, include_other=include_other),
+        }
+    prefix = output["prefix"]["score"]
+    suffix = output["suffix"]["score"]
+    output["ratio"] = prefix / suffix if prefix is not None and suffix else None
+    output["minimum"] = min(prefix, suffix) if None not in (prefix, suffix) else None
+    output["maximum"] = max(prefix, suffix) if None not in (prefix, suffix) else None
+    return output
+
+
+def affix_order_effect_scores(sequences, rng, shuffles=100,
+                              include_other=False, **discovery):
+    """Measure order contribution relative to a within-unit shuffle null.
+
+    Affixes are discovered once from the observed token multiset. Shuffling
+    cannot change that multiset, so rediscovery would be redundant. Returned
+    null scores can be summarized by callers without manufacturing cross-
+    system replicate pairings.
+    """
+    if shuffles < 1:
+        raise ValueError("shuffles must be at least 1")
+    discovery = dict(discovery)
+    min_n = discovery.pop("min_n", 10)
+    output = {}
+    for side in ("prefix", "suffix"):
+        affixes = discover_affixes(sequences, side, **discovery)
+        observed_classes = assign_affix_sequences(sequences, affixes, side)
+        observed = self_clustering_details(
+            observed_classes, min_n=min_n, include_other=include_other)
+        null_scores = []
+        for _ in range(shuffles):
+            shuffled_tokens = shuffle_within_sequences(sequences, rng)
+            shuffled_classes = assign_affix_sequences(
+                shuffled_tokens, affixes, side)
+            score = self_clustering_details(
+                shuffled_classes, min_n=min_n,
+                include_other=include_other)["score"]
+            if score is not None:
+                null_scores.append(score)
+        output[side] = {
+            "affixes": affixes,
+            "observed": observed,
+            "shuffle_scores": null_scores,
+        }
+    return output
 
 
 def affix_clustering_scores(sequences, include_other=False, **discovery):

@@ -17,6 +17,30 @@ constructed, hybrid, stenographic, cipher, or historical mechanisms.
 
 ## Current scientific position
 
+### Post-release defect status
+
+The Version 2 prefix/suffix cross-corpus comparison has been **reopened** after
+a verified estimator defect was identified on 2026-09-29. Version 2 correctly
+preserved natural sequence boundaries when counting transitions, but its
+self-clustering expectation pooled source and destination marginals across
+sequence units. That pooled baseline can therefore confound within-unit order
+with between-unit compositional heterogeneity. The released v2 values remain
+reproducible historical outputs, but they are **not currently treated as a
+supported cross-corpus ordering claim**.
+
+A second verified defect affected suffix-family discovery: the v2 nesting guard
+used prefix-style `startswith` logic for suffixes. This allowed nested suffix
+candidates such as `dy/edy` and `in/iin` to be selected even though the
+specification prohibited nested same-side families. The frozen `v2.0.0` tag
+and Zenodo artifact are not being rewritten.
+
+Version 3 development is isolated from the frozen release. The candidate
+estimator uses an exact within-unit permutation expectation, side-aware affix
+nesting, one-character comparator words, and the same without-replacement
+natural-unit sampling rule for every system. Cross-system replicate-index sign
+tests have been removed.
+
+
 ### Retained descriptive results
 
 - Under the canonical prefix-first classifier and strictly within Voynich
@@ -31,32 +55,35 @@ constructed, hybrid, stenographic, cipher, or historical mechanisms.
   B, but equivalence was not tested. Canonical AIIN-family density differs:
   13.58% in A versus 10.77% in B.
 
-### Version 2 prefix/suffix comparison
+### Version 2 prefix/suffix comparison: reopened
 
-The Version 2 estimator preserves lines and sentences, resamples Voynich by
-page blocks, repeatedly samples comparator sequence units without replacement
-to exactly 31,608 tokens, and applies identical automatic discovery to both
-sides of every system. Its primary mean excludes `OTHER`; inclusion is
-reported as a sensitivity condition.
+The frozen Version 2 estimator reported median prefix self-clustering 1.333,
+suffix self-clustering 1.458, ratio 0.918, and a minimum-side score of 1.333
+across its declared 14 eligible comparators. Those numbers remain exactly
+reproducible from the frozen tag.
 
-Across 200 replicates, Voynich has median prefix self-clustering 1.333 (95%
-replicate interval 1.222-1.461), suffix self-clustering 1.458 (1.389-1.555),
-and ratio 0.918. The median minimum of the two side scores is 1.333. With
-`OTHER` included, the corresponding medians are 1.292, 1.363, and 0.951.
+They are no longer treated as a supported confirmatory cross-corpus result.
+The pooled independence expectation used by the estimator does not condition
+on each line or sentence's affix composition, so between-unit heterogeneity can
+raise the score even after word order is destroyed. The reported
+`p = 0.00995` values also came from index-pairing independently generated
+Voynich and comparator replicate distributions and are no longer given
+inferential status.
 
-Voynich exceeds each of 14 eligible comparators on the continuous minimum-side
-score in these sampled distributions; all two-sided corrected replicate sign
-tests are `p = 0.00995` and remain `0.00995` after Benjamini-Hochberg correction
-because all raw values tie. Ottoman Turkish is ineligible at 16,890 preserved
-tokens, and is not padded or replaced. These results apply only to this frozen
-corpus set and estimator. They do not establish natural-language uniqueness,
-language identity, or exclusion of untested mechanisms. Threshold buckets are
-secondary; Voynich's `SYMM-HIGH` frequency ranges from 0.89 to 1.00 across the
-declared 27-cell threshold grid.
+See `docs/v2/post_release_defect_2026-09-29.md` for the defect record.
 
-Generated evidence is in `results/prefix_suffix_v2.json`, `.csv`, `.md`, and
-`.svg`. The estimator specification is
-`docs/v2/prefix_suffix_estimator_spec.md`.
+### Version 3 repair candidate
+
+`scripts/24_prefix_suffix_v3.py` implements the replacement analysis. For a
+class with `k` occurrences inside a sequence unit of length `n`, its exact
+expected adjacent self-transition count under random within-unit ordering is
+`k(k-1)/n`. Summing that expectation over natural units conditions the null
+on each unit's composition and length, so page/line/sentence vocabulary mix
+cannot by itself create an order effect.
+
+Version 3 is currently a research candidate, not a released claim. These analyses
+do not establish natural-language uniqueness, identify a language, or identify a generating mechanism. Its design and acceptance criteria are documented in
+`docs/v3/prefix_suffix_order_estimator_spec.md`.
 
 ### Other provisional findings
 

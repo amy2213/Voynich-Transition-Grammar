@@ -30,6 +30,7 @@ tolerance rationale.
 """
 
 import hashlib
+import importlib.util
 import json
 import os
 import sys
@@ -47,8 +48,10 @@ from _canonical import (  # noqa: E402
     transitions,
     sample_two_disjoint_contiguous_blocks,
     SequenceUnit,
+    affixes_nested,
     assign_affix_sequences,
     bootstrap_groups_to_target,
+    composition_controlled_self_clustering_details,
     discover_affixes,
     sample_units_to_target,
     self_clustering_details,
@@ -437,6 +440,55 @@ class TestBoundaryAwareAffixUtilities(unittest.TestCase):
         second = discover_affixes(sequences, "prefix", min_coverage=0.1,
                                   max_coverage=0.6)
         self.assertEqual(first, second)
+
+    def test_suffix_nesting_uses_suffix_logic(self):
+        self.assertTrue(affixes_nested("edy", "dy", "suffix"))
+        self.assertTrue(affixes_nested("iin", "in", "suffix"))
+        self.assertFalse(affixes_nested("edy", "dy", "prefix"))
+
+    def test_discovered_suffixes_are_not_nested(self):
+        sequences = [
+            ("xedy", "yedy", "zedy", "xin", "yin", "ziin",
+             "xey", "yey", "zey", "tar", "bar", "car")
+        ] * 40
+        suffixes = discover_affixes(
+            sequences, "suffix", n_families=5,
+            min_coverage=0.02, max_coverage=0.40,
+            nesting_mode="side_aware")
+        for i, left in enumerate(suffixes):
+            for right in suffixes[i + 1:]:
+                self.assertFalse(
+                    affixes_nested(left, right, "suffix"),
+                    msg=f"Nested suffixes selected: {left}, {right}",
+                )
+
+    def test_composition_control_removes_between_unit_inflation(self):
+        # Globally this looks maximally self-clustered because each unit is
+        # compositionally pure. Conditional on unit composition, order adds
+        # nothing: every permutation is identical and the ratio must be 1.
+        sequences = [
+            ("A", "A", "A", "A"),
+            ("B", "B", "B", "B"),
+        ]
+        result = composition_controlled_self_clustering_details(
+            sequences, min_n=0, include_other=True)
+        self.assertAlmostEqual(result["score"], 1.0, places=12)
+
+    def test_composition_control_detects_order_driven_anti_clustering(self):
+        sequences = [tuple(["A", "B"] * 50)]
+        result = composition_controlled_self_clustering_details(
+            sequences, min_n=0, include_other=True)
+        self.assertAlmostEqual(result["score"], 0.0, places=12)
+
+    def test_v3_comparator_tokenizer_retains_one_character_words(self):
+        path = PROJECT_ROOT / "scripts" / "24_prefix_suffix_v3.py"
+        spec = importlib.util.spec_from_file_location("prefix_suffix_v3", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        self.assertEqual(
+            module.tokenize("a b cd", r"[a-z]+"),
+            ("a", "b", "cd"),
+        )
 
 
 class TestGeneratedRepairArtifacts(unittest.TestCase):
