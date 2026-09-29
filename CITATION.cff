@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use this software or its Version 2 findings, please cite the release and paper associated with the version you used."
+message: "If you use this software or the Version 3 findings, please cite the v3.0.0 release. The Zenodo concept DOI identifies the version family."
 title: "Voynich Transition Grammar: Boundary-Aware Token-Structure Analysis"
 type: software
 authors:
@@ -9,13 +9,15 @@ authors:
 abstract: >-
   Reproducible corpus-analysis code, frozen inputs, generated results, tests,
   and audit records for boundary-aware token-structure analysis of the
-  Voynich Manuscript. The project makes no decipherment, translation,
-  language-identification, or natural-language-proof claim.
+  Voynich Manuscript. Version 3 replaces the Version 2 prefix/suffix estimator
+  with an exact within-unit composition-conditioned ordering baseline. The
+  project makes no decipherment, translation, language-identification, or
+  natural-language-uniqueness claim.
 repository-code: "https://github.com/amy2213/Voynich-Transition-Grammar"
 url: "https://github.com/amy2213/Voynich-Transition-Grammar"
-doi: "10.5281/zenodo.22715079"
-version: "2.0.0"
-date-released: "2026-09-11"
+doi: "10.5281/zenodo.19996904"
+version: "3.0.0"
+date-released: "2026-09-29"
 license: MIT
 keywords:
   - voynich-manuscript
@@ -24,14 +26,3 @@ keywords:
   - statistical-text-analysis
   - digital-humanities
   - reproducible-research
-
-preferred-citation:
-  type: article
-  title: "Boundary-Aware Token-Structure Analysis of the Voynich Manuscript: A Reproducible Reassessment"
-  authors:
-    - family-names: "Laird"
-      given-names: "Amy"
-      orcid: "https://orcid.org/0009-0001-5479-0007"
-  year: 2026
-  month: 7
-  url: "https://github.com/amy2213/Voynich-Transition-Grammar/blob/v2.0.0/docs/paper.pdf"
