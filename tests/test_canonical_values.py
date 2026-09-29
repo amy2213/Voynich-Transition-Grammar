@@ -452,7 +452,8 @@ class TestBoundaryAwareAffixUtilities(unittest.TestCase):
         ] * 40
         suffixes = discover_affixes(
             sequences, "suffix", n_families=5,
-            min_coverage=0.02, max_coverage=0.40)
+            min_coverage=0.02, max_coverage=0.40,
+            nesting_mode="side_aware")
         for i, left in enumerate(suffixes):
             for right in suffixes[i + 1:]:
                 self.assertFalse(
